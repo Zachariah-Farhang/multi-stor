@@ -9,12 +9,12 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // TODO: This widget is the root of ouer application.
+  //This widget is the root of ouer application.
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      // TODO: This widget is the main screan that is showing now on the app CustomerHomeScrean().
+      //This widget is the main screan that is showing now on the app CustomerHomeScrean().
       home: CustomerHomeScrean(),
     );
   }

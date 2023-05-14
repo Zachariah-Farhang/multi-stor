@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/main_screans/home.dart';
 
-// TODO: I have created a fulstatwidget for customer page that have a navigationbar.
+//I have created a fulstatwidget for customer page that have a navigationbar.
 class CustomerHomeScrean extends StatefulWidget {
   const CustomerHomeScrean({super.key});
 
@@ -11,7 +12,7 @@ class CustomerHomeScrean extends StatefulWidget {
 class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
   int _selectedIndex = 0;
   final List<Widget> _tabs = const [
-    Center(child: Text('Home')),
+    HomeScrean(),
     Center(child: Text('Category')),
     Center(child: Text('Stores')),
     Center(child: Text('Cart')),
@@ -19,12 +20,12 @@ class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
   ];
   @override
   Widget build(BuildContext context) {
-    // TODO: Scaffold is the root widget of the customer page.
+    //Scaffold is the root widget of the customer page.
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0.0,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.black,
+        selectedItemColor: Colors.blueGrey.shade700,
         // unselectedItemColor: Colors.red,
         currentIndex: _selectedIndex,
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
