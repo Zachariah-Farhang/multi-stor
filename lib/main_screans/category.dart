@@ -86,13 +86,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
         physics: const BouncingScrollPhysics(),
         itemCount: items.length,
         itemBuilder: (context, index) {
-          return Container(
-            decoration: BoxDecoration(
-              backgroundBlendMode: BlendMode.multiply,
-              color: items[index].isSelected && index == _selectedIndex
-                  ? Colors.white
-                  : Colors.grey.shade300,
-            ),
+          return Ink(
+            color: items[index].isSelected && index == _selectedIndex
+                ? Colors.white
+                : Colors.grey.shade300,
             child: InkWell(
               onTap: () {
                 _pageController.animateToPage(
@@ -101,7 +98,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   curve: Curves.easeIn,
                 );
               },
-              splashColor: Colors.black38, // Set the desired splash color here
+              splashColor: Colors.yellow.shade500,
+              // highlightColor: Colors.yellow.shade500,
               child: SizedBox(
                 height: 100,
                 child: Center(child: Text(items[index].label)),
