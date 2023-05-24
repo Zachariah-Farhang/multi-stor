@@ -14,7 +14,7 @@ List<ItemData> items = [
 ];
 
 class CategoryScreen extends StatefulWidget {
-  const CategoryScreen({super.key});
+  const CategoryScreen({Key? key}) : super(key: key);
 
   @override
   State<CategoryScreen> createState() => _CategoryScreenState();
@@ -22,16 +22,21 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen> {
   final PageController _pageController = PageController();
-
+  final ScrollController _scrollController = ScrollController();
+  bool _portrait = true;
+  int _selectedIndex = 0;
   @override
   void initState() {
-    for (var element in items) {
-      element.isSelected = false;
-      setState(() {
-        items[0].isSelected = true;
-      });
-    }
+    items[0].isSelected = true;
+    _selectedIndex = 0;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -43,10 +48,29 @@ class _CategoryScreenState extends State<CategoryScreen> {
         backgroundColor: Colors.white,
         title: const SearchBottom(),
       ),
-      body: Stack(children: [
-        Positioned(bottom: 0, left: 0, child: sideNavigator(size)),
-        Positioned(bottom: 0, right: 0, child: categView(size))
-      ]),
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          if (orientation == Orientation.portrait) {
+            _portrait = true;
+          } else {
+            _portrait = false;
+          }
+          return Stack(
+            children: [
+              Positioned(
+                bottom: 0,
+                left: 0,
+                child: sideNavigator(size),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: categView(size),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -55,21 +79,29 @@ class _CategoryScreenState extends State<CategoryScreen> {
       width: size.width * 0.25,
       height: size.height * 0.8,
       child: ListView.builder(
+        padding: _portrait
+            ? const EdgeInsets.only(top: 0)
+            : const EdgeInsets.only(top: 50),
+        controller: _scrollController,
         physics: const BouncingScrollPhysics(),
         itemCount: items.length,
         itemBuilder: (context, index) {
-          return GestureDetector(
+          debugPrint('index $index');
+          return InkWell(
             onTap: () {
-              _pageController.animateToPage(index,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeIn);
+              _pageController.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 100),
+                curve: Curves.easeIn,
+              );
             },
             child: Container(
-                color: items[index].isSelected
-                    ? Colors.white
-                    : Colors.grey.shade300,
-                height: 100,
-                child: Center(child: Text(items[index].label))),
+              color: items[index].isSelected && index == _selectedIndex
+                  ? Colors.white
+                  : Colors.grey.shade300,
+              height: 100,
+              child: Center(child: Text(items[index].label)),
+            ),
           );
         },
       ),
@@ -82,28 +114,44 @@ class _CategoryScreenState extends State<CategoryScreen> {
       height: size.height * 0.8,
       color: Colors.white,
       child: PageView(
-          controller: _pageController,
-          physics: const BouncingScrollPhysics(),
-          onPageChanged: (value) {
-            for (var element in items) {
-              element.isSelected = false;
-              setState(() {
-                items[value].isSelected = true;
-              });
-            }
-          },
-          scrollDirection: Axis.vertical,
-          children: const [
-            Center(child: Text("men")),
-            Center(child: Text("women")),
-            Center(child: Text("accessories")),
-            Center(child: Text("electronics")),
-            Center(child: Text("shoes")),
-            Center(child: Text("home & garden")),
-            Center(child: Text("beauty")),
-            Center(child: Text("kids")),
-            Center(child: Text("bogs")),
-          ]),
+        controller: _pageController,
+        physics: const BouncingScrollPhysics(),
+        onPageChanged: (value) {
+          _selectItem(value, size);
+        },
+        scrollDirection: Axis.vertical,
+        children: const [
+          Center(child: Text("men")),
+          Center(child: Text("women")),
+          Center(child: Text("accessories")),
+          Center(child: Text("electronics")),
+          Center(child: Text("shoes")),
+          Center(child: Text("home & garden")),
+          Center(child: Text("beauty")),
+          Center(child: Text("kids")),
+          Center(child: Text("bags")),
+        ],
+      ),
+    );
+  }
+
+  void _selectItem(int index, Size size) {
+    setState(() {
+      items[_selectedIndex].isSelected = false;
+      items[index].isSelected = true;
+      _selectedIndex = index;
+      _scrollToIndex(
+          index, _portrait ? size.height * 0.075 : size.height * 0.25);
+    });
+  }
+
+  void _scrollToIndex(int index, double itemExtent) {
+    double offset = index * itemExtent;
+
+    _scrollController.animateTo(
+      offset,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
     );
   }
 }
