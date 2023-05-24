@@ -86,21 +86,26 @@ class _CategoryScreenState extends State<CategoryScreen> {
         physics: const BouncingScrollPhysics(),
         itemCount: items.length,
         itemBuilder: (context, index) {
-          debugPrint('index $index');
-          return InkWell(
-            onTap: () {
-              _pageController.animateToPage(
-                index,
-                duration: const Duration(milliseconds: 100),
-                curve: Curves.easeIn,
-              );
-            },
-            child: Container(
+          return Container(
+            decoration: BoxDecoration(
+              backgroundBlendMode: BlendMode.multiply,
               color: items[index].isSelected && index == _selectedIndex
                   ? Colors.white
                   : Colors.grey.shade300,
-              height: 100,
-              child: Center(child: Text(items[index].label)),
+            ),
+            child: InkWell(
+              onTap: () {
+                _pageController.animateToPage(
+                  index,
+                  duration: const Duration(milliseconds: 100),
+                  curve: Curves.easeIn,
+                );
+              },
+              splashColor: Colors.black38, // Set the desired splash color here
+              child: SizedBox(
+                height: 100,
+                child: Center(child: Text(items[index].label)),
+              ),
             ),
           );
         },
