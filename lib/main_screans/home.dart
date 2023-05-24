@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../minor_screens/search.dart';
+import '../widgets/search_bottom.dart';
 
 class HomeScrean extends StatefulWidget {
   const HomeScrean({super.key});
@@ -19,57 +19,7 @@ class _HomeScreanState extends State<HomeScrean> {
         appBar: AppBar(
           elevation: 0.0,
           backgroundColor: Colors.white,
-          title: InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const SearchScreen()));
-            },
-            child: Container(
-                height: 35,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25.0),
-                    border: Border.all(color: Colors.yellow, width: 1.4)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                          ),
-                          child: Icon(Icons.search, color: Colors.grey),
-                        ),
-                        Text(
-                          'What are you looking for?',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      height: 32,
-                      width: 75,
-                      decoration: BoxDecoration(
-                          color: Colors.yellow,
-                          borderRadius: BorderRadius.circular(25)),
-                      child: const Center(
-                        child: Text(
-                          'Search',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                )),
-          ),
+          title: const SearchBottom(),
           bottom: const TabBar(
             physics: BouncingScrollPhysics(),
             isScrollable: true,

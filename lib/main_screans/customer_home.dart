@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/main_screans/category.dart';
 import 'package:multi_store_app/main_screans/home.dart';
 
 //I have created a fulstatwidget for customer page that have a navigationbar.
@@ -13,7 +14,7 @@ class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
   int _selectedIndex = 0;
   final List<Widget> _tabs = const [
     HomeScrean(),
-    Center(child: Text('Category')),
+    CategoryScreen(),
     Center(child: Text('Stores')),
     Center(child: Text('Cart')),
     Center(child: Text('Profile')),
