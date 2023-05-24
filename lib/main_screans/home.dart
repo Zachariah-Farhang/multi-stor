@@ -25,8 +25,8 @@ class _HomeScreanState extends State<HomeScrean> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: 10,
