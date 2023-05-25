@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/categoreis/men_category.dart';
+import 'package:multi_store_app/categoreis/women_category.dart';
 import 'package:multi_store_app/widgets/search_bottom.dart';
 
 List<ItemData> items = [
@@ -46,35 +47,38 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.white,
-        title: const SearchBottom(),
-      ),
-      body: OrientationBuilder(
-        builder: (context, orientation) {
-          if (orientation == Orientation.portrait) {
-            _portrait = true;
-          } else {
-            _portrait = false;
-          }
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: Colors.white,
+          title: const SearchBottom(),
+        ),
+        body: OrientationBuilder(
+          builder: (context, orientation) {
+            if (orientation == Orientation.portrait) {
+              _portrait = true;
+            } else {
+              _portrait = false;
+            }
 
-          return Stack(
-            children: [
-              Positioned(
-                bottom: 0,
-                left: 0,
-                child: sideNavigator(size),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: categView(size),
-              ),
-            ],
-          );
-        },
+            return Stack(
+              children: [
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  child: sideNavigator(size),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: categView(size),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -128,6 +132,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         scrollDirection: Axis.vertical,
         children: const [
           MenCategory(),
+          WomenCategory(),
           Center(child: Text("women")),
           Center(child: Text("accessories")),
           Center(child: Text("electronics")),

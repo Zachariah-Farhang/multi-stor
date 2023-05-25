@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 
 class SubGategories extends StatelessWidget {
   final String subcategName;
-  const SubGategories({super.key, required this.subcategName});
+  final String maincategName;
+
+  const SubGategories(
+      {super.key, required this.subcategName, required this.maincategName});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         elevation: 0.0,
         backgroundColor: Colors.white,
         leading: IconButton(
@@ -22,8 +26,8 @@ class SubGategories extends StatelessWidget {
           style: const TextStyle(color: Colors.black87),
         ),
       ),
-      body: const Center(
-        child: Text('SubGategories'),
+      body: Center(
+        child: Text(maincategName),
       ),
     );
   }
