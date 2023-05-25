@@ -13,6 +13,9 @@ List<ItemData> items = [
   ItemData(label: 'bags', isSelected: false),
 ];
 
+double appBarHeight = AppBar().preferredSize.height;
+double bottomBarHeight = appBarHeight;
+
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({Key? key}) : super(key: key);
 
@@ -55,6 +58,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
           } else {
             _portrait = false;
           }
+
           return Stack(
             children: [
               Positioned(
@@ -77,11 +81,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
   Widget sideNavigator(Size size) {
     return SizedBox(
       width: size.width * 0.25,
-      height: size.height * 0.8,
+      height: size.height - bottomBarHeight - appBarHeight,
       child: ListView.builder(
-        padding: _portrait
-            ? const EdgeInsets.only(top: 0)
-            : const EdgeInsets.only(top: 50),
+        padding: const EdgeInsets.only(top: 24),
         controller: _scrollController,
         physics: const BouncingScrollPhysics(),
         itemCount: items.length,
@@ -114,7 +116,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   Widget categView(Size size) {
     return Container(
       width: size.width * 0.75,
-      height: size.height * 0.8,
+      height: size.height - bottomBarHeight - appBarHeight,
       color: Colors.white,
       child: PageView(
         controller: _pageController,
@@ -144,7 +146,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       items[index].isSelected = true;
       _selectedIndex = index;
       _scrollToIndex(
-          index, _portrait ? size.height * 0.075 : size.height * 0.25);
+          index, _portrait ? size.height * 0.075 : size.height * 0.20);
     });
   }
 
