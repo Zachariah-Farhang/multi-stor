@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/categoreis/men_category.dart';
 import 'package:multi_store_app/widgets/search_bottom.dart';
 
 List<ItemData> items = [
@@ -126,7 +127,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         },
         scrollDirection: Axis.vertical,
         children: const [
-          Center(child: Text("men")),
+          MenCategory(),
           Center(child: Text("women")),
           Center(child: Text("accessories")),
           Center(child: Text("electronics")),
