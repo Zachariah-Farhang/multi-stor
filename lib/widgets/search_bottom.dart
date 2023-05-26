@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../minor_screens/search.dart';
+import '../screens/minor_screens/search.dart';
 
 class SearchBottom extends StatelessWidget {
   const SearchBottom({

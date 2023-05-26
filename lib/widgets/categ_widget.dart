@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../minor_screens/sub_gategories.dart';
+import '../screens/minor_screens/sub_gategories.dart';
 
 class SliderBar extends StatelessWidget {
   final String maincategName;
