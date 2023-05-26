@@ -36,17 +36,17 @@ flutter:
     - assets/images/bags/
 
 
-  fonts:
-    - family: Shabnam
-      fonts:
-        - asset: assets/fonts/Shabnam-bold.ttf
-          weight: 700
-        - asset: assets/fonts/Shabnam-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Shabnam-Thin.ttf
-          weight: 300
-    - family: Kanun
-      fonts:
-        - asset: assets/fonts/Kanun_bold.otf
-          weight: 700
+  # fonts:
+  #   - family: Shabnam
+  #     fonts:
+  #       - asset: assets/fonts/Shabnam-bold.ttf
+  #         weight: 700
+  #       - asset: assets/fonts/Shabnam-Medium.ttf
+  #         weight: 500
+  #       - asset: assets/fonts/Shabnam-Thin.ttf
+  #         weight: 300
+  #   - family: Kanun
+  #     fonts:
+  #       - asset: assets/fonts/Kanun_bold.otf
+  #         weight: 700
 

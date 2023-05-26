@@ -40,12 +40,13 @@ class SliderBar extends StatelessWidget {
                       letterSpacing: 10),
                 ),
                 Text(
-                  maincategName.toUpperCase(),
+                  maincategName,
                   style: const TextStyle(
-                      color: Colors.brown,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 10),
+                    color: Colors.brown,
+                    fontSize: 16,
+                    letterSpacing: 8,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const Text(
                   '>>',
@@ -86,7 +87,7 @@ class SubCategModel extends StatelessWidget {
           children: [
             SizedBox(
               height: 70,
-              width: 70,
+              width: double.maxFinite,
               child: Image(
                 image: AssetImage(assteImage),
               ),
@@ -95,8 +96,7 @@ class SubCategModel extends StatelessWidget {
               subcategLebel,
               style: const TextStyle(
                 overflow: TextOverflow.ellipsis,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
+                fontSize: 14,
               ),
             ),
           ],
@@ -127,12 +127,11 @@ class CategHeaderLebel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20.0, 5.0, 0.0, 10.0),
+      padding: const EdgeInsets.fromLTRB(20.0, 10.0, 0.0, 10.0),
       child: Text(
         headerLebel,
         style: const TextStyle(
           fontSize: 24,
-          fontWeight: FontWeight.bold,
           letterSpacing: 1.5,
         ),
       ),

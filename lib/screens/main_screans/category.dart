@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/categoreis/accessories_category.dart';
-import 'package:multi_store_app/categoreis/bags_category.dart';
-import 'package:multi_store_app/categoreis/beauty_category.dart';
-import 'package:multi_store_app/categoreis/men_category.dart';
-import 'package:multi_store_app/categoreis/kids_category.dart';
-import 'package:multi_store_app/categoreis/women_category.dart';
-import 'package:multi_store_app/widgets/search_bottom.dart';
 
-import '../../categoreis/electronics_category.dart';
-import '../../categoreis/homeandgarden_category.dart';
-import '../../categoreis/shoes_category.dart';
+import 'package:multi_store_app/utilities/categ_list.dart';
+import 'package:multi_store_app/widgets/category_view_model.dart';
+import 'package:multi_store_app/widgets/search_bottom.dart';
 
 List<ItemData> items = [
   ItemData(label: 'men', isSelected: false),
@@ -138,16 +131,61 @@ class _CategoryScreenState extends State<CategoryScreen> {
           _selectItem(value, size);
         },
         scrollDirection: Axis.vertical,
-        children: const [
-          MenCategory(),
-          WomenCategory(),
-          AccessoriesCategory(),
-          ElectronicsCategory(),
-          ShoesCategory(),
-          HomeandgardenCategory(),
-          BeautyCategory(),
-          KidsCategory(),
-          BagsCategory()
+        children: [
+          CategoryViewModel(
+              screanWidth: size.width * 0.75,
+              mainHeight: size.height - (appBarHeight * 2.5),
+              categoryList: men,
+              headerLabel: 'Men',
+              assetImage: 'men/men'),
+          CategoryViewModel(
+              screanWidth: size.width * 0.75,
+              mainHeight: size.height - (appBarHeight * 2.5),
+              categoryList: women,
+              headerLabel: 'Women',
+              assetImage: 'women/women'),
+          CategoryViewModel(
+              screanWidth: size.width * 0.75,
+              mainHeight: size.height - (appBarHeight * 2.5),
+              categoryList: accessories,
+              headerLabel: 'Accessories',
+              assetImage: 'accessories/accessories'),
+          CategoryViewModel(
+              screanWidth: size.width * 0.75,
+              mainHeight: size.height - (appBarHeight * 2.5),
+              categoryList: electronics,
+              headerLabel: 'Electronics',
+              assetImage: 'electronics/electronics'),
+          CategoryViewModel(
+              screanWidth: size.width * 0.75,
+              mainHeight: size.height - (appBarHeight * 2.5),
+              categoryList: shoes,
+              headerLabel: 'Shoes',
+              assetImage: 'shoes/shoes'),
+          CategoryViewModel(
+              screanWidth: size.width * 0.75,
+              mainHeight: size.height - (appBarHeight * 2.5),
+              categoryList: homeandgarden,
+              headerLabel: 'Home & Garden',
+              assetImage: 'homegarden/home'),
+          CategoryViewModel(
+              screanWidth: size.width * 0.75,
+              mainHeight: size.height - (appBarHeight * 2.5),
+              categoryList: beauty,
+              headerLabel: 'Beauty',
+              assetImage: 'beauty/beauty'),
+          CategoryViewModel(
+              screanWidth: size.width * 0.75,
+              mainHeight: size.height - (appBarHeight * 2.5),
+              categoryList: kids,
+              headerLabel: 'Kids',
+              assetImage: 'kids/kids'),
+          CategoryViewModel(
+              screanWidth: size.width * 0.75,
+              mainHeight: size.height - (appBarHeight * 2.5),
+              categoryList: bags,
+              headerLabel: 'Bags',
+              assetImage: 'bags/bags'),
         ],
       ),
     );
