@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/main_screans/category.dart';
-import 'package:multi_store_app/main_screans/home.dart';
+import 'package:multi_store_app/screens/main_screans/category.dart';
+import 'package:multi_store_app/screens/main_screans/home.dart';
 
 //I have created a fulstatwidget for customer page that have a navigationbar.
 class CustomerHomeScrean extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
 
-import '../../widgets/categ_widget.dart';
+import '../widgets/categ_widget.dart';
 
 double appBarHeight = AppBar().preferredSize.height;
 
