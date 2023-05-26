@@ -39,14 +39,14 @@ flutter:
   fonts:
     - family: Shabnam
       fonts:
-        - asset: asstes/fonts/Shabnam-bold.ttf
+        - asset: assets/fonts/Shabnam-bold.ttf
           weight: 700
-        - asset: asstes/fonts/Shabnam-Medium.ttf
+        - asset: assets/fonts/Shabnam-Medium.ttf
           weight: 500
-        - asset: asstes/fonts/Shabnam-Light.ttf
+        - asset: assets/fonts/Shabnam-Light.ttf
           weight: 300
     - family: Kanun
       fonts:
-        - asset: asstes/fonts/Kanun_bold.otf
+        - asset: assets/fonts/Kanun_bold.otf
           weight: 700
 
