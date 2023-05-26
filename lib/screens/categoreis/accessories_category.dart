@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
 
-import '../widgets/categ_widget.dart';
+import '../../widgets/categ_widget.dart';
 
 double appBarHeight = AppBar().preferredSize.height;
 
-class ElectronicsCategory extends StatelessWidget {
-  const ElectronicsCategory({super.key});
+class AccessoriesCategory extends StatelessWidget {
+  const AccessoriesCategory({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class ElectronicsCategory extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const CategHeaderLebel(
-                    headerLebel: 'Electronics',
+                    headerLebel: 'accessories',
                   ),
                   Expanded(
                     child: GridView.count(
@@ -34,13 +34,13 @@ class ElectronicsCategory extends StatelessWidget {
                       mainAxisSpacing: 50,
                       crossAxisSpacing: 15,
                       crossAxisCount: 3,
-                      children: List.generate(electronics.length, (index) {
+                      children: List.generate(accessories.length, (index) {
                         return SubCategModel(
-                          maincategName: 'Electronics',
-                          subcategName: electronics[index],
+                          maincategName: 'Accessories',
+                          subcategName: accessories[index],
                           assteImage:
-                              'assets/images/electronics/electronics$index.jpg',
-                          subcategLebel: electronics[index],
+                              'assets/images/accessories/accessories$index.jpg',
+                          subcategLebel: accessories[index],
                         );
                       }),
                     ),
@@ -54,7 +54,7 @@ class ElectronicsCategory extends StatelessWidget {
           bottom: 0,
           right: 0,
           child: SliderBar(
-              maincategName: 'electronics',
+              maincategName: 'accessories',
               mainHeight: mainHeight,
               screanWidth: screanWidth),
         )

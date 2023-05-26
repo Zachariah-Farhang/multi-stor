@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
 
-import '../widgets/categ_widget.dart';
+import '../../widgets/categ_widget.dart';
 
 double appBarHeight = AppBar().preferredSize.height;
 
-class ShoesCategory extends StatelessWidget {
-  const ShoesCategory({super.key});
+class KidsCategory extends StatelessWidget {
+  const KidsCategory({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class ShoesCategory extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const CategHeaderLebel(
-                    headerLebel: 'Shoes',
+                    headerLebel: ' Kids',
                   ),
                   Expanded(
                     child: GridView.count(
@@ -34,12 +34,12 @@ class ShoesCategory extends StatelessWidget {
                       mainAxisSpacing: 50,
                       crossAxisSpacing: 15,
                       crossAxisCount: 3,
-                      children: List.generate(shoes.length, (index) {
+                      children: List.generate(kids.length, (index) {
                         return SubCategModel(
-                          maincategName: 'Shoes',
-                          subcategName: shoes[index],
-                          assteImage: 'assets/images/shoes/shoes$index.jpg',
-                          subcategLebel: shoes[index],
+                          maincategName: ' Kids',
+                          subcategName: kids[index],
+                          assteImage: 'assets/images/kids/kids$index.jpg',
+                          subcategLebel: kids[index],
                         );
                       }),
                     ),
@@ -53,7 +53,7 @@ class ShoesCategory extends StatelessWidget {
           bottom: 0,
           right: 0,
           child: SliderBar(
-              maincategName: 'shoes',
+              maincategName: ' Kids',
               mainHeight: mainHeight,
               screanWidth: screanWidth),
         )

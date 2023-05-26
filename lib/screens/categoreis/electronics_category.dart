@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
 
-import '../widgets/categ_widget.dart';
+import '../../widgets/categ_widget.dart';
 
 double appBarHeight = AppBar().preferredSize.height;
 
-class BagsCategory extends StatelessWidget {
-  const BagsCategory({super.key});
+class ElectronicsCategory extends StatelessWidget {
+  const ElectronicsCategory({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class BagsCategory extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const CategHeaderLebel(
-                    headerLebel: 'Bags',
+                    headerLebel: 'Electronics',
                   ),
                   Expanded(
                     child: GridView.count(
@@ -34,12 +34,13 @@ class BagsCategory extends StatelessWidget {
                       mainAxisSpacing: 50,
                       crossAxisSpacing: 15,
                       crossAxisCount: 3,
-                      children: List.generate(bags.length, (index) {
+                      children: List.generate(electronics.length, (index) {
                         return SubCategModel(
-                          maincategName: 'Bags',
-                          subcategName: bags[index],
-                          assteImage: 'assets/images/bags/bags$index.jpg',
-                          subcategLebel: bags[index],
+                          maincategName: 'Electronics',
+                          subcategName: electronics[index],
+                          assteImage:
+                              'assets/images/electronics/electronics$index.jpg',
+                          subcategLebel: electronics[index],
                         );
                       }),
                     ),
@@ -53,7 +54,7 @@ class BagsCategory extends StatelessWidget {
           bottom: 0,
           right: 0,
           child: SliderBar(
-              maincategName: 'bags',
+              maincategName: 'electronics',
               mainHeight: mainHeight,
               screanWidth: screanWidth),
         )

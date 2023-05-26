@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
 
-import '../widgets/categ_widget.dart';
+import '../../widgets/categ_widget.dart';
 
 double appBarHeight = AppBar().preferredSize.height;
 
-class KidsCategory extends StatelessWidget {
-  const KidsCategory({super.key});
+class MenCategory extends StatelessWidget {
+  const MenCategory({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class KidsCategory extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const CategHeaderLebel(
-                    headerLebel: ' Kids',
+                    headerLebel: 'Men',
                   ),
                   Expanded(
                     child: GridView.count(
@@ -34,12 +34,12 @@ class KidsCategory extends StatelessWidget {
                       mainAxisSpacing: 50,
                       crossAxisSpacing: 15,
                       crossAxisCount: 3,
-                      children: List.generate(kids.length, (index) {
+                      children: List.generate(men.length, (index) {
                         return SubCategModel(
-                          maincategName: ' Kids',
-                          subcategName: kids[index],
-                          assteImage: 'assets/images/kids/kids$index.jpg',
-                          subcategLebel: kids[index],
+                          maincategName: 'Men',
+                          subcategName: men[index],
+                          assteImage: 'assets/images/men/men$index.jpg',
+                          subcategLebel: men[index],
                         );
                       }),
                     ),
@@ -53,7 +53,7 @@ class KidsCategory extends StatelessWidget {
           bottom: 0,
           right: 0,
           child: SliderBar(
-              maincategName: ' Kids',
+              maincategName: 'men',
               mainHeight: mainHeight,
               screanWidth: screanWidth),
         )

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
 
-import '../widgets/categ_widget.dart';
+import '../../widgets/categ_widget.dart';
 
 double appBarHeight = AppBar().preferredSize.height;
 
-class BeautyCategory extends StatelessWidget {
-  const BeautyCategory({super.key});
+class HomeandgardenCategory extends StatelessWidget {
+  const HomeandgardenCategory({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class BeautyCategory extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const CategHeaderLebel(
-                    headerLebel: 'beauty',
+                    headerLebel: 'Home & garden',
                   ),
                   Expanded(
                     child: GridView.count(
@@ -34,12 +34,12 @@ class BeautyCategory extends StatelessWidget {
                       mainAxisSpacing: 50,
                       crossAxisSpacing: 15,
                       crossAxisCount: 3,
-                      children: List.generate(beauty.length, (index) {
+                      children: List.generate(homeandgarden.length, (index) {
                         return SubCategModel(
-                          maincategName: 'Beauty',
-                          subcategName: beauty[index],
-                          assteImage: 'assets/images/beauty/beauty$index.jpg',
-                          subcategLebel: beauty[index],
+                          maincategName: 'home & garden',
+                          subcategName: homeandgarden[index],
+                          assteImage: 'assets/images/homegarden/home$index.jpg',
+                          subcategLebel: homeandgarden[index],
                         );
                       }),
                     ),
@@ -53,7 +53,7 @@ class BeautyCategory extends StatelessWidget {
           bottom: 0,
           right: 0,
           child: SliderBar(
-              maincategName: 'beauty',
+              maincategName: 'home & garden',
               mainHeight: mainHeight,
               screanWidth: screanWidth),
         )
