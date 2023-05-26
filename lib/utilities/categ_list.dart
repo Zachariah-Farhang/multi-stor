@@ -11,16 +11,27 @@ List<String> maincateg = [
 ];
 
 List<String> men = [
-  'shirt',
-  't-shirt',
-  'jacket',
-  'vest',
-  'coat',
-  'jeans',
-  'shorts',
-  'suit',
-  'other',
+  'پیراهن',
+  'تی شرت',
+  'جاکت',
+  'ویست',
+  'کت',
+  'جینز',
+  'شورت',
+  'کت و شلوار',
+  'سایر',
 ];
+// List<String> men = [
+//   'shirt',
+//   't-shirt',
+//   'jacket',
+//   'vest',
+//   'coat',
+//   'jeans',
+//   'shorts',
+//   'suit',
+//   'other',
+// ];
 List<String> women = [
   'dress',
   '2pcs sets',
