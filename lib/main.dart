@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       //This widget is the main screan that is showing now on the app CustomerHomeScrean().
-      home: CustomerHomeScrean(),
+      home: Directionality(
+          textDirection: TextDirection.rtl, child: CustomerHomeScrean()),
     );
   }
 }

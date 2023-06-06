@@ -24,6 +24,7 @@ class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
     //Scaffold is the root widget of the customer page.
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         elevation: 0.0,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.blueGrey.shade700,
@@ -31,12 +32,12 @@ class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
         currentIndex: _selectedIndex,
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Category'),
-          BottomNavigationBarItem(icon: Icon(Icons.shop), label: 'Stores'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'خانه'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'دسته بندی'),
+          BottomNavigationBarItem(icon: Icon(Icons.shop), label: 'فروشگاها'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: 'Cart'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+              icon: Icon(Icons.shopping_cart), label: 'سبدخرید'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'پروفایل'),
         ],
         onTap: (index) {
           setState(
