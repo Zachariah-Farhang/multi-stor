@@ -35,6 +35,7 @@ flutter:
     - assets/images/homegarden/
     - assets/images/accessories/
     - assets/images/bags/
+    - assets/ahmad.png
 
 
   fonts:
