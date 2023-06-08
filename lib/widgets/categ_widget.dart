@@ -79,29 +79,45 @@ class SubCategModel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
-    return Material(
-      color: Colors.transparent,
+    return Container(
+      margin: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.black26,
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: InkWell(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: callPleace == 'category' ? 60 : 100,
-              width: double.maxFinite,
-              child: Image(
-                image: AssetImage(assteImage),
+            Expanded(
+              flex: 4,
+              child: Container(
+                padding: const EdgeInsets.only(bottom: 4),
+                width: MediaQuery.of(context).size.width,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                  ),
+                  color: Colors.white,
+                ),
+                child: Image(
+                  image: AssetImage(assteImage),
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: AutoSizeText(
-                subcategLebel,
-                minFontSize: 14,
-                maxLines: 1,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  overflow: TextOverflow.visible,
+            Expanded(
+              flex: 2,
+              child: Center(
+                child: AutoSizeText(
+                  subcategLebel,
+                  minFontSize: 14,
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    overflow: TextOverflow.visible,
+                  ),
                 ),
               ),
             ),
