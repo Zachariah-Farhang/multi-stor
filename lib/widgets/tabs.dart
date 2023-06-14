@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:multi_store_app/widgets/repated_tab.dart';
 
 import '../utilities/categ_list.dart';
@@ -12,47 +13,47 @@ class Tabs {
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[0],
-        icon: CupertinoIcons.person,
+        image: AssetImage('assets/images/tabImages/men.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[1],
-        icon: CupertinoIcons.person_2,
+        image: AssetImage('assets/images/tabImages/women.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[2],
-        icon: CupertinoIcons.desktopcomputer,
+        image: AssetImage('assets/images/tabImages/accessories.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[3],
-        icon: CupertinoIcons.person_3,
+        image: AssetImage('assets/images/tabImages/electronics.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[4],
-        icon: CupertinoIcons.square_favorites_alt,
+        image: AssetImage('assets/images/tabImages/shoes.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[5],
-        icon: CupertinoIcons.house_fill,
+        image: AssetImage('assets/images/tabImages/homeandgarden.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[6],
-        icon: CupertinoIcons.heart_fill,
+        image: AssetImage('assets/images/tabImages/beauty.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[7],
-        icon: CupertinoIcons.person_2_fill,
+        image: AssetImage('assets/images/tabImages/kids.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[8],
-        icon: CupertinoIcons.bag_fill,
+        image: AssetImage('assets/images/tabImages/bags.png'),
       ),
     ];
 
