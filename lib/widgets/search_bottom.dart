@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/minor_screens/search.dart';
@@ -30,8 +31,8 @@ class SearchBottom extends StatelessWidget {
                     ),
                     child: Icon(Icons.search, color: Colors.grey),
                   ),
-                  Text(
-                    'What are you looking for?',
+                  AutoSizeText(
+                    'دنبال چی میگردی؟',
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 16.0,
@@ -46,8 +47,8 @@ class SearchBottom extends StatelessWidget {
                     color: Colors.yellow,
                     borderRadius: BorderRadius.circular(25)),
                 child: const Center(
-                  child: Text(
-                    'Search',
+                  child: AutoSizeText(
+                    'جستجو',
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 16.0,

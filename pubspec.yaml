@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -36,17 +37,21 @@ flutter:
     - assets/images/bags/
 
 
-  # fonts:
-  #   - family: Shabnam
-  #     fonts:
-  #       - asset: assets/fonts/Shabnam-bold.ttf
-  #         weight: 700
-  #       - asset: assets/fonts/Shabnam-Medium.ttf
-  #         weight: 500
-  #       - asset: assets/fonts/Shabnam-Thin.ttf
-  #         weight: 300
-  #   - family: Kanun
-  #     fonts:
-  #       - asset: assets/fonts/Kanun_bold.otf
-  #         weight: 700
+  fonts:
+    - family: Vazir
+      fonts:
+        - asset: assets/fonts/Vazir-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Vazir-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Vazir-Light.ttf
+          weight: 400
+    - family: Kanun
+      fonts:
+        - asset: assets/fonts/Kanun_Bold.otf
+          weight: 700
+        - asset: assets/fonts/Kanun_Medium.otf
+          weight: 500
+        - asset: assets/fonts/Kanun_Regular.otf
+          weight: 300
 
