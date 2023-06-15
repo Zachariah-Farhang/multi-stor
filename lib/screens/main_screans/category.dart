@@ -3,18 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
 import 'package:multi_store_app/widgets/category_view_model.dart';
 import 'package:multi_store_app/widgets/search_bottom.dart';
-
-List<ItemData> items = [
-  ItemData(label: 'men', isSelected: false),
-  ItemData(label: 'women', isSelected: false),
-  ItemData(label: 'electronics', isSelected: false),
-  ItemData(label: 'accessories', isSelected: false),
-  ItemData(label: 'shoes', isSelected: false),
-  ItemData(label: 'home & garden', isSelected: false),
-  ItemData(label: 'beauty', isSelected: false),
-  ItemData(label: 'kids', isSelected: false),
-  ItemData(label: 'bags', isSelected: false),
-];
+import 'package:multi_store_app/widgets/tabs.dart';
 
 double appBarHeight = AppBar().preferredSize.height;
 double bottomBarHeight = appBarHeight;
@@ -26,194 +15,152 @@ class CategoryScreen extends StatefulWidget {
   State<CategoryScreen> createState() => _CategoryScreenState();
 }
 
-class _CategoryScreenState extends State<CategoryScreen> {
+class _CategoryScreenState extends State<CategoryScreen>
+    with SingleTickerProviderStateMixin {
   final PageController _pageController = PageController();
-  final ScrollController _scrollController = ScrollController();
-  bool _portrait = true;
-  int _selectedIndex = 0;
+  late TabController _tabController;
+  final Tabs _getTabs = Tabs(isRotated: true);
+  bool isAnimating = false;
+
   @override
   void initState() {
-    items[0].isSelected = true;
-    _selectedIndex = 0;
+    _tabController = TabController(initialIndex: 0, length: 9, vsync: this);
+    tabBarControllerListner();
     super.initState();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
-    _scrollController.dispose();
+    _tabController.removeListener(() {});
+    _tabController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Directionality(
-      textDirection: TextDirection.ltr,
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-          title: const SearchBottom(),
-        ),
-        body: OrientationBuilder(
-          builder: (context, orientation) {
-            if (orientation == Orientation.portrait) {
-              _portrait = true;
-            } else {
-              _portrait = false;
-            }
-
-            return Stack(
-              children: [
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  child: sideNavigator(size),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: categView(size),
-                ),
-              ],
-            );
-          },
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        title: const SearchBottom(),
+      ),
+      body: Stack(
+        children: [
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: sideNavigator(size),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            child: categView(size),
+          ),
+        ],
       ),
     );
   }
 
   Widget sideNavigator(Size size) {
+    List<Widget> tabs = _getTabs.getTabs();
     return SizedBox(
-      width: size.width * 0.25,
+      width: size.width * 0.20,
       height: size.height - bottomBarHeight - appBarHeight,
-      child: ListView.builder(
-        padding: const EdgeInsets.only(top: 24),
-        controller: _scrollController,
-        physics: const BouncingScrollPhysics(),
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          return Ink(
-            color: items[index].isSelected && index == _selectedIndex
-                ? Colors.white
-                : Colors.grey.shade300,
-            child: InkWell(
-              onTap: () {
-                _pageController.animateToPage(
-                  index,
-                  duration: const Duration(milliseconds: 100),
-                  curve: Curves.easeIn,
-                );
-              },
-              splashColor: Colors.yellow.shade500,
-              // highlightColor: Colors.yellow.shade500,
-              child: SizedBox(
-                height: 100,
-                child: Center(child: Text(items[index].label)),
-              ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Expanded(
+            child: RotatedBox(
+              quarterTurns: 3,
+              child: TabBar(
+                  splashBorderRadius:
+                      const BorderRadius.all(Radius.circular(8)),
+                  controller: _tabController,
+                  indicator: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      color: Colors.black12),
+                  physics: const BouncingScrollPhysics(),
+                  isScrollable: true,
+                  tabs: tabs),
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
 
   Widget categView(Size size) {
     return Container(
-      width: size.width * 0.75,
+      width: size.width * 0.80,
       height: size.height - bottomBarHeight - appBarHeight,
       color: Colors.white,
       child: PageView(
         controller: _pageController,
         physics: const BouncingScrollPhysics(),
         onPageChanged: (value) {
-          _selectItem(value, size);
+          _tabController.animateTo(value,
+              duration: const Duration(milliseconds: 100),
+              curve: Curves.bounceInOut);
         },
         scrollDirection: Axis.vertical,
         children: [
           CategoryViewModel(
-              screanWidth: size.width * 0.75,
-              mainHeight: size.height - (appBarHeight * 2.5),
               categoryList: men,
-              headerLabel: 'Men',
+              headerLabel: maincateg[0],
               assetImage: 'men/men'),
           CategoryViewModel(
-              screanWidth: size.width * 0.75,
-              mainHeight: size.height - (appBarHeight * 2.5),
               categoryList: women,
-              headerLabel: 'Women',
+              headerLabel: maincateg[1],
               assetImage: 'women/women'),
           CategoryViewModel(
-              screanWidth: size.width * 0.75,
-              mainHeight: size.height - (appBarHeight * 2.5),
               categoryList: accessories,
-              headerLabel: 'Accessories',
+              headerLabel: maincateg[2],
               assetImage: 'accessories/accessories'),
           CategoryViewModel(
-              screanWidth: size.width * 0.75,
-              mainHeight: size.height - (appBarHeight * 2.5),
               categoryList: electronics,
-              headerLabel: 'Electronics',
+              headerLabel: maincateg[3],
               assetImage: 'electronics/electronics'),
           CategoryViewModel(
-              screanWidth: size.width * 0.75,
-              mainHeight: size.height - (appBarHeight * 2.5),
               categoryList: shoes,
-              headerLabel: 'Shoes',
+              headerLabel: maincateg[4],
               assetImage: 'shoes/shoes'),
           CategoryViewModel(
-              screanWidth: size.width * 0.75,
-              mainHeight: size.height - (appBarHeight * 2.5),
               categoryList: homeandgarden,
-              headerLabel: 'Home & Garden',
+              headerLabel: maincateg[5],
               assetImage: 'homegarden/home'),
           CategoryViewModel(
-              screanWidth: size.width * 0.75,
-              mainHeight: size.height - (appBarHeight * 2.5),
               categoryList: beauty,
-              headerLabel: 'Beauty',
+              headerLabel: maincateg[6],
               assetImage: 'beauty/beauty'),
           CategoryViewModel(
-              screanWidth: size.width * 0.75,
-              mainHeight: size.height - (appBarHeight * 2.5),
               categoryList: kids,
-              headerLabel: 'Kids',
+              headerLabel: maincateg[7],
               assetImage: 'kids/kids'),
           CategoryViewModel(
-              screanWidth: size.width * 0.75,
-              mainHeight: size.height - (appBarHeight * 2.5),
               categoryList: bags,
-              headerLabel: 'Bags',
+              headerLabel: maincateg[8],
               assetImage: 'bags/bags'),
         ],
       ),
     );
   }
 
-  void _selectItem(int index, Size size) {
-    setState(() {
-      items[_selectedIndex].isSelected = false;
-      items[index].isSelected = true;
-      _selectedIndex = index;
-      _scrollToIndex(
-          index, _portrait ? size.height * 0.075 : size.height * 0.20);
+  void tabBarControllerListner() {
+    _tabController.addListener(() {
+      if (!isAnimating) {
+        isAnimating = true;
+        _pageController
+            .animateToPage(
+          _tabController.index,
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.bounceInOut,
+        )
+            .then((_) {
+          isAnimating = false;
+        });
+      }
     });
   }
-
-  void _scrollToIndex(int index, double itemExtent) {
-    double offset = index * itemExtent;
-
-    _scrollController.animateTo(
-      offset,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
-}
-
-class ItemData {
-  String label;
-  bool isSelected;
-  ItemData({required this.label, this.isSelected = false});
 }
