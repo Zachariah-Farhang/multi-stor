@@ -37,7 +37,7 @@ class CategoryViewModel extends StatelessWidget {
                     Expanded(
                       child: GridView.count(
                         physics: const BouncingScrollPhysics(),
-                        mainAxisSpacing: 30,
+                        mainAxisSpacing: 20,
                         crossAxisCount: 3,
                         children: List.generate(categoryList.length, (index) {
                           return SubCategModel(

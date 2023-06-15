@@ -74,12 +74,13 @@ class _CategoryScreenState extends State<CategoryScreen>
             child: RotatedBox(
               quarterTurns: 3,
               child: Container(
-                color: Colors.amber,
+                color: Colors.white,
                 child: TabBar(
+                    indicatorWeight: 0,
                     padding: EdgeInsets.zero,
                     indicatorPadding: EdgeInsets.zero,
                     labelPadding: EdgeInsets.zero,
-                    indicatorSize: TabBarIndicatorSize.label,
+                    indicatorSize: TabBarIndicatorSize.tab,
                     controller: _tabController,
                     splashBorderRadius:
                         const BorderRadius.all(Radius.circular(8)),

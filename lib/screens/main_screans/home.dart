@@ -30,8 +30,10 @@ class _HomeScreanState extends State<HomeScrean> {
           title: const SearchBottom(),
           bottom: TabBar(
               padding: EdgeInsets.zero,
+              indicatorWeight: 0,
               indicatorPadding: EdgeInsets.zero,
-              labelPadding: const EdgeInsets.symmetric(horizontal: 15),
+              labelPadding:
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
               indicatorSize: TabBarIndicatorSize.tab,
               splashBorderRadius: const BorderRadius.all(Radius.circular(8)),
               indicator: const BoxDecoration(
@@ -41,54 +43,76 @@ class _HomeScreanState extends State<HomeScrean> {
               isScrollable: true,
               tabs: tabs),
         ),
-        body: TabBarView(physics: const BouncingScrollPhysics(), children: [
-          CategoryViewModel(
-              callPleace: 'home',
-              categoryList: men,
-              headerLabel: maincateg[0],
-              assetImage: 'men/men'),
-          CategoryViewModel(
-              callPleace: 'home',
-              categoryList: women,
-              headerLabel: maincateg[1],
-              assetImage: 'women/women'),
-          CategoryViewModel(
-              callPleace: 'home',
-              categoryList: accessories,
-              headerLabel: maincateg[2],
-              assetImage: 'accessories/accessories'),
-          CategoryViewModel(
-              callPleace: 'home',
-              categoryList: electronics,
-              headerLabel: maincateg[3],
-              assetImage: 'electronics/electronics'),
-          CategoryViewModel(
-              callPleace: 'home',
-              categoryList: shoes,
-              headerLabel: maincateg[4],
-              assetImage: 'shoes/shoes'),
-          CategoryViewModel(
-              callPleace: 'home',
-              categoryList: homeandgarden,
-              headerLabel: maincateg[5],
-              assetImage: 'homegarden/home'),
-          CategoryViewModel(
-              callPleace: 'home',
-              categoryList: beauty,
-              headerLabel: maincateg[6],
-              assetImage: 'beauty/beauty'),
-          CategoryViewModel(
-              callPleace: 'home',
-              categoryList: kids,
-              headerLabel: maincateg[7],
-              assetImage: 'kids/kids'),
-          CategoryViewModel(
-              callPleace: 'home',
-              categoryList: bags,
-              headerLabel: maincateg[8],
-              assetImage: 'bags/bags'),
-        ]),
+        body:
+            // SingleChildScrollView(
+            //   child:
+            SizedBox(
+          height: MediaQuery.of(context).size.height -
+              (AppBar().preferredSize.height * 2.5),
+          child: Column(
+            children: [
+              // Expanded(
+              //     flex: 2,
+              //     child: Image(
+              //       image: const AssetImage('assets/images/bags/bags0.jpg'),
+              //       width: MediaQuery.of(context).size.width,
+              //     )),
+              Expanded(
+                child: TabBarView(
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                      CategoryViewModel(
+                          callPleace: 'home',
+                          categoryList: men,
+                          headerLabel: maincateg[0],
+                          assetImage: 'men/men'),
+                      CategoryViewModel(
+                          callPleace: 'home',
+                          categoryList: women,
+                          headerLabel: maincateg[1],
+                          assetImage: 'women/women'),
+                      CategoryViewModel(
+                          callPleace: 'home',
+                          categoryList: accessories,
+                          headerLabel: maincateg[2],
+                          assetImage: 'accessories/accessories'),
+                      CategoryViewModel(
+                          callPleace: 'home',
+                          categoryList: electronics,
+                          headerLabel: maincateg[3],
+                          assetImage: 'electronics/electronics'),
+                      CategoryViewModel(
+                          callPleace: 'home',
+                          categoryList: shoes,
+                          headerLabel: maincateg[4],
+                          assetImage: 'shoes/shoes'),
+                      CategoryViewModel(
+                          callPleace: 'home',
+                          categoryList: homeandgarden,
+                          headerLabel: maincateg[5],
+                          assetImage: 'homegarden/home'),
+                      CategoryViewModel(
+                          callPleace: 'home',
+                          categoryList: beauty,
+                          headerLabel: maincateg[6],
+                          assetImage: 'beauty/beauty'),
+                      CategoryViewModel(
+                          callPleace: 'home',
+                          categoryList: kids,
+                          headerLabel: maincateg[7],
+                          assetImage: 'kids/kids'),
+                      CategoryViewModel(
+                          callPleace: 'home',
+                          categoryList: bags,
+                          headerLabel: maincateg[8],
+                          assetImage: 'bags/bags'),
+                    ]),
+              ),
+            ],
+          ),
+        ),
       ),
     );
+    // );
   }
 }

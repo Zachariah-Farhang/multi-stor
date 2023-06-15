@@ -79,13 +79,15 @@ class SubCategModel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.black26,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: InkWell(
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
+      splashColor: Colors.black54,
+      child: Container(
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.black26,
+          borderRadius: BorderRadius.circular(8),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -112,7 +114,7 @@ class SubCategModel extends StatelessWidget {
               child: Center(
                 child: AutoSizeText(
                   subcategLebel,
-                  minFontSize: 14,
+                  minFontSize: 16,
                   maxLines: 1,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
@@ -123,18 +125,18 @@ class SubCategModel extends StatelessWidget {
             ),
           ],
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SubGategories(
-                subcategName: subcategName,
-                maincategName: maincategName,
-              ),
-            ),
-          );
-        },
       ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SubGategories(
+              subcategName: subcategName,
+              maincategName: maincategName,
+            ),
+          ),
+        );
+      },
     );
   }
 }
