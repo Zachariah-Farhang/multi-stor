@@ -15,7 +15,7 @@ class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
   final List<Widget> _tabs = const [
     HomeScrean(),
     CategoryScreen(),
-    Center(child: Text('Stores')),
+    Center(child: Text('Stors')),
     Center(child: Text('Cart')),
     Center(child: Text('Profile')),
   ];
