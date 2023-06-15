@@ -13,47 +13,47 @@ class Tabs {
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[0],
-        image: AssetImage('assets/images/tabImages/men.png'),
+        image: const AssetImage('assets/images/tabImages/men.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[1],
-        image: AssetImage('assets/images/tabImages/women.png'),
+        image: const AssetImage('assets/images/tabImages/women.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[2],
-        image: AssetImage('assets/images/tabImages/accessories.png'),
+        image: const AssetImage('assets/images/tabImages/accessories.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[3],
-        image: AssetImage('assets/images/tabImages/electronics.png'),
+        image: const AssetImage('assets/images/tabImages/electronics.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[4],
-        image: AssetImage('assets/images/tabImages/shoes.png'),
+        image: const AssetImage('assets/images/tabImages/shoes.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[5],
-        image: AssetImage('assets/images/tabImages/homeandgarden.png'),
+        image: const AssetImage('assets/images/tabImages/homeandgarden.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[6],
-        image: AssetImage('assets/images/tabImages/beauty.png'),
+        image: const AssetImage('assets/images/tabImages/beauty.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[7],
-        image: AssetImage('assets/images/tabImages/kids.png'),
+        image: const AssetImage('assets/images/tabImages/kids.png'),
       ),
       RepeatedTab(
         isRotated: isRotated,
         tabName: maincateg[8],
-        image: AssetImage('assets/images/tabImages/bags.png'),
+        image: const AssetImage('assets/images/tabImages/bags.png'),
       ),
     ];
 
