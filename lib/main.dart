@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:multi_store_app/screens/main_screans/supplier_home_screen.dart';
+import 'package:multi_store_app/screens/main_screans/welcome.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       //This widget is the main screan that is showing now on the app CustomerHomeScrean().
-      home: SupplierHomeScreen(),
+      home: WelcomeScreen(),
     );
   }
 }

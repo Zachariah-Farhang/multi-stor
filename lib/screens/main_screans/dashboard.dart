@@ -23,36 +23,36 @@ class DashbordScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "داشبورد",
           style: TextStyle(color: Colors.black87),
         ),
         actions: [
           IconButton(
               onPressed: () {},
-              icon: RotatedBox(
+              icon: const RotatedBox(
                   quarterTurns: -2,
                   child: Icon(Icons.logout, color: Colors.black87)))
         ],
       ),
       body: GridView.count(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         crossAxisSpacing: 25,
         mainAxisSpacing: 25,
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         crossAxisCount: 2,
         children: List.generate(4, (index) {
           return Material(
             elevation: 8,
             shadowColor: Colors.grey.shade900,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
                     bottomRight: Radius.circular(30))),
             color: Colors.grey.shade400,
             child: InkWell(
               splashColor: Colors.black38,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30)),
               onTap: () {},
@@ -67,7 +67,7 @@ class DashbordScreen extends StatelessWidget {
                     ),
                     Text(
                       labels[index],
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: Colors.black87),
