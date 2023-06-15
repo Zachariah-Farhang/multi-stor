@@ -37,6 +37,7 @@ flutter:
     - assets/images/bags/
     - assets/images/tabImages/
     - assets/images/supplierImages/
+    - assets/images/welcome/
 
 
   fonts:
