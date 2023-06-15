@@ -11,147 +11,189 @@ class ProfileScreen extends StatefulWidget {
 class ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade300,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            pinned: true,
-            elevation: 0,
-            backgroundColor: Colors.white,
-            expandedHeight: 140,
-            flexibleSpace: LayoutBuilder(
-              builder: (context, constraints) {
-                return FlexibleSpaceBar(
-                  titlePadding: EdgeInsets.zero,
-                  centerTitle: true,
-                  title: AnimatedOpacity(
-                    opacity: constraints.biggest.height <= 100 ? 1 : 0,
-                    duration: const Duration(milliseconds: 200),
-                    child: const Text(
-                      'پروفایل',
-                      style: TextStyle(color: Colors.black87, fontSize: 29),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  background: Container(
-                      decoration: const BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                    Colors.yellow,
-                    Colors.brown,
-                  ]))),
-                );
-              },
-            ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade300,
+        body: Stack(children: [
+          Container(
+            height: 210,
+            decoration: const BoxDecoration(
+                gradient:
+                    LinearGradient(colors: [Colors.yellow, Colors.brown])),
           ),
-          SliverToBoxAdapter(
-            child: Column(children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: 80,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(50)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ReusableCotiner(
-                      text: "سبدخرید",
-                      decoration: const BoxDecoration(
-                          color: Colors.black54,
-                          borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(50),
-                              bottomRight: Radius.circular(50))),
-                      onPressed: () {},
-                    ),
-                    ReusableCotiner(
-                      text: "سفارشات",
-                      decoration: const BoxDecoration(
-                        color: Colors.black54,
+          CustomScrollView(physics: const BouncingScrollPhysics(), slivers: [
+            SliverAppBar(
+              pinned: true,
+              elevation: 0,
+              backgroundColor: Colors.white,
+              expandedHeight: 160,
+              flexibleSpace: LayoutBuilder(
+                builder: (context, constraints) {
+                  return FlexibleSpaceBar(
+                    centerTitle: true,
+                    title: AnimatedOpacity(
+                      opacity: constraints.biggest.height <= 100 ? 1 : 0,
+                      duration: const Duration(milliseconds: 200),
+                      child: const Text(
+                        'پروفایل',
+                        style: TextStyle(color: Colors.black87, fontSize: 29),
+                        textAlign: TextAlign.center,
                       ),
-                      onPressed: () {},
                     ),
-                    ReusableCotiner(
-                      text: "موردعلاقه ها",
+                    background: Container(
+                      padding: const EdgeInsets.only(top: 20),
                       decoration: const BoxDecoration(
+                        gradient: LinearGradient(colors: [
+                          Colors.yellow,
+                          Colors.brown,
+                        ]),
+                      ),
+                      child: const Column(children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundImage:
+                              AssetImage("assets/images/tabImages/men.png"),
+                        ),
+                        Text(
+                          "نام کاربر",
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        )
+                      ]),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Column(children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: 80,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ReusableCotiner(
+                        text: "سبدخرید",
+                        decoration: const BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(50),
+                                bottomRight: Radius.circular(50))),
+                        onPressed: () {},
+                      ),
+                      ReusableCotiner(
+                        text: "سفارشات",
+                        decoration: const BoxDecoration(
                           color: Colors.black54,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(50),
-                              bottomLeft: Radius.circular(50))),
-                      onPressed: () {},
-                    ),
-                  ],
+                        ),
+                        onPressed: () {},
+                      ),
+                      ReusableCotiner(
+                        text: "موردعلاقه ها",
+                        decoration: const BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(50),
+                                bottomLeft: Radius.circular(50))),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 150,
-                child: Image(
-                  image: AssetImage("assets/images/tabImages/bags.png"),
+                Container(
+                  color: Colors.grey.shade300,
+                  child: Column(children: [
+                    const SizedBox(
+                      height: 150,
+                      child: Image(
+                        image: AssetImage("assets/images/tabImages/bags.png"),
+                      ),
+                    ),
+                    const ReuseableSizedBox(
+                      text: "اطلاعات حساب",
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(8),
+                      height: 260,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16)),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: ReusableListTile(
+                              onTop: () {},
+                              title: "ایمیل آدرس",
+                              subTitle: "example@gmail.com",
+                              icon: Icons.email,
+                            ),
+                          ),
+                          const ReuseableDivider(),
+                          Expanded(
+                            child: ReusableListTile(
+                              onTop: () {},
+                              title: "شماره تماس",
+                              subTitle: "+۹۳۷۹۲۱۲۳۴۵۶",
+                              icon: Icons.phone,
+                            ),
+                          ),
+                          const ReuseableDivider(),
+                          Expanded(
+                            child: ReusableListTile(
+                              onTop: () {},
+                              title: "آدرس",
+                              subTitle: "شهرنو،مارکت حضرتها،درب شیشم",
+                              icon: Icons.location_on,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const ReuseableSizedBox(text: "تنظیمات حساب"),
+                    Container(
+                      margin: const EdgeInsets.all(8),
+                      height: 260,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16)),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: ReusableListTile(
+                              onTop: () {},
+                              title: "ویرایش پروفایل",
+                              icon: Icons.edit,
+                            ),
+                          ),
+                          const ReuseableDivider(),
+                          Expanded(
+                            child: ReusableListTile(
+                              onTop: () {},
+                              title: "تغیر رمز عبور",
+                              icon: Icons.lock,
+                            ),
+                          ),
+                          const ReuseableDivider(),
+                          Expanded(
+                            child: ReusableListTile(
+                              onTop: () {},
+                              title: "خروج",
+                              icon: Icons.logout,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]),
                 ),
-              ),
-              const ReuseableSizedBox(
-                text: "اطلاعات حساب",
-              ),
-              Container(
-                margin: const EdgeInsets.all(8),
-                height: 260,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16)),
-                child: const Column(
-                  children: [
-                    ReusableListTile(
-                      title: "ایمیل آدرس",
-                      subTitle: "example@gmail.com",
-                      icon: Icons.email,
-                    ),
-                    ReuseableDivider(),
-                    ReusableListTile(
-                      title: "شماره تماس",
-                      subTitle: "+۹۳۷۹۲۱۲۳۴۵۶",
-                      icon: Icons.phone,
-                    ),
-                    ReuseableDivider(),
-                    ReusableListTile(
-                      title: "آدرس",
-                      subTitle: "شهرنو،مارکت حضرتها،درب شیشم",
-                      icon: Icons.location_on,
-                    ),
-                  ],
-                ),
-              ),
-              const ReuseableSizedBox(text: "تنظیمات حساب"),
-              Container(
-                margin: const EdgeInsets.all(8),
-                height: 260,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16)),
-                child: const Column(
-                  children: [
-                    ReusableListTile(
-                      title: "ایمیل آدرس",
-                      subTitle: "example@gmail.com",
-                      icon: Icons.email,
-                    ),
-                    ReuseableDivider(),
-                    ReusableListTile(
-                      title: "شماره تماس",
-                      subTitle: "+۹۳۷۹۲۱۲۳۴۵۶",
-                      icon: Icons.phone,
-                    ),
-                    ReuseableDivider(),
-                    ReusableListTile(
-                      title: "آدرس",
-                      subTitle: "شهرنو،مارکت حضرتها،درب شیشم",
-                      icon: Icons.location_on,
-                    ),
-                  ],
-                ),
-              ),
-            ]),
-          )
-        ],
+              ]),
+            ),
+          ]),
+        ]),
       ),
     );
   }
@@ -178,19 +220,31 @@ class ReusableListTile extends StatelessWidget {
   final String title;
   final String subTitle;
   final IconData icon;
+  final void Function()? onTop;
   const ReusableListTile({
     super.key,
     required this.title,
-    required this.subTitle,
+    this.subTitle = '',
     required this.icon,
+    this.onTop,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(title),
-      subtitle: Text(subTitle),
-      leading: Icon(icon),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        splashColor: Colors.black54,
+        onTap: onTop,
+        child: Center(
+          child: ListTile(
+            title: Text(title),
+            subtitle: subTitle != "" ? Text(subTitle) : null,
+            leading: Icon(icon),
+          ),
+        ),
+      ),
     );
   }
 }
