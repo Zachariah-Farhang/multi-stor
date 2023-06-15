@@ -12,50 +12,48 @@ class SliderBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.brown.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: RotatedBox(
-            quarterTurns: 3,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const AutoSizeText(
-                  '<<',
-                  minFontSize: 16,
-                  style: TextStyle(
-                      color: Colors.brown,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 10),
-                ),
-                AutoSizeText(
-                  maincategName,
-                  minFontSize: 10,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.brown.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: RotatedBox(
+          quarterTurns: 3,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const AutoSizeText(
+                '<<',
+                minFontSize: 16,
+                style: TextStyle(
                     color: Colors.brown,
-                    letterSpacing: 1.5,
+                    fontSize: 16,
                     fontWeight: FontWeight.w600,
-                  ),
+                    letterSpacing: 10),
+              ),
+              AutoSizeText(
+                maincategName,
+                minFontSize: 10,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.brown,
+                  letterSpacing: 1.5,
+                  fontWeight: FontWeight.w600,
                 ),
-                const AutoSizeText(
-                  '>>',
-                  minFontSize: 16,
-                  style: TextStyle(
-                      color: Colors.brown,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 10),
-                ),
-              ],
-            ),
+              ),
+              const AutoSizeText(
+                '>>',
+                minFontSize: 16,
+                style: TextStyle(
+                    color: Colors.brown,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 10),
+              ),
+            ],
           ),
         ),
       ),
@@ -68,16 +66,20 @@ class SubCategModel extends StatelessWidget {
   final String subcategName;
   final String assteImage;
   final String subcategLebel;
+  final String callPleace;
+
   const SubCategModel({
     super.key,
     required this.maincategName,
     required this.subcategName,
     required this.assteImage,
     required this.subcategLebel,
+    required this.callPleace,
   });
 
   @override
   Widget build(BuildContext context) {
+  
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -85,7 +87,7 @@ class SubCategModel extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: 40,
+              height: callPleace == 'category' ? 60 : 100,
               width: double.maxFinite,
               child: Image(
                 image: AssetImage(assteImage),
@@ -132,7 +134,7 @@ class CategHeaderLebel extends StatelessWidget {
   Widget build(BuildContext context) {
     return FittedBox(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20.0, 20.0, 10.0, 10.0),
+        padding: const EdgeInsets.only(right: 20),
         child: AutoSizeText(
           headerLebel,
           minFontSize: 22,

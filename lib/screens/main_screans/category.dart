@@ -6,7 +6,6 @@ import 'package:multi_store_app/widgets/search_bottom.dart';
 import 'package:multi_store_app/widgets/tabs.dart';
 
 double appBarHeight = AppBar().preferredSize.height;
-double bottomBarHeight = appBarHeight;
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({Key? key}) : super(key: key);
@@ -49,12 +48,12 @@ class _CategoryScreenState extends State<CategoryScreen>
       body: Stack(
         children: [
           Positioned(
-            bottom: 0,
+            top: 0,
             right: 0,
             child: sideNavigator(size),
           ),
           Positioned(
-            bottom: 0,
+            top: 0,
             left: 0,
             child: categView(size),
           ),
@@ -66,24 +65,31 @@ class _CategoryScreenState extends State<CategoryScreen>
   Widget sideNavigator(Size size) {
     List<Widget> tabs = _getTabs.getTabs();
     return SizedBox(
-      width: size.width * 0.20,
-      height: size.height - bottomBarHeight - appBarHeight,
+      width: size.width * 0.25,
+      height: size.height - (appBarHeight * 2.5),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Expanded(
             child: RotatedBox(
               quarterTurns: 3,
-              child: TabBar(
-                  splashBorderRadius:
-                      const BorderRadius.all(Radius.circular(8)),
-                  controller: _tabController,
-                  indicator: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      color: Colors.black12),
-                  physics: const BouncingScrollPhysics(),
-                  isScrollable: true,
-                  tabs: tabs),
+              child: Container(
+                color: Colors.amber,
+                child: TabBar(
+                    padding: EdgeInsets.zero,
+                    indicatorPadding: EdgeInsets.zero,
+                    labelPadding: EdgeInsets.zero,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    controller: _tabController,
+                    splashBorderRadius:
+                        const BorderRadius.all(Radius.circular(8)),
+                    indicator: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        color: Colors.black12),
+                    physics: const BouncingScrollPhysics(),
+                    isScrollable: true,
+                    tabs: tabs),
+              ),
             ),
           ),
         ],
@@ -93,8 +99,8 @@ class _CategoryScreenState extends State<CategoryScreen>
 
   Widget categView(Size size) {
     return Container(
-      width: size.width * 0.80,
-      height: size.height - bottomBarHeight - appBarHeight,
+      width: size.width * 0.75,
+      height: size.height - (appBarHeight * 2.5),
       color: Colors.white,
       child: PageView(
         controller: _pageController,
@@ -107,38 +113,47 @@ class _CategoryScreenState extends State<CategoryScreen>
         scrollDirection: Axis.vertical,
         children: [
           CategoryViewModel(
+              callPleace: 'category',
               categoryList: men,
               headerLabel: maincateg[0],
               assetImage: 'men/men'),
           CategoryViewModel(
+              callPleace: 'category',
               categoryList: women,
               headerLabel: maincateg[1],
               assetImage: 'women/women'),
           CategoryViewModel(
+              callPleace: 'category',
               categoryList: accessories,
               headerLabel: maincateg[2],
               assetImage: 'accessories/accessories'),
           CategoryViewModel(
+              callPleace: 'category',
               categoryList: electronics,
               headerLabel: maincateg[3],
               assetImage: 'electronics/electronics'),
           CategoryViewModel(
+              callPleace: 'category',
               categoryList: shoes,
               headerLabel: maincateg[4],
               assetImage: 'shoes/shoes'),
           CategoryViewModel(
+              callPleace: 'category',
               categoryList: homeandgarden,
               headerLabel: maincateg[5],
               assetImage: 'homegarden/home'),
           CategoryViewModel(
+              callPleace: 'category',
               categoryList: beauty,
               headerLabel: maincateg[6],
               assetImage: 'beauty/beauty'),
           CategoryViewModel(
+              callPleace: 'category',
               categoryList: kids,
               headerLabel: maincateg[7],
               assetImage: 'kids/kids'),
           CategoryViewModel(
+              callPleace: 'category',
               categoryList: bags,
               headerLabel: maincateg[8],
               assetImage: 'bags/bags'),
