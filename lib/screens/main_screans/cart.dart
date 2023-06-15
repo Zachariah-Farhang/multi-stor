@@ -1,8 +1,8 @@
-import 'dart:ffi';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/screens/main_screans/customer_home.dart';
+
+import '../../widgets/reuseable_bottun.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -50,11 +50,14 @@ class _CartScreenState extends State<CartScreen> {
             ),
             ReuseableButton(
               onPressed: replacePage,
-              text: const Text(
-                "به خرید ادامه دهید",
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              ),
               color: Colors.blueAccent,
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "به خرید ادامه دهید",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              ),
             )
           ]),
         ),
@@ -79,45 +82,15 @@ class _CartScreenState extends State<CartScreen> {
             ),
             ReuseableButton(
                 onPressed: () {},
-                text: const Text("پرداخت",
+                color: Colors.yellow,
+                child: const Text("پرداخت",
                     style: TextStyle(
                         color: Colors.black87,
                         fontSize: 22,
-                        fontWeight: FontWeight.bold)),
-                color: Colors.yellow)
+                        fontWeight: FontWeight.bold)))
           ]),
         ),
       ),
-    );
-  }
-}
-
-class ReuseableButton extends StatelessWidget {
-  final void Function() onPressed;
-  final Text text;
-  final Color color;
-  const ReuseableButton({
-    super.key,
-    required this.onPressed,
-    required this.text,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(color),
-        elevation: MaterialStateProperty.all(0),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(16.0), // Adjust the value as needed
-          ),
-        ),
-      ),
-      onPressed: onPressed,
-      child: text,
     );
   }
 }

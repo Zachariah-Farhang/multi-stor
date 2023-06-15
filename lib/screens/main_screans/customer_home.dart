@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_store_app/screens/main_screans/cart.dart';
 import 'package:multi_store_app/screens/main_screans/category.dart';
 import 'package:multi_store_app/screens/main_screans/home.dart';
+import 'package:multi_store_app/screens/main_screans/profile.dart';
 import 'package:multi_store_app/screens/main_screans/stores.dart';
 
 //I have created a fulstatwidget for customer page that have a navigationbar.
@@ -19,7 +20,7 @@ class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
     CategoryScreen(),
     StoresScreen(),
     CartScreen(),
-    Center(child: Text('Profile')),
+    ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {
