@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/screens/main_screans/customer_home.dart';
+import 'package:multi_store_app/screens/main_screens/customer_home.dart';
 
 import '../../widgets/reuseable_bottun.dart';
 

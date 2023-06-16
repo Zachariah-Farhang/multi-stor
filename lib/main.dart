@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:multi_store_app/screens/main_screans/welcome.dart';
+import 'package:multi_store_app/screens/main_screens/welcome.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +13,7 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  //This widget is the root of ouer application.
+  //This widget is the root of our application.
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(

@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/screens/main_screans/category.dart';
-import 'package:multi_store_app/screens/main_screans/dashboard.dart';
-import 'package:multi_store_app/screens/main_screans/home.dart';
-
-import 'package:multi_store_app/screens/main_screans/stores.dart';
+import 'package:multi_store_app/screens/main_screens/cart.dart';
+import 'package:multi_store_app/screens/main_screens/category.dart';
+import 'package:multi_store_app/screens/main_screens/home.dart';
+import 'package:multi_store_app/screens/main_screens/profile.dart';
+import 'package:multi_store_app/screens/main_screens/stores.dart';
 
 //I have created a fulstatwidget for customer page that have a navigationbar.
-class SupplierHomeScreen extends StatefulWidget {
-  const SupplierHomeScreen({super.key});
+class CustomerHomeScrean extends StatefulWidget {
+  const CustomerHomeScrean({super.key});
 
   @override
-  State<SupplierHomeScreen> createState() => _SupplierHomeScreenState();
+  State<CustomerHomeScrean> createState() => _CustomerHomeScreanState();
 }
 
-class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
+class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
   int _selectedIndex = 0;
   final List<Widget> _tabs = const [
     HomeScrean(),
     CategoryScreen(),
     StoresScreen(),
-    DashbordScreen(),
-    Center(
-      child: Text("افزودن جنس جدید"),
-    ),
+    CartScreen(),
+    ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -44,9 +42,8 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
                 icon: Icon(Icons.search), label: 'دسته بندی'),
             BottomNavigationBarItem(icon: Icon(Icons.shop), label: 'فروشگاها'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.dashboard), label: 'داشبورد'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.upload), label: 'بارگذاری'),
+                icon: Icon(Icons.shopping_cart), label: 'سبدخرید'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'پروفایل'),
           ],
           onTap: (index) {
             setState(

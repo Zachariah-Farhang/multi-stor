@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/screens/main_screans/cart.dart';
-import 'package:multi_store_app/screens/main_screans/category.dart';
-import 'package:multi_store_app/screens/main_screans/home.dart';
-import 'package:multi_store_app/screens/main_screans/profile.dart';
-import 'package:multi_store_app/screens/main_screans/stores.dart';
+import 'package:multi_store_app/screens/main_screens/category.dart';
+import 'package:multi_store_app/screens/main_screens/dashboard.dart';
+import 'package:multi_store_app/screens/main_screens/home.dart';
+
+import 'package:multi_store_app/screens/main_screens/stores.dart';
 
 //I have created a fulstatwidget for customer page that have a navigationbar.
-class CustomerHomeScrean extends StatefulWidget {
-  const CustomerHomeScrean({super.key});
+class SupplierHomeScreen extends StatefulWidget {
+  const SupplierHomeScreen({super.key});
 
   @override
-  State<CustomerHomeScrean> createState() => _CustomerHomeScreanState();
+  State<SupplierHomeScreen> createState() => _SupplierHomeScreenState();
 }
 
-class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
+class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
   int _selectedIndex = 0;
   final List<Widget> _tabs = const [
     HomeScrean(),
     CategoryScreen(),
     StoresScreen(),
-    CartScreen(),
-    ProfileScreen(),
+    DashbordScreen(),
+    Center(
+      child: Text("افزودن جنس جدید"),
+    ),
   ];
   @override
   Widget build(BuildContext context) {
@@ -42,8 +44,9 @@ class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
                 icon: Icon(Icons.search), label: 'دسته بندی'),
             BottomNavigationBarItem(icon: Icon(Icons.shop), label: 'فروشگاها'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart), label: 'سبدخرید'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'پروفایل'),
+                icon: Icon(Icons.dashboard), label: 'داشبورد'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.upload), label: 'بارگذاری'),
           ],
           onTap: (index) {
             setState(
