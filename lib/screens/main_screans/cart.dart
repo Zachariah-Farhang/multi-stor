@@ -65,7 +65,7 @@ class _CartScreenState extends State<CartScreen> {
           padding: const EdgeInsets.all(8.0),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            const Row(
+            Row(
               children: [
                 Text(
                   "مجموعه :",

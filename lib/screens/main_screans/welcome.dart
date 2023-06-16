@@ -183,7 +183,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     color: Colors.grey.withOpacity(0.6),
                     height: 80,
                     padding: const EdgeInsets.all(8.0),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Column(
