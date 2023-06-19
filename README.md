@@ -1,2 +1,2 @@
 # multi-stor
-This reedme is created for "sohrab's" branch
+This readme is created for "sohrab's" branch
