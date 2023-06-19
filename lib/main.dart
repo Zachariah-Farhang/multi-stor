@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:multi_store_app/auth/customer_signup.dart';
+import 'package:multi_store_app/screens/main_screans/customer_home.dart';
+import 'package:multi_store_app/screens/main_screans/supplier_home_screen.dart';
 import 'package:multi_store_app/screens/main_screans/welcome.dart';
 
 void main() {
@@ -16,10 +19,16 @@ class MyApp extends StatelessWidget {
   //This widget is the root of ouer application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       //This widget is the main screan that is showing now on the app CustomerHomeScrean().
-      home: WelcomeScreen(),
+      initialRoute: "/welcome_screen",
+      routes: {
+        '/welcome_screen': ((context) => const WelcomeScreen()),
+        '/customer_screen': ((context) => const CustomerHomeScrean()),
+        '/supplier_screen': ((context) => const SupplierHomeScreen()),
+        '/customer_signup': ((context) => const CustomerRgisterScreen()),
+      },
     );
   }
 }

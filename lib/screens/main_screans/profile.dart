@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/widgets/reuseable_bottun.dart';
+import 'package:multi_store_app/components/customer_components/customer_orders.dart';
+import 'package:multi_store_app/components/customer_components/wishlist.dart';
+import 'package:multi_store_app/screens/main_screans/cart.dart';
+import 'package:multi_store_app/widgets/app_bar_back_button.dart';
+
+import '../../widgets/reuseable_continer.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -74,32 +79,69 @@ class ProfileScreenState extends State<ProfileScreen> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(50)),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ReusableCotiner(
-                        text: "سبدخرید",
                         decoration: const BoxDecoration(
                             color: Colors.black54,
                             borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(50),
                                 bottomRight: Radius.circular(50))),
-                        onPressed: () {},
-                      ),
-                      ReusableCotiner(
-                        text: "سفارشات",
-                        decoration: const BoxDecoration(
-                          color: Colors.black54,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CartScreen(
+                                backButtom: AppBarBackButton(),
+                              ),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          "سبدخرید",
+                          style: TextStyle(
+                              color: Colors.yellow, fontSize: 24),
                         ),
-                        onPressed: () {},
+                      ),
+                      Expanded(
+                        child: ReusableCotiner(
+                          decoration: const BoxDecoration(
+                            color: Colors.black54,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CustomerOrders(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            "سفارشات",
+                            style: TextStyle(
+                                color: Colors.yellow, fontSize: 24),
+                          ),
+                        ),
                       ),
                       ReusableCotiner(
-                        text: "موردعلاقه ها",
                         decoration: const BoxDecoration(
                             color: Colors.black54,
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(50),
                                 bottomLeft: Radius.circular(50))),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const WishlistScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          "موردعلاقه ها",
+                          style: TextStyle(
+                              color: Colors.yellow, fontSize: 24),
+                        ),
                       ),
                     ],
                   ),
@@ -180,7 +222,10 @@ class ProfileScreenState extends State<ProfileScreen> {
                           const ReuseableDivider(),
                           Expanded(
                             child: ReusableListTile(
-                              onTop: () {},
+                              onTop: () {
+                                Navigator.pushReplacementNamed(
+                                    context, '/welcome_screen');
+                              },
                               title: "خروج",
                               icon: Icons.logout,
                             ),
@@ -290,38 +335,6 @@ class ReuseableSizedBox extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class ReusableCotiner extends StatelessWidget {
-  final String text;
-  final void Function() onPressed;
-  final BoxDecoration decoration;
-  const ReusableCotiner({
-    super.key,
-    required this.text,
-    required this.onPressed,
-    required this.decoration,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      decoration: decoration,
-      child: ReuseableButton(
-        onPressed: onPressed,
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              text,
-              style: const TextStyle(color: Colors.yellow, fontSize: 24),
-            ),
-          ),
-        ),
       ),
     );
   }

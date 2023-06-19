@@ -6,7 +6,11 @@ import '../../widgets/category_view_model.dart';
 import '../../widgets/search_bottom.dart';
 
 class HomeScrean extends StatefulWidget {
-  const HomeScrean({super.key});
+  final Widget? backButtom;
+  const HomeScrean({
+    super.key,
+    this.backButtom,
+  });
 
   @override
   State<HomeScrean> createState() => _HomeScreanState();
@@ -24,6 +28,7 @@ class _HomeScreanState extends State<HomeScrean> {
       length: 9,
       child: Scaffold(
         appBar: AppBar(
+          leading: widget.backButtom,
           toolbarHeight: 80,
           elevation: 0.0,
           backgroundColor: Colors.white,
