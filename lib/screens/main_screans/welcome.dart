@@ -1,10 +1,12 @@
 import 'dart:math';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../widgets/login_bottun.dart';
 
@@ -38,8 +40,41 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     super.initState();
   }
 
+  Future<bool> requestPermissions() async {
+    // Request camera permission
+    final cameraStatus = await Permission.camera.request();
+
+    // Request storage permission
+    final storageStatus = await Permission.storage.request();
+
+    // Request photo library permission
+    final photoLibraryStatus = await Permission.photos.request();
+
+    // Request internet permission
+
+    if (cameraStatus.isGranted &&
+        storageStatus.isGranted &&
+        photoLibraryStatus.isGranted) {
+      return true; // All permissions granted
+    } else {
+      return false; // Permissions not granted
+    }
+  }
+
+  Future<bool> checkInternetConnectivity() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
+      return true; // Internet is available
+    } else {
+      return false; // No internet connection
+    }
+  }
+
   @override
   void dispose() {
+    checkInternetConnectivity();
+    requestPermissions();
     _controler.dispose();
     super.dispose();
   }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_store_app/auth/auth_components.dart';
@@ -27,6 +28,7 @@ class _CustomerRgisterScreenState extends State<CustomerRgisterScreen> {
       GlobalKey<ScaffoldMessengerState>();
   XFile? _imageFile;
   dynamic _pickedImageError;
+
   void _pickImageFromCamera() async {
     try {
       final pickedImaae = await ImagePicker().pickImage(
@@ -60,6 +62,23 @@ class _CustomerRgisterScreenState extends State<CustomerRgisterScreen> {
         _pickedImageError = e;
       });
       debugPrint(_pickedImageError);
+    }
+  }
+
+  void signUp() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+        Navigator.pushReplacementNamed(context, '/customer_screen');
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'email-already-in-use') {
+          Snackbar(_scafoldKey, 'این ایمیل قبلا استفاده شده!').showsnackBar();
+        }
+      }
+    } else {
+      Snackbar(_scafoldKey, 'لطفا همه فورمها را خانه پری نمایید!')
+          .showsnackBar();
     }
   }
 
@@ -158,12 +177,12 @@ class _CustomerRgisterScreenState extends State<CustomerRgisterScreen> {
                           children: [
                             const TextFormFiled(
                               labelText: 'نام ',
-                              hintText: 'نام کامل خود را وارد کنید',
+                              hintText: 'نام و تخلص خود را وارد کنید',
                               textInputType: TextInputType.text,
                             ),
                             const TextFormFiled(
                               labelText: 'ایمیل',
-                              hintText: 'ایمیل آدرس',
+                              hintText: ' ایمیل آدرس',
                               textInputType: TextInputType.emailAddress,
                             ),
                             TextFormFiled(
@@ -211,14 +230,7 @@ class _CustomerRgisterScreenState extends State<CustomerRgisterScreen> {
                                 child: ReuseableButton(
                                   color: Colors.blue,
                                   onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      debugPrint(
-                                          'valid $name $email $password');
-                                    } else {
-                                      Snackbar(_scafoldKey,
-                                              'لطفا همه فورمها رو خانه پری نمایید!')
-                                          .showsnackBar();
-                                    }
+                                    signUp();
                                   },
                                   child: const Text(
                                     'ثبت نام',
@@ -255,6 +267,27 @@ class TextFormFiled extends StatelessWidget {
       required this.textInputType,
       this.onPressed});
 
+  String? validateValue(String value, TextInputType textInputType) {
+    if (value.isEmpty && textInputType == TextInputType.text) {
+      return 'لطفا نام و تخلص خود را وارد کنید!';
+    } else if (value.isEmpty && textInputType == TextInputType.emailAddress) {
+      return 'لطفا ایمیل خود را وارد کنید!';
+    } else if (value.isNotEmpty &&
+        textInputType == TextInputType.emailAddress &&
+        value.isValidEmail() == false) {
+      return 'لطفا ایمیل خود را درست وارد کنید!';
+    } else if (value.isEmpty &&
+        textInputType == TextInputType.visiblePassword) {
+      return 'لطفا پسورد را وارد کنید!';
+    } else if (value.isNotEmpty &&
+        textInputType == TextInputType.visiblePassword &&
+        value.isValidPassword() == false) {
+      return 'پسورد باید حداقل شش حرف مشتکل ازاعدادوحروف باشد';
+    }
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -269,24 +302,7 @@ class TextFormFiled extends StatelessWidget {
             password = value;
           }
         },
-        validator: (value) {
-          if (value!.isEmpty && textInputType == TextInputType.text) {
-            return 'لطفا نام کامل خود را وارد کنید!';
-          }
-
-          if (value.isEmpty && textInputType == TextInputType.emailAddress) {
-            return 'لطفا ایمیل خود را وارد کنید!';
-          } else if (value.isNotEmpty &&
-              textInputType == TextInputType.emailAddress &&
-              value.isValidEmail() == false) {
-            return 'لطفا ایمیل خود را درست وارد کنید!';
-          }
-
-          if (value.isEmpty && textInputType == TextInputType.visiblePassword) {
-            return 'لطفا پسورد را درست وارد کنید!';
-          }
-          return null;
-        },
+        validator: (value) => validateValue(value!, textInputType),
         obscureText: textInputType == TextInputType.visiblePassword
             ? _passwordVisibalty
             : false,
