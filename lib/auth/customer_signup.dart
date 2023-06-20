@@ -156,12 +156,12 @@ class _CustomerRgisterScreenState extends State<CustomerRgisterScreen> {
                         ),
                         Column(
                           children: [
-                            TextFormFiled(
+                            const TextFormFiled(
                               labelText: 'نام ',
                               hintText: 'نام کامل خود را وارد کنید',
                               textInputType: TextInputType.text,
                             ),
-                            TextFormFiled(
+                            const TextFormFiled(
                               labelText: 'ایمیل',
                               hintText: 'ایمیل آدرس',
                               textInputType: TextInputType.emailAddress,

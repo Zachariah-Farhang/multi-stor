@@ -1,9 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/components/customer_components/customer_orders.dart';
 import 'package:multi_store_app/components/customer_components/wishlist.dart';
 import 'package:multi_store_app/screens/main_screans/cart.dart';
 import 'package:multi_store_app/widgets/app_bar_back_button.dart';
-
+import '../../widgets/alirt_dialog.dart';
 import '../../widgets/reuseable_continer.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -14,6 +15,17 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class ProfileScreenState extends State<ProfileScreen> {
+  void logOut() async {
+    await FirebaseAuth.instance.signOut().whenComplete(() {
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, '/welcome_screen');
+    });
+  }
+
+  void popUp() {
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -99,8 +111,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                         },
                         child: const Text(
                           "سبدخرید",
-                          style: TextStyle(
-                              color: Colors.yellow, fontSize: 24),
+                          style: TextStyle(color: Colors.yellow, fontSize: 24),
                         ),
                       ),
                       Expanded(
@@ -118,8 +129,8 @@ class ProfileScreenState extends State<ProfileScreen> {
                           },
                           child: const Text(
                             "سفارشات",
-                            style: TextStyle(
-                                color: Colors.yellow, fontSize: 24),
+                            style:
+                                TextStyle(color: Colors.yellow, fontSize: 24),
                           ),
                         ),
                       ),
@@ -139,8 +150,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                         },
                         child: const Text(
                           "موردعلاقه ها",
-                          style: TextStyle(
-                              color: Colors.yellow, fontSize: 24),
+                          style: TextStyle(color: Colors.yellow, fontSize: 24),
                         ),
                       ),
                     ],
@@ -223,8 +233,16 @@ class ProfileScreenState extends State<ProfileScreen> {
                           Expanded(
                             child: ReusableListTile(
                               onTop: () {
-                                Navigator.pushReplacementNamed(
-                                    context, '/welcome_screen');
+                                CuperAlertDialog(
+                                        context: context,
+                                        agree: 'بلی',
+                                        desAgree: 'نخیر',
+                                        agreeFun: logOut,
+                                        desAgreeFun: popUp,
+                                        title: 'خارج شدن',
+                                        descreption:
+                                            'آیا مطمعین هستید که میخواهید خارج شوید؟')
+                                    .showAlertDialog();
                               },
                               title: "خروج",
                               icon: Icons.logout,

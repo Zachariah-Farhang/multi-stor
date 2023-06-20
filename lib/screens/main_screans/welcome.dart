@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
@@ -29,6 +28,8 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controler;
+  bool isProcessing = false;
+
   @override
   void initState() {
     _controler =
@@ -152,13 +153,25 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           text: "فیسبوک",
                           imagePath: "assets/images/welcome/facebook.png",
                         ),
-                        LoginBottom(
-                          onTop: () async {
-                            await FirebaseAuth.instance.signInAnonymously();
-                          },
-                          text: "مهمان",
-                          imagePath: "assets/images/welcome/man.png",
-                        )
+                        isProcessing
+                            ? const Expanded(
+                                child:
+                                    Center(child: CircularProgressIndicator()))
+                            : LoginBottom(
+                                onTop: () async {
+                                  setState(() {
+                                    isProcessing = true;
+                                  });
+                                  await FirebaseAuth.instance
+                                      .signInAnonymously()
+                                      .whenComplete(() {
+                                    Navigator.pushReplacementNamed(
+                                        context, '/customer_screen');
+                                  });
+                                },
+                                text: "مهمان",
+                                imagePath: "assets/images/welcome/man.png",
+                              )
                       ],
                     ),
                   ),
