@@ -73,7 +73,7 @@ class _CartScreenState extends State<CartScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
-                      children: [
+                      children: const [
                         Text(
                           "مجموعه :",
                           style: TextStyle(fontSize: 22),

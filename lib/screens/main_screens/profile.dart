@@ -65,7 +65,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                           Colors.brown,
                         ]),
                       ),
-                      child: Column(children: [
+                      child: Column(children: const [
                         CircleAvatar(
                           radius: 40,
                           backgroundImage:
