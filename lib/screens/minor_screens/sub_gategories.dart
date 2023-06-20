@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../../widgets/app_bar_back_button.dart';
 
 class SubGategories extends StatelessWidget {
   final String subcategName;
@@ -15,12 +16,7 @@ class SubGategories extends StatelessWidget {
         centerTitle: true,
         elevation: 0.0,
         backgroundColor: Colors.white,
-        leading: IconButton(
-            icon: const Icon(
-              CupertinoIcons.back,
-              color: Colors.black,
-            ),
-            onPressed: () => Navigator.of(context).pop()),
+        leading: const AppBarBackButton(),
         title: Text(
           subcategName,
           style: const TextStyle(color: Colors.black87),
