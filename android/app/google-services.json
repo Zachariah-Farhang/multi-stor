@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "652232585529",
+    "project_id": "multi-store-d74dc",
+    "storage_bucket": "multi-store-d74dc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:652232585529:android:0fcab6e8e1d40de97478e8",
+        "android_client_info": {
+          "package_name": "com.sohrab.multi_store_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "652232585529-7siulbtcidop49ec61ohmutb3de1jnhe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sohrab.multi_store_app",
+            "certificate_hash": "d65fc1c5e3987903306577a96c5bb9608a3d05b0"
+          }
+        },
+        {
+          "client_id": "652232585529-3lsstbvt37mkf1ebe2l2ksev6tg87mrh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFKQBfqy3YXhNwbapDdqxL7nrUNs2zdlM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "652232585529-3lsstbvt37mkf1ebe2l2ksev6tg87mrh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

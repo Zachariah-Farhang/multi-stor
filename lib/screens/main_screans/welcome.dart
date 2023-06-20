@@ -1,9 +1,13 @@
 import 'dart:math';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
+
+import '../../widgets/login_bottun.dart';
 
 const colorizeColors = [
   Colors.orangeAccent,
@@ -86,13 +90,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                       ),
                     ],
                   ),
-                  /*  SizedBox(
-                    height: 120,
-                    width: 200,
-                    child: AnimatedLogo(
-                      controler: _controler,
-                    ),
-                  ), */
                   SizedBox(
                     height: 100,
                     child: Row(
@@ -143,60 +140,24 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   Container(
                     color: Colors.grey.withOpacity(0.6),
                     height: 80,
-                    padding: const EdgeInsets.all(8.0),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    child: Row(
                       children: [
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Image(
-                                image: AssetImage(
-                                    "assets/images/welcome/google.png"),
-                              ),
-                            ),
-                            Text(
-                              "گوگل",
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
-                            )
-                          ],
+                        LoginBottom(
+                          onTop: () {},
+                          text: "گوگل",
+                          imagePath: "assets/images/welcome/google.png",
                         ),
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Image(
-                                image: AssetImage(
-                                    "assets/images/welcome/facebook.png"),
-                              ),
-                            ),
-                            Text(
-                              "فیسبوک",
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
-                            )
-                          ],
+                        LoginBottom(
+                          onTop: () {},
+                          text: "فیسبوک",
+                          imagePath: "assets/images/welcome/facebook.png",
                         ),
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Image(
-                                image:
-                                    AssetImage("assets/images/welcome/man.png"),
-                              ),
-                            ),
-                            Text(
-                              "مهمان",
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
-                            )
-                          ],
+                        LoginBottom(
+                          onTop: () async {
+                            await FirebaseAuth.instance.signInAnonymously();
+                          },
+                          text: "مهمان",
+                          imagePath: "assets/images/welcome/man.png",
                         )
                       ],
                     ),

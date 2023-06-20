@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_store_app/auth/customer_signup.dart';
@@ -5,8 +6,13 @@ import 'package:multi_store_app/screens/main_screans/customer_home.dart';
 import 'package:multi_store_app/screens/main_screans/supplier_home_screen.dart';
 import 'package:multi_store_app/screens/main_screans/welcome.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
   );
