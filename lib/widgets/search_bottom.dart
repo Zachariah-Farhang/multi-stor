@@ -24,7 +24,7 @@ class SearchBottom extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                children: [
+                children: const [
                   Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: 10,

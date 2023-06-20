@@ -1,5 +1,24 @@
+import 'dart:math';
+
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import '../../widgets/login_bottun.dart';
+
+const colorizeColors = [
+  Colors.orangeAccent,
+  Colors.blue,
+  Colors.yellow,
+  Colors.red,
+  Colors.green,
+  Colors.orange,
+  Colors.pink,
+];
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -8,7 +27,58 @@ class WelcomeScreen extends StatefulWidget {
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controler;
+  bool isProcessing = false;
+
+  @override
+  void initState() {
+    _controler =
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _controler.repeat();
+    super.initState();
+  }
+
+  Future<bool> requestPermissions() async {
+    // Request camera permission
+    final cameraStatus = await Permission.camera.request();
+
+    // Request storage permission
+    final storageStatus = await Permission.storage.request();
+
+    // Request photo library permission
+    final photoLibraryStatus = await Permission.photos.request();
+
+    // Request internet permission
+
+    if (cameraStatus.isGranted &&
+        storageStatus.isGranted &&
+        photoLibraryStatus.isGranted) {
+      return true; // All permissions granted
+    } else {
+      return false; // Permissions not granted
+    }
+  }
+
+  Future<bool> checkInternetConnectivity() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
+      return true; // Internet is available
+    } else {
+      return false; // No internet connection
+    }
+  }
+
+  @override
+  void dispose() {
+    checkInternetConnectivity();
+    requestPermissions();
+    _controler.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -26,217 +96,117 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    "خوش آمدید",
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                  const SizedBox(
-                    height: 120,
-                    width: 200,
-                    child: Image(
-                        image: AssetImage("assets/images/tabImages/bags.png")),
-                  ),
-                  const Text(
-                    "فروشگاه",
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.6),
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                bottomLeft: Radius.circular(30))),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
-                          child: Text(
-                            "فروشنده",
-                            style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
+                  AnimatedTextKit(
+                    isRepeatingAnimation: true,
+                    repeatForever: true,
+                    animatedTexts: [
+                      ColorizeAnimatedText(
+                        "خوش آمدید",
+                        textStyle: const TextStyle(
+                          fontSize: 45,
+                          fontWeight: FontWeight.bold,
                         ),
+                        colors: colorizeColors,
                       ),
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: BoxDecoration(
-                                color: Colors.grey.withOpacity(0.6),
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(30),
-                                    bottomLeft: Radius.circular(30))),
-                            child: Row(
-                              children: [
-                                ReuseableButton(
-                                  color: Colors.amber,
-                                  onPressed: () {},
-                                  child: const Text(
-                                    "وارد شدن",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                ReuseableButton(
-                                  color: Colors.amber,
-                                  onPressed: () {},
-                                  child: const Text(
-                                    "ثبت نام",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                const Image(
-                                    height: 50,
-                                    image: AssetImage(
-                                        "assets/images/tabImages/bags.png"))
-                              ],
-                            ),
-                          ),
-                        ],
+                      ColorizeAnimatedText(
+                        "به",
+                        textStyle: const TextStyle(
+                          fontSize: 45,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        colors: colorizeColors,
+                      ),
+                      ColorizeAnimatedText(
+                        "دیوار هرات",
+                        textStyle: const TextStyle(
+                          fontSize: 45,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        colors: colorizeColors,
                       ),
                     ],
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.6),
-                            borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(30),
-                                bottomRight: Radius.circular(30))),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
-                          child: Text(
-                            "خریدار",
-                            style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: BoxDecoration(
-                                color: Colors.grey.withOpacity(0.6),
-                                borderRadius: const BorderRadius.only(
-                                    topRight: Radius.circular(30),
-                                    bottomRight: Radius.circular(30))),
-                            child: Row(
-                              children: [
-                                const Image(
-                                    height: 50,
-                                    image: AssetImage(
-                                        "assets/images/tabImages/bags.png")),
-                                ReuseableButton(
-                                  color: Colors.amber,
-                                  onPressed: () {},
-                                  child: const Text(
-                                    "وارد شدن",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                ReuseableButton(
-                                  color: Colors.amber,
-                                  onPressed: () {},
-                                  child: const Text(
-                                    "ثبت نام",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ],
+                  SizedBox(
+                    height: 100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AnimatedTextKit(
+                          repeatForever: true,
+                          animatedTexts: [
+                            RotateAnimatedText(
+                              "خرید",
+                              textStyle: const TextStyle(
+                                  fontSize: 45,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange),
                             ),
+                            RotateAnimatedText(
+                              "فروش",
+                              textStyle: const TextStyle(
+                                  fontSize: 45,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange),
+                            ),
+                            RotateAnimatedText(
+                              "بدون واسطه",
+                              textStyle: const TextStyle(
+                                  fontSize: 45,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange),
+                            ),
+                          ],
+                        ),
+                        AnimatedTextKit(repeatForever: true, animatedTexts: [
+                          ColorizeAnimatedText(
+                            "دیوار هرات",
+                            textAlign: TextAlign.right,
+                            textStyle: const TextStyle(
+                              fontSize: 45,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            colors: colorizeColors,
                           ),
-                        ],
-                      ),
-                    ],
+                        ]),
+                      ],
+                    ),
                   ),
+                  SuplierSignInOrSignUp(controler: _controler),
+                  BuyerSignInOrSignUp(controler: _controler),
                   Container(
                     color: Colors.grey.withOpacity(0.6),
                     height: 80,
-                    padding: const EdgeInsets.all(8.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Image(
-                                image: AssetImage(
-                                    "assets/images/welcome/google.png"),
-                              ),
-                            ),
-                            Text(
-                              "گوگل",
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
-                            )
-                          ],
+                        LoginBottom(
+                          onTop: () {},
+                          text: "گوگل",
+                          imagePath: "assets/images/welcome/google.png",
                         ),
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Image(
-                                image: AssetImage(
-                                    "assets/images/welcome/facebook.png"),
-                              ),
-                            ),
-                            Text(
-                              "فیسبوک",
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
-                            )
-                          ],
+                        LoginBottom(
+                          onTop: () {},
+                          text: "فیسبوک",
+                          imagePath: "assets/images/welcome/facebook.png",
                         ),
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Image(
-                                image:
-                                    AssetImage("assets/images/welcome/man.png"),
-                              ),
-                            ),
-                            Text(
-                              "مهمان",
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        )
+                        isProcessing
+                            ? const Expanded(
+                                child:
+                                    Center(child: CircularProgressIndicator()))
+                            : LoginBottom(
+                                onTop: () async {
+                                  setState(() {
+                                    isProcessing = true;
+                                  });
+                                  await FirebaseAuth.instance
+                                      .signInAnonymously()
+                                      .whenComplete(() {
+                                    Navigator.pushReplacementNamed(
+                                        context, '/customer_screen');
+                                  });
+                                },
+                                text: "مهمان",
+                                imagePath: "assets/images/welcome/man.png",
+                              )
                       ],
                     ),
                   ),
@@ -244,6 +214,189 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class BuyerSignInOrSignUp extends StatelessWidget {
+  const BuyerSignInOrSignUp({
+    super.key,
+    required AnimationController controler,
+  }) : _controler = controler;
+
+  final AnimationController _controler;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.6),
+              borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(30),
+                  bottomRight: Radius.circular(30))),
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: Text(
+              "خریدار",
+              style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.6),
+                  borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(30),
+                      bottomRight: Radius.circular(30))),
+              child: Row(
+                children: [
+                  AnimatedLogo(controler: _controler),
+                  ReuseableButton(
+                    color: Colors.amber,
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(
+                          context, '/customer_screen');
+                    },
+                    child: const Text(
+                      "وارد شدن",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  ReuseableButton(
+                    color: Colors.amber,
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(
+                          context, '/customer_signup');
+                    },
+                    child: const Text(
+                      "ثبت نام",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class SuplierSignInOrSignUp extends StatelessWidget {
+  const SuplierSignInOrSignUp({
+    super.key,
+    required AnimationController controler,
+  }) : _controler = controler;
+
+  final AnimationController _controler;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.6),
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  bottomLeft: Radius.circular(30))),
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: Text(
+              "فروشنده",
+              style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.6),
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      bottomLeft: Radius.circular(30))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ReuseableButton(
+                    color: Colors.amber,
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(
+                          context, '/supplier_screen');
+                    },
+                    child: const Text(
+                      "وارد شدن",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  ReuseableButton(
+                    color: Colors.amber,
+                    onPressed: () {},
+                    child: const Text(
+                      "ثبت نام",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  AnimatedLogo(controler: _controler)
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class AnimatedLogo extends StatelessWidget {
+  const AnimatedLogo({
+    super.key,
+    required AnimationController controler,
+  }) : _controler = controler;
+
+  final AnimationController _controler;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controler.view,
+      builder: (context, child) {
+        return Transform.rotate(
+          angle: _controler.value * 2 * pi,
+          child: child,
+        );
+      },
+      child: const Image(
+          height: 50, image: AssetImage("assets/images/tabImages/bags.png")),
     );
   }
 }

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/components/dashboard_components/edit_profile.dart';
+import 'package:multi_store_app/components/dashboard_components/manage_products.dart';
+import 'package:multi_store_app/components/dashboard_components/my_sotre.dart';
+import 'package:multi_store_app/components/dashboard_components/supplier_orders.dart';
 
 const String abslutPath = "assets/images/supplierImages/";
 final List<String> imagePaht = [
@@ -12,6 +16,13 @@ final List<String> labels = [
   "ویرایش پروفایل",
   "سفارشات",
   "مدریت سفارشات"
+];
+
+const List<Widget> pagesOnDashboard = [
+  MyStore(),
+  EditProfile(),
+  SupplierOrders(),
+  ManageProducts()
 ];
 
 class DashbordScreen extends StatelessWidget {
@@ -29,7 +40,9 @@ class DashbordScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/welcome_screen');
+              },
               icon: const RotatedBox(
                   quarterTurns: -2,
                   child: Icon(Icons.logout, color: Colors.black87)))
@@ -55,7 +68,12 @@ class DashbordScreen extends StatelessWidget {
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30)),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => pagesOnDashboard[index]));
+              },
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
