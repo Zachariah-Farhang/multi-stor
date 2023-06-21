@@ -1,0 +1,10 @@
+flutter_native_splash:
+
+
+  android_12:
+
+    image: assets/images/tabImages/women.png
+
+    image_dark: assets/images/tabImages/women.png
+    android_gravity: fill
+

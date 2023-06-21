@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.5
   auto_size_text: ^3.0.0
   animated_text_kit: ^4.2.2
   image_picker: ^0.8.9
@@ -24,11 +24,12 @@ dependencies:
   firebase_core: ^2.14.0
   permission_handler: ^10.3.0
   connectivity: ^3.0.6
+  flutter_native_splash: ^2.3.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^2.0.1
 
 flutter:
   uses-material-design: true
@@ -48,6 +49,7 @@ flutter:
     - assets/images/tabImages/
     - assets/images/supplierImages/
     - assets/images/welcome/
+
 
 
   fonts:

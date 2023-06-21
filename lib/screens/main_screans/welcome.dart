@@ -45,22 +45,34 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   Future<bool> requestPermissions() async {
     // Request camera permission
     final cameraStatus = await Permission.camera.request();
+    if (cameraStatus.isDenied) {
+      // Camera permission denied
+      return false;
+    }
 
     // Request storage permission
     final storageStatus = await Permission.storage.request();
+    if (storageStatus.isDenied) {
+      // Storage permission denied
+      return false;
+    }
 
     // Request photo library permission
     final photoLibraryStatus = await Permission.photos.request();
+    if (photoLibraryStatus.isDenied) {
+      // Photo library permission denied
+      return false;
+    }
 
     // Request internet permission
+    // final internetStatus = await Permission.internet.request();
+    // if (internetStatus.isDenied) {
+    //   // Internet permission denied
+    //   return false;
+    // }
 
-    if (cameraStatus.isGranted == true &&
-        storageStatus.isGranted == true &&
-        photoLibraryStatus.isGranted == true) {
-      return true; // All permissions granted
-    } else {
-      return false; // Permissions not granted
-    }
+    // All permissions granted
+    return true;
   }
 
   Future<bool> checkInternetConnectivity() async {
