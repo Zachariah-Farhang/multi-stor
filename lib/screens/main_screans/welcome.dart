@@ -37,6 +37,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     _controler =
         AnimationController(vsync: this, duration: const Duration(seconds: 2));
     _controler.repeat();
+    checkInternetConnectivity();
+    requestPermissions();
     super.initState();
   }
 
@@ -52,9 +54,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
     // Request internet permission
 
-    if (cameraStatus.isGranted &&
-        storageStatus.isGranted &&
-        photoLibraryStatus.isGranted) {
+    if (cameraStatus.isGranted == true &&
+        storageStatus.isGranted == true &&
+        photoLibraryStatus.isGranted == true) {
       return true; // All permissions granted
     } else {
       return false; // Permissions not granted
@@ -73,8 +75,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   @override
   void dispose() {
-    checkInternetConnectivity();
-    requestPermissions();
     _controler.dispose();
     super.dispose();
   }
