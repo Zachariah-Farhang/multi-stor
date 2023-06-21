@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,16 +25,11 @@ class WelcomeScreen extends StatefulWidget {
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controler;
+class _WelcomeScreenState extends State<WelcomeScreen> {
   bool isProcessing = false;
 
   @override
   void initState() {
-    _controler =
-        AnimationController(vsync: this, duration: const Duration(seconds: 2));
-    _controler.repeat();
     checkInternetConnectivity();
     requestPermissions();
     super.initState();
@@ -87,7 +80,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   @override
   void dispose() {
-    _controler.dispose();
     super.dispose();
   }
 
@@ -108,83 +100,31 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  AnimatedTextKit(
-                    isRepeatingAnimation: true,
-                    repeatForever: true,
-                    animatedTexts: [
-                      ColorizeAnimatedText(
-                        "خوش آمدید",
-                        textStyle: const TextStyle(
-                          fontSize: 45,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        colors: colorizeColors,
-                      ),
-                      ColorizeAnimatedText(
-                        "به",
-                        textStyle: const TextStyle(
-                          fontSize: 45,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        colors: colorizeColors,
-                      ),
-                      ColorizeAnimatedText(
-                        "دیوار هرات",
-                        textStyle: const TextStyle(
-                          fontSize: 45,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        colors: colorizeColors,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * 0.20),
+                        child: AnimatedTextKit(
+                            repeatForever: true,
+                            animatedTexts: [
+                              ColorizeAnimatedText(
+                                "دیوار هرات",
+                                textAlign: TextAlign.right,
+                                textStyle: TextStyle(
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                colors: colorizeColors,
+                              ),
+                            ]),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 100,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AnimatedTextKit(
-                          repeatForever: true,
-                          animatedTexts: [
-                            RotateAnimatedText(
-                              "خرید",
-                              textStyle: const TextStyle(
-                                  fontSize: 45,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.orange),
-                            ),
-                            RotateAnimatedText(
-                              "فروش",
-                              textStyle: const TextStyle(
-                                  fontSize: 45,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.orange),
-                            ),
-                            RotateAnimatedText(
-                              "بدون واسطه",
-                              textStyle: const TextStyle(
-                                  fontSize: 45,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.orange),
-                            ),
-                          ],
-                        ),
-                        AnimatedTextKit(repeatForever: true, animatedTexts: [
-                          ColorizeAnimatedText(
-                            "دیوار هرات",
-                            textAlign: TextAlign.right,
-                            textStyle: const TextStyle(
-                              fontSize: 45,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            colors: colorizeColors,
-                          ),
-                        ]),
-                      ],
-                    ),
-                  ),
-                  SuplierSignInOrSignUp(controler: _controler),
-                  BuyerSignInOrSignUp(controler: _controler),
+                  const SuplierSignInOrSignUp(),
+                  const BuyerSignInOrSignUp(),
                   Container(
                     color: Colors.grey.withOpacity(0.6),
                     height: 80,
@@ -233,10 +173,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 class BuyerSignInOrSignUp extends StatelessWidget {
   const BuyerSignInOrSignUp({
     super.key,
-    required AnimationController controler,
-  }) : _controler = controler;
-
-  final AnimationController _controler;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -265,7 +202,7 @@ class BuyerSignInOrSignUp extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               decoration: BoxDecoration(
                   color: Colors.grey.withOpacity(0.6),
                   borderRadius: const BorderRadius.only(
@@ -273,7 +210,6 @@ class BuyerSignInOrSignUp extends StatelessWidget {
                       bottomRight: Radius.circular(30))),
               child: Row(
                 children: [
-                  AnimatedLogo(controler: _controler),
                   ReuseableButton(
                     color: Colors.amber,
                     onPressed: () {
@@ -314,10 +250,7 @@ class BuyerSignInOrSignUp extends StatelessWidget {
 class SuplierSignInOrSignUp extends StatelessWidget {
   const SuplierSignInOrSignUp({
     super.key,
-    required AnimationController controler,
-  }) : _controler = controler;
-
-  final AnimationController _controler;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -345,7 +278,7 @@ class SuplierSignInOrSignUp extends StatelessWidget {
         Row(
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               decoration: BoxDecoration(
                   color: Colors.grey.withOpacity(0.6),
                   borderRadius: const BorderRadius.only(
@@ -378,37 +311,12 @@ class SuplierSignInOrSignUp extends StatelessWidget {
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  AnimatedLogo(controler: _controler)
                 ],
               ),
             ),
           ],
         ),
       ],
-    );
-  }
-}
-
-class AnimatedLogo extends StatelessWidget {
-  const AnimatedLogo({
-    super.key,
-    required AnimationController controler,
-  }) : _controler = controler;
-
-  final AnimationController _controler;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controler.view,
-      builder: (context, child) {
-        return Transform.rotate(
-          angle: _controler.value * 2 * pi,
-          child: child,
-        );
-      },
-      child: const Image(
-          height: 50, image: AssetImage("assets/images/tabImages/bags.png")),
     );
   }
 }

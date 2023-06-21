@@ -1,5 +1,11 @@
 flutter_native_splash:
 
+  background_image: "assets/images/tabImages/women.png"
+
+
+  
+
+  background_image_dark: "assets/images/tabImages/women.png"
 
   android_12:
 
@@ -7,4 +13,8 @@ flutter_native_splash:
 
     image_dark: assets/images/tabImages/women.png
     android_gravity: fill
+  ios: false
+  web: false
 
+  background_image_android: "assets/images/tabImages/women.png"
+  background_image_dark_android: "assets/images/tabImages/women.png"
