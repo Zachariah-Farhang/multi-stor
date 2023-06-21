@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      //This widget is the main screan that is showing now on the app CustomerHomeScrean().
+      //This widget is the main screen that is showing now on the app CustomerHomeScreen().
       initialRoute: "/welcome_screen",
       routes: {
         '/welcome_screen': ((context) => const WelcomeScreen()),
