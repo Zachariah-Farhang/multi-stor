@@ -15,14 +15,14 @@ String name = '';
 String email = '';
 String password = '';
 
-class CustomerRgisterScreen extends StatefulWidget {
-  const CustomerRgisterScreen({super.key});
+class RgisterScreen extends StatefulWidget {
+  const RgisterScreen({super.key});
 
   @override
-  State<CustomerRgisterScreen> createState() => _CustomerRgisterScreenState();
+  State<RgisterScreen> createState() => _RgisterScreenState();
 }
 
-class _CustomerRgisterScreenState extends State<CustomerRgisterScreen> {
+class _RgisterScreenState extends State<RgisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scafoldKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -84,6 +84,8 @@ class _CustomerRgisterScreenState extends State<CustomerRgisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final text = ModalRoute.of(context)!.settings.arguments as String;
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: ScaffoldMessenger(
@@ -104,9 +106,9 @@ class _CustomerRgisterScreenState extends State<CustomerRgisterScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                'ثبت نام',
-                                style: TextStyle(
+                              Text(
+                                text,
+                                style: const TextStyle(
                                     fontSize: 40, fontWeight: FontWeight.bold),
                               ),
                               IconButton(

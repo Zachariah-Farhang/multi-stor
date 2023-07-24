@@ -229,7 +229,10 @@ class BuyerSignInOrSignUp extends StatelessWidget {
                     color: Colors.amber,
                     onPressed: () {
                       Navigator.pushReplacementNamed(
-                          context, '/customer_signup');
+                        context,
+                        '/signup',
+                        arguments: 'خریدار',
+                      );
                     },
                     child: const Text(
                       "ثبت نام",
@@ -304,7 +307,13 @@ class SuplierSignInOrSignUp extends StatelessWidget {
                   ),
                   ReuseableButton(
                     color: Colors.amber,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(
+                        context,
+                        '/signup',
+                        arguments: 'فروشنده',
+                      );
+                    },
                     child: const Text(
                       "ثبت نام",
                       style:
