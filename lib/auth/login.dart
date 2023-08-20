@@ -1,150 +1,107 @@
-import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:multi_store_app/auth/auth_components.dart';
+
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
 import 'package:multi_store_app/widgets/snackbarr.dart';
 // import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 bool _passwordVisibalty = false;
-String name = '';
+
 String email = '';
 String password = '';
-String phoneNumber = '';
-String address = '';
 
-class RgisterScreen extends StatefulWidget {
-  const RgisterScreen({super.key});
+class LogIn extends StatefulWidget {
+  const LogIn({super.key});
 
   @override
-  State<RgisterScreen> createState() => _RgisterScreenState();
+  State<LogIn> createState() => _LogInState();
 }
 
-class _RgisterScreenState extends State<RgisterScreen>
-    with WidgetsBindingObserver {
+class _LogInState extends State<LogIn> with WidgetsBindingObserver {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scafoldKey =
       GlobalKey<ScaffoldMessengerState>();
-  XFile? _imageFile;
-  dynamic _pickedImageError;
+
   bool _isKeyboardVisible = false;
   double keyboardHeight = 0;
   String customerOrSupplier = '';
 
-  late String profileImage;
-  late String uid;
-  CollectionReference customers =
-      FirebaseFirestore.instance.collection('customers');
-  CollectionReference suppliers =
-      FirebaseFirestore.instance.collection('suppliers');
+  // CollectionReference customers =
+  //     FirebaseFirestore.instance.collection('customers');
+  // CollectionReference suppliers =
+  //     FirebaseFirestore.instance.collection('suppliers');
 
-  void _pickImageFromCamera() async {
+  Future<String?> getSupOrcusByEmail(String email) async {
     try {
-      final pickedImaae = await ImagePicker().pickImage(
-          source: ImageSource.camera,
-          maxHeight: 300,
-          maxWidth: 300,
-          imageQuality: 95);
-      setState(() {
-        _imageFile = pickedImaae;
-      });
-    } catch (e) {
-      setState(() {
-        _pickedImageError = e;
-      });
-      debugPrint(_pickedImageError);
-    }
-  }
+      // Query Firestore for the document with the specified email in the 'suppliers' collection
+      QuerySnapshot supplierQuerySnapshot = await FirebaseFirestore.instance
+          .collection('suppliers')
+          .where('email', isEqualTo: email)
+          .get();
 
-  void _pickImageFromGallery() async {
-    try {
-      final pickedImaae = await ImagePicker().pickImage(
-          source: ImageSource.gallery,
-          maxHeight: 300,
-          maxWidth: 300,
-          imageQuality: 95);
-      setState(() {
-        _imageFile = pickedImaae;
-      });
-    } catch (e) {
-      setState(() {
-        _pickedImageError = e;
-      });
-      debugPrint(_pickedImageError);
-    }
-  }
-
-  void signUp() async {
-    if (_formKey.currentState!.validate() && _imageFile != null) {
-      try {
-        await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: email, password: password);
-
-        // firebase_storage.Reference ref = firebase_storage
-        //     .FirebaseStorage.instance
-        //     .ref('customer-images/$email.jpg');
-
-        if (customerOrSupplier.isNotEmpty && customerOrSupplier == 'customer') {
-          Reference ref =
-              FirebaseStorage.instance.ref('cust-images/$email.jpg');
-          await ref.putFile(File(_imageFile!.path));
-
-          profileImage = await ref.getDownloadURL();
-          uid = FirebaseAuth.instance.currentUser!.uid;
-          customers.doc(uid).set({
-            'name': name,
-            'email': email,
-            'profileImage': profileImage,
-            'phone': phoneNumber,
-            'address': address,
-            'cid': uid,
-            'supOrcus': customerOrSupplier
-          });
-          Navigator.pushReplacementNamed(context, '/customer_screen');
-        } else {
-          Reference ref =
-              FirebaseStorage.instance.ref('supl-images/$email.jpg');
-          await ref.putFile(File(_imageFile!.path));
-
-          profileImage = await ref.getDownloadURL();
-          uid = FirebaseAuth.instance.currentUser!.uid;
-          suppliers.doc(uid).set({
-            'name': name,
-            'email': email,
-            'profileImage': profileImage,
-            'phone': phoneNumber,
-            'address': address,
-            'sid': uid,
-            'supOrcus': customerOrSupplier
-          });
-          Navigator.pushReplacementNamed(context, '/supplier_screen');
-        }
-
-        _formKey.currentState!.reset();
-        setState(() {
-          _imageFile = null;
-        });
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'email-already-in-use') {
-          Snackbar(_scafoldKey, 'این ایمیل قبلا استفاده شده!').showsnackBar();
-        }
+      if (supplierQuerySnapshot.docs.isNotEmpty) {
+        // Extract the 'supOrcus' property from the first document in the result
+        var data = supplierQuerySnapshot.docs[0].data() as Map<String, dynamic>;
+        return data['supOrcus'];
       }
-    } else if (_formKey.currentState!.validate() && _imageFile == null) {
-      Snackbar(_scafoldKey, 'لطفا عکس پروفایل خود را انتخاب کنید!')
-          .showsnackBar();
-    } else {
-      Snackbar(_scafoldKey, 'لطفا همه بخش ها را خانه پری نمایید!')
-          .showsnackBar();
+
+      // If not found in 'suppliers', try to find the email in the 'customers' collection
+      QuerySnapshot customerQuerySnapshot = await FirebaseFirestore.instance
+          .collection('customers')
+          .where('email', isEqualTo: email)
+          .get();
+
+      if (customerQuerySnapshot.docs.isNotEmpty) {
+        // Extract the 'supOrcus' property from the first document in the result
+        var data = customerQuerySnapshot.docs[0].data() as Map<String, dynamic>;
+        return data['supOrcus'];
+      }
+
+      return null; // Email not found in either 'suppliers' or 'customers' collection
+    } catch (error) {
+      debugPrint("Error: $error");
+      return null;
+    }
+  }
+
+  void logIn() async {
+    try {
+      if (email.isNotEmpty && password.isNotEmpty) {
+        String? cusOrSup = await getSupOrcusByEmail(email);
+        debugPrint("from the method" + cusOrSup!);
+        if (cusOrSup == 'customer' && customerOrSupplier == 'customer') {
+          await FirebaseAuth.instance
+              .signInWithEmailAndPassword(email: email, password: password);
+          _formKey.currentState!.reset();
+          Navigator.pushReplacementNamed(context, '/customer_screen');
+        } else if (cusOrSup == 'supplier' && customerOrSupplier == 'supplier') {
+          await FirebaseAuth.instance
+              .signInWithEmailAndPassword(email: email, password: password);
+          _formKey.currentState!.reset();
+          Navigator.pushReplacementNamed(context, '/supplier_screen');
+        } else {
+          Snackbar(_scafoldKey, 'حساب ندارید ابتدا حساب ایجاد کنید !')
+              .showsnackBar();
+        }
+      } else {
+        Snackbar(_scafoldKey, 'ایمیل و پسورد خود را وارد کنید!').showsnackBar();
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        Snackbar(_scafoldKey, 'حساب ندارید ابتدا حساب ایجاد کنید !')
+            .showsnackBar();
+      } else if (e.code == 'wrong-password') {
+        Snackbar(_scafoldKey, 'پسورد خود را درست وارد کنید!').showsnackBar();
+      }
     }
   }
 
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -166,6 +123,8 @@ class _RgisterScreenState extends State<RgisterScreen>
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as String;
     customerOrSupplier = arguments;
+
+    debugPrint(customerOrSupplier);
     return Directionality(
       textDirection: TextDirection.rtl,
       child: ScaffoldMessenger(
@@ -184,10 +143,10 @@ class _RgisterScreenState extends State<RgisterScreen>
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     fillColor: Colors.blue,
                     onPressed: () {
-                      signUp();
+                      logIn();
                     },
                     child: const Text(
-                      'ثبت نام',
+                      'وارد شدن',
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -232,63 +191,12 @@ class _RgisterScreenState extends State<RgisterScreen>
                             ],
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 20),
-                              child: CircleAvatar(
-                                radius: 60,
-                                backgroundColor: Colors.amber,
-                                backgroundImage: _imageFile == null
-                                    ? null
-                                    : FileImage(File(_imageFile!.path)),
-                              ),
-                            ),
-                            Column(
-                              children: [
-                                PickImage(
-                                    border: const BorderRadius.only(
-                                        topLeft: Radius.circular(12),
-                                        topRight: Radius.circular(12)),
-                                    icon: Icons.camera_alt,
-                                    onPressed: () {
-                                      _pickImageFromCamera();
-                                    }),
-                                PickImage(
-                                    border: const BorderRadius.only(
-                                        bottomLeft: Radius.circular(12),
-                                        bottomRight: Radius.circular(12)),
-                                    icon: Icons.photo,
-                                    onPressed: () {
-                                      _pickImageFromGallery();
-                                    }),
-                              ],
-                            )
-                          ],
-                        ),
                         Column(
                           children: [
-                            const TextFormFiled(
-                              labelText: 'نام ',
-                              hintText: 'نام و تخلص خود را وارد کنید',
-                              textInputType: TextInputType.text,
-                            ),
-                            const TextFormFiled(
-                              labelText: 'شماره تماس',
-                              hintText: 'شماره تماس خود را وارد کنید',
-                              textInputType: TextInputType.phone,
-                            ),
                             const TextFormFiled(
                               labelText: 'ایمیل',
                               hintText: 'ایمیل آدرس خود را وارد کنید',
                               textInputType: TextInputType.emailAddress,
-                            ),
-                            const TextFormFiled(
-                              labelText: 'آدرس ',
-                              hintText: 'آدرس خود را وارد کنید',
-                              textInputType: TextInputType.streetAddress,
                             ),
                             TextFormFiled(
                               labelText: 'پسورد ',
@@ -308,7 +216,7 @@ class _RgisterScreenState extends State<RgisterScreen>
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               const Text(
-                                'قبلا ثبت نام کردید؟',
+                                'حساب ندارید؟',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontStyle: FontStyle.italic,
@@ -316,7 +224,7 @@ class _RgisterScreenState extends State<RgisterScreen>
                               ),
                               ReuseableButton(
                                 child: const Text(
-                                  'وارد شوید',
+                                  'ثبت نام',
                                   style: TextStyle(
                                       color: Colors.blue,
                                       fontWeight: FontWeight.bold,
@@ -324,7 +232,7 @@ class _RgisterScreenState extends State<RgisterScreen>
                                 ),
                                 onPressed: () {
                                   Navigator.pushReplacementNamed(
-                                      context, '/login',
+                                      context, '/signup',
                                       arguments: customerOrSupplier);
                                 },
                               )
@@ -381,31 +289,6 @@ class TextFormFiled extends StatelessWidget {
       required this.textInputType,
       this.onPressed});
 
-  String? validateValue(String value, TextInputType textInputType) {
-    if (value.isEmpty && textInputType == TextInputType.text) {
-      return 'لطفا نام و تخلص خود را وارد کنید!';
-    } else if (value.isEmpty && textInputType == TextInputType.emailAddress) {
-      return 'لطفا ایمیل خود را وارد کنید!';
-    } else if (value.isNotEmpty &&
-        textInputType == TextInputType.emailAddress &&
-        value.isValidEmail() == false) {
-      return 'لطفا ایمیل خود را درست وارد کنید!';
-    } else if (value.isEmpty && textInputType == TextInputType.number) {
-      return 'لطفا شماره تماس خود را وارد کنید!';
-    } else if (value.isEmpty && textInputType == TextInputType.streetAddress) {
-      return 'لطفا آدرس خود را وارد کنید!';
-    } else if (value.isEmpty &&
-        textInputType == TextInputType.visiblePassword) {
-      return 'لطفا پسورد را وارد کنید!';
-    } else if (value.isNotEmpty &&
-        textInputType == TextInputType.visiblePassword &&
-        value.isValidPassword() == false) {
-      return 'پسورد باید حداقل شش حرف مشتکل ازاعدادوحروف باشد';
-    }
-
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -416,19 +299,12 @@ class TextFormFiled extends StatelessWidget {
             Text(currentLength.toString()),
         textAlignVertical: TextAlignVertical.bottom,
         onChanged: (value) {
-          if (textInputType == TextInputType.text) {
-            name = value;
-          } else if (textInputType == TextInputType.emailAddress) {
+          if (textInputType == TextInputType.emailAddress) {
             email = value;
-          } else if (textInputType == TextInputType.phone) {
-            phoneNumber = value;
-          } else if (textInputType == TextInputType.streetAddress) {
-            address = value;
           } else {
             password = value;
           }
         },
-        validator: (value) => validateValue(value!, textInputType),
         obscureText: textInputType == TextInputType.visiblePassword
             ? _passwordVisibalty
             : false,

@@ -6,16 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../utilities/netwotk_checker.dart';
 import '../../widgets/login_bottun.dart';
 
 const colorizeColors = [
-  Colors.orangeAccent,
+  Colors.amber,
   Colors.blue,
   Colors.yellow,
   Colors.red,
   Colors.green,
-  Colors.orange,
-  Colors.pink,
+  Colors.amber,
 ];
 
 class WelcomeScreen extends StatefulWidget {
@@ -27,12 +27,50 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   bool isProcessing = false;
+  bool hasInternet = false;
+  // Stream<ConnectivityResult> internetStatusChange =
+  //     Connectivity().onConnectivityChanged;
+
+  Map _source = {ConnectivityResult.none: false};
+  final NetworkConnectivity _networkConnectivity = NetworkConnectivity.instance;
+  String string = '';
 
   @override
   void initState() {
-    checkInternetConnectivity();
-    requestPermissions();
     super.initState();
+    requestPermissions();
+    checkConectivity();
+    _networkConnectivity.initialise();
+    _networkConnectivity.myStream.listen((source) {
+      _source = source;
+
+      switch (_source.keys.toList()[0]) {
+        case ConnectivityResult.mobile:
+          string =
+              _source.values.toList()[0] ? 'Mobile: Online' : 'Mobile: Offline';
+          break;
+        case ConnectivityResult.wifi:
+          string =
+              _source.values.toList()[0] ? 'WiFi: Online' : 'WiFi: Offline';
+          break;
+        case ConnectivityResult.none:
+        default:
+          string = 'Offline';
+      }
+      // 2.
+      if (mounted) {
+        setState(() {
+          if (string == 'Mobile: Online' || string == 'WiFi: Online') {
+            hasInternet = true;
+            isProcessing = false;
+          } else {
+            isProcessing = true;
+          }
+        });
+      }
+
+      // 3.
+    });
   }
 
   Future<bool> requestPermissions() async {
@@ -68,14 +106,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return true;
   }
 
-  Future<bool> checkInternetConnectivity() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
+  Future<bool> checkConectivity() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
-      return true; // Internet is available
+      // Internet is available
+      setState(() {
+        hasInternet = true;
+      });
     } else {
-      return false; // No internet connection
+      // No internet connection
+      setState(() {
+        hasInternet = false;
+      });
     }
+    return hasInternet;
   }
 
   @override
@@ -103,9 +148,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.20),
+                      Container(
+                        height: 70,
+                        decoration: BoxDecoration(
+                            color: Colors.black87.withOpacity(0.4),
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15))),
+                        margin: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * 0.26),
                         child: AnimatedTextKit(
                             repeatForever: true,
                             animatedTexts: [
@@ -146,15 +197,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     Center(child: CircularProgressIndicator()))
                             : LoginBottom(
                                 onTop: () async {
+                                  await checkConectivity();
                                   setState(() {
                                     isProcessing = true;
                                   });
-                                  await FirebaseAuth.instance
-                                      .signInAnonymously()
-                                      .whenComplete(() {
-                                    Navigator.pushReplacementNamed(
-                                        context, '/customer_screen');
-                                  });
+                                  if (hasInternet) {
+                                    await FirebaseAuth.instance
+                                        .signInAnonymously()
+                                        .whenComplete(() {
+                                      Navigator.pushReplacementNamed(
+                                          context, '/customer_screen');
+                                    });
+                                  }
                                 },
                                 text: "مهمان",
                                 imagePath: "assets/images/welcome/man.png",
@@ -213,8 +267,8 @@ class BuyerSignInOrSignUp extends StatelessWidget {
                   ReuseableButton(
                     color: Colors.amber,
                     onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, '/customer_screen');
+                      Navigator.pushReplacementNamed(context, '/login',
+                          arguments: 'customer');
                     },
                     child: const Text(
                       "وارد شدن",
@@ -231,7 +285,7 @@ class BuyerSignInOrSignUp extends StatelessWidget {
                       Navigator.pushReplacementNamed(
                         context,
                         '/signup',
-                        arguments: 'خریدار',
+                        arguments: 'customer',
                       );
                     },
                     child: const Text(
@@ -293,8 +347,8 @@ class SuplierSignInOrSignUp extends StatelessWidget {
                   ReuseableButton(
                     color: Colors.amber,
                     onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, '/supplier_screen');
+                      Navigator.pushReplacementNamed(context, '/login',
+                          arguments: 'supplier');
                     },
                     child: const Text(
                       "وارد شدن",
@@ -311,7 +365,7 @@ class SuplierSignInOrSignUp extends StatelessWidget {
                       Navigator.pushReplacementNamed(
                         context,
                         '/signup',
-                        arguments: 'فروشنده',
+                        arguments: 'supplier',
                       );
                     },
                     child: const Text(

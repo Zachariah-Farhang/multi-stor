@@ -100,9 +100,7 @@ class SubCategModel extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 4),
                   width: MediaQuery.of(context).size.width,
                   decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
                     color: Colors.white,
                   ),
                   child: Image(
