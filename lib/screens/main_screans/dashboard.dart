@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/components/dashboard_components/edit_profile.dart';
 import 'package:multi_store_app/components/dashboard_components/manage_products.dart';
 import 'package:multi_store_app/components/dashboard_components/my_sotre.dart';
 import 'package:multi_store_app/components/dashboard_components/supplier_orders.dart';
+
+import '../../widgets/alirt_dialog.dart';
 
 const String abslutPath = "assets/images/supplierImages/";
 final List<String> imagePaht = [
@@ -27,8 +30,20 @@ const List<Widget> pagesOnDashboard = [
 
 class DashbordScreen extends StatelessWidget {
   const DashbordScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
+    void logOut() async {
+      await FirebaseAuth.instance.signOut().whenComplete(() {
+        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, '/welcome_screen');
+      });
+    }
+
+    void popUp() {
+      Navigator.pop(context);
+    }
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -41,7 +56,15 @@ class DashbordScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/welcome_screen');
+                CuperAlertDialog(
+                        context: context,
+                        agree: 'بلی',
+                        desAgree: 'نخیر',
+                        agreeFun: logOut,
+                        desAgreeFun: popUp,
+                        title: 'خارج شدن',
+                        descreption: 'آیا مطمعین هستید که میخواهید خارج شوید؟')
+                    .showAlertDialog();
               },
               icon: const RotatedBox(
                   quarterTurns: -2,

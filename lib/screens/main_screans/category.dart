@@ -76,17 +76,15 @@ class _CategoryScreenState extends State<CategoryScreen>
               child: Container(
                 color: Colors.white,
                 child: TabBar(
+                    labelStyle: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w600),
                     indicatorWeight: 0,
                     padding: EdgeInsets.zero,
                     indicatorPadding: EdgeInsets.zero,
                     labelPadding: EdgeInsets.zero,
                     indicatorSize: TabBarIndicatorSize.tab,
                     controller: _tabController,
-                    splashBorderRadius:
-                        const BorderRadius.all(Radius.circular(8)),
-                    indicator: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        color: Colors.black12),
+                    indicator: const BoxDecoration(color: Colors.black12),
                     physics: const BouncingScrollPhysics(),
                     isScrollable: true,
                     tabs: tabs),
@@ -102,7 +100,7 @@ class _CategoryScreenState extends State<CategoryScreen>
     return Container(
       width: size.width * 0.75,
       height: size.height - (appBarHeight * 2.5),
-      color: Colors.white,
+      color: Colors.black12,
       child: PageView(
         controller: _pageController,
         physics: const BouncingScrollPhysics(),
@@ -114,47 +112,38 @@ class _CategoryScreenState extends State<CategoryScreen>
         scrollDirection: Axis.vertical,
         children: [
           CategoryViewModel(
-              callPleace: 'category',
               categoryList: men,
               headerLabel: maincateg[0],
               assetImage: 'men/men'),
           CategoryViewModel(
-              callPleace: 'category',
               categoryList: women,
               headerLabel: maincateg[1],
               assetImage: 'women/women'),
           CategoryViewModel(
-              callPleace: 'category',
               categoryList: accessories,
               headerLabel: maincateg[2],
               assetImage: 'accessories/accessories'),
           CategoryViewModel(
-              callPleace: 'category',
               categoryList: electronics,
               headerLabel: maincateg[3],
               assetImage: 'electronics/electronics'),
           CategoryViewModel(
-              callPleace: 'category',
               categoryList: shoes,
               headerLabel: maincateg[4],
               assetImage: 'shoes/shoes'),
           CategoryViewModel(
-              callPleace: 'category',
               categoryList: homeandgarden,
               headerLabel: maincateg[5],
               assetImage: 'homegarden/home'),
           CategoryViewModel(
-              callPleace: 'category',
               categoryList: beauty,
               headerLabel: maincateg[6],
               assetImage: 'beauty/beauty'),
           CategoryViewModel(
-              callPleace: 'category',
               categoryList: kids,
               headerLabel: maincateg[7],
               assetImage: 'kids/kids'),
           CategoryViewModel(
-              callPleace: 'category',
               categoryList: bags,
               headerLabel: maincateg[8],
               assetImage: 'bags/bags'),

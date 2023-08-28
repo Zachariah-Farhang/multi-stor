@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multi_store_app/galleries/gallery.dart';
 import 'package:multi_store_app/widgets/tabs.dart';
 
 import '../../utilities/categ_list.dart';
@@ -27,6 +28,7 @@ class _HomeScreanState extends State<HomeScrean> {
     return DefaultTabController(
       length: 9,
       child: Scaffold(
+        backgroundColor: Colors.black12,
         appBar: AppBar(
           leading: widget.backButtom,
           toolbarHeight: 80,
@@ -40,9 +42,15 @@ class _HomeScreanState extends State<HomeScrean> {
               labelPadding:
                   const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
               indicatorSize: TabBarIndicatorSize.tab,
-              splashBorderRadius: const BorderRadius.all(Radius.circular(8)),
+              splashBorderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
               indicator: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
                   color: Colors.black12),
               physics: const BouncingScrollPhysics(),
               isScrollable: true,
@@ -54,64 +62,38 @@ class _HomeScreanState extends State<HomeScrean> {
             SizedBox(
           height: MediaQuery.of(context).size.height -
               (AppBar().preferredSize.height * 2.5),
-          child: Column(
+          child: const Column(
             children: [
-              // Expanded(
-              //     flex: 2,
-              //     child: Image(
-              //       image: const AssetImage('assets/images/bags/bags0.jpg'),
-              //       width: MediaQuery.of(context).size.width,
-              //     )),
               Expanded(
-                child: TabBarView(
-                    physics: const BouncingScrollPhysics(),
-                    children: [
-                      CategoryViewModel(
-                          callPleace: 'home',
-                          categoryList: men,
-                          headerLabel: maincateg[0],
-                          assetImage: 'men/men'),
-                      CategoryViewModel(
-                          callPleace: 'home',
-                          categoryList: women,
-                          headerLabel: maincateg[1],
-                          assetImage: 'women/women'),
-                      CategoryViewModel(
-                          callPleace: 'home',
-                          categoryList: accessories,
-                          headerLabel: maincateg[2],
-                          assetImage: 'accessories/accessories'),
-                      CategoryViewModel(
-                          callPleace: 'home',
-                          categoryList: electronics,
-                          headerLabel: maincateg[3],
-                          assetImage: 'electronics/electronics'),
-                      CategoryViewModel(
-                          callPleace: 'home',
-                          categoryList: shoes,
-                          headerLabel: maincateg[4],
-                          assetImage: 'shoes/shoes'),
-                      CategoryViewModel(
-                          callPleace: 'home',
-                          categoryList: homeandgarden,
-                          headerLabel: maincateg[5],
-                          assetImage: 'homegarden/home'),
-                      CategoryViewModel(
-                          callPleace: 'home',
-                          categoryList: beauty,
-                          headerLabel: maincateg[6],
-                          assetImage: 'beauty/beauty'),
-                      CategoryViewModel(
-                          callPleace: 'home',
-                          categoryList: kids,
-                          headerLabel: maincateg[7],
-                          assetImage: 'kids/kids'),
-                      CategoryViewModel(
-                          callPleace: 'home',
-                          categoryList: bags,
-                          headerLabel: maincateg[8],
-                          assetImage: 'bags/bags'),
-                    ]),
+                child: TabBarView(physics: BouncingScrollPhysics(), children: [
+                  GalleryScreen(
+                    category: 'مردانه',
+                  ),
+                  GalleryScreen(
+                    category: 'زنانه',
+                  ),
+                  GalleryScreen(
+                    category: 'لوازم جانبی',
+                  ),
+                  GalleryScreen(
+                    category: 'الکترونیک',
+                  ),
+                  GalleryScreen(
+                    category: 'کفش',
+                  ),
+                  GalleryScreen(
+                    category: 'خانه و باغ',
+                  ),
+                  GalleryScreen(
+                    category: 'زیبایی',
+                  ),
+                  GalleryScreen(
+                    category: 'کودکان',
+                  ),
+                  GalleryScreen(
+                    category: 'کیف و کوله',
+                  ),
+                ]),
               ),
             ],
           ),

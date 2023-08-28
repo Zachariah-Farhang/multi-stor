@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -205,6 +208,32 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     await FirebaseAuth.instance
                                         .signInAnonymously()
                                         .whenComplete(() {
+                                      String defultName = 'User';
+                                      int id = Random().nextInt(100000);
+
+                                      String defultUserName =
+                                          defultName + id.toString();
+                                      late String uid;
+                                      String phoneNumber = '';
+                                      String email = '';
+                                      String address = '';
+                                      String userName = '';
+                                      userName = defultUserName;
+                                      email = '$defultUserName@gmail.com';
+                                      address = defultUserName;
+                                      phoneNumber = id.toString();
+                                      CollectionReference customers =
+                                          FirebaseFirestore.instance
+                                              .collection('customers');
+                                      uid = FirebaseAuth
+                                          .instance.currentUser!.uid;
+                                      customers.doc(uid).set({
+                                        'name': userName,
+                                        'email': email,
+                                        'phone': phoneNumber,
+                                        'address': address,
+                                        'cid': uid,
+                                      });
                                       Navigator.pushReplacementNamed(
                                           context, '/customer_screen');
                                     });

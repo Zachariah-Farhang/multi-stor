@@ -66,7 +66,6 @@ class SubCategModel extends StatelessWidget {
   final String subcategName;
   final String assteImage;
   final String subcategLebel;
-  final String callPleace;
 
   const SubCategModel({
     super.key,
@@ -74,7 +73,6 @@ class SubCategModel extends StatelessWidget {
     required this.subcategName,
     required this.assteImage,
     required this.subcategLebel,
-    required this.callPleace,
   });
 
   @override
@@ -85,6 +83,7 @@ class SubCategModel extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         splashColor: Colors.black54,
         child: Container(
+          height: MediaQuery.of(context).size.height / 5,
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Colors.black26,
@@ -95,17 +94,16 @@ class SubCategModel extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                flex: 4,
+                flex: 5,
                 child: Container(
                   padding: const EdgeInsets.only(bottom: 4),
-                  width: MediaQuery.of(context).size.width,
+                  constraints: const BoxConstraints.expand(),
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     color: Colors.white,
                   ),
                   child: Image(
                     image: AssetImage(assteImage),
-                    fit: BoxFit.contain,
                   ),
                 ),
               ),
@@ -156,6 +154,7 @@ class CategHeaderLebel extends StatelessWidget {
         padding: const EdgeInsets.only(right: 20),
         child: AutoSizeText(
           headerLebel,
+          maxLines: 2,
           minFontSize: 22,
           style: const TextStyle(
             fontSize: 24,

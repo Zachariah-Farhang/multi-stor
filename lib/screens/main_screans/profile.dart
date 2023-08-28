@@ -1,10 +1,14 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/components/customer_components/customer_orders.dart';
 import 'package:multi_store_app/components/customer_components/wishlist.dart';
 import 'package:multi_store_app/screens/main_screans/cart.dart';
 import 'package:multi_store_app/widgets/app_bar_back_button.dart';
 import '../../widgets/alirt_dialog.dart';
+import '../../widgets/divider.dart';
 import '../../widgets/reuseable_continer.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -15,6 +19,15 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class ProfileScreenState extends State<ProfileScreen> {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  CollectionReference customer =
+      FirebaseFirestore.instance.collection('customers');
+  String userId = '';
+  String userName = '';
+  String phoneNumber = '';
+  String email = '';
+  String address = '';
+  String profileIamge = '';
   void logOut() async {
     await FirebaseAuth.instance.signOut().whenComplete(() {
       Navigator.pop(context);
@@ -24,6 +37,40 @@ class ProfileScreenState extends State<ProfileScreen> {
 
   void popUp() {
     Navigator.pop(context);
+  }
+
+  void getData() {
+    userId = FirebaseAuth.instance.currentUser!.uid;
+    customer.doc(userId).get().then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        var data = documentSnapshot.data() as Map<String, dynamic>;
+        setState(() {
+          userName = data['name'];
+          phoneNumber = data['phone'];
+          email = data['email'];
+          address = data['address'];
+          profileIamge = data['profileImage'] ?? '';
+        });
+      } else {
+        String defultName = 'User';
+        int id = Random().nextInt(100000);
+
+        String defultUserName = defultName + id.toString();
+
+        setState(() {
+          userName = defultUserName;
+          email = '$defultUserName@gmail.com';
+          address = defultUserName;
+          phoneNumber = id.toString();
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
   }
 
   @override
@@ -65,15 +112,17 @@ class ProfileScreenState extends State<ProfileScreen> {
                           Colors.brown,
                         ]),
                       ),
-                      child: const Column(children: [
+                      child: Column(children: [
                         CircleAvatar(
                           radius: 40,
-                          backgroundImage:
-                              AssetImage("assets/images/tabImages/men.png"),
+                          backgroundImage: profileIamge.isNotEmpty
+                              ? Image.network(profileIamge).image
+                              : const AssetImage(
+                                  "assets/images/tabImages/men.png"),
                         ),
                         Text(
-                          "نام کاربر",
-                          style: TextStyle(
+                          userName,
+                          style: const TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
                         )
                       ]),
@@ -180,7 +229,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                             child: ReusableListTile(
                               onTop: () {},
                               title: "ایمیل آدرس",
-                              subTitle: "example@gmail.com",
+                              subTitle: email,
                               icon: Icons.email,
                             ),
                           ),
@@ -189,7 +238,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                             child: ReusableListTile(
                               onTop: () {},
                               title: "شماره تماس",
-                              subTitle: "+۹۳۷۹۲۱۲۳۴۵۶",
+                              subTitle: phoneNumber,
                               icon: Icons.phone,
                             ),
                           ),
@@ -198,7 +247,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                             child: ReusableListTile(
                               onTop: () {},
                               title: "آدرس",
-                              subTitle: "شهرنو،مارکت حضرتها،درب شیشم",
+                              subTitle: address,
                               icon: Icons.location_on,
                             ),
                           ),
@@ -208,28 +257,36 @@ class ProfileScreenState extends State<ProfileScreen> {
                     const ReuseableSizedBox(text: "تنظیمات حساب"),
                     Container(
                       margin: const EdgeInsets.all(8),
-                      height: 260,
+                      height: profileIamge.isNotEmpty ? 260 : 80,
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(16)),
                       child: Column(
                         children: [
-                          Expanded(
-                            child: ReusableListTile(
-                              onTop: () {},
-                              title: "ویرایش پروفایل",
-                              icon: Icons.edit,
-                            ),
-                          ),
-                          const ReuseableDivider(),
-                          Expanded(
-                            child: ReusableListTile(
-                              onTop: () {},
-                              title: "تغیر رمز عبور",
-                              icon: Icons.lock,
-                            ),
-                          ),
-                          const ReuseableDivider(),
+                          profileIamge.isNotEmpty
+                              ? Expanded(
+                                  child: ReusableListTile(
+                                    onTop: () {},
+                                    title: "ویرایش پروفایل",
+                                    icon: Icons.edit,
+                                  ),
+                                )
+                              : const SizedBox(),
+                          profileIamge.isNotEmpty
+                              ? const ReuseableDivider()
+                              : const SizedBox(),
+                          profileIamge.isNotEmpty
+                              ? Expanded(
+                                  child: ReusableListTile(
+                                    onTop: () {},
+                                    title: "تغیر رمز عبور",
+                                    icon: Icons.lock,
+                                  ),
+                                )
+                              : const SizedBox(),
+                          profileIamge.isNotEmpty
+                              ? const ReuseableDivider()
+                              : const SizedBox(),
                           Expanded(
                             child: ReusableListTile(
                               onTop: () {
@@ -257,23 +314,6 @@ class ProfileScreenState extends State<ProfileScreen> {
             ),
           ]),
         ]),
-      ),
-    );
-  }
-}
-
-class ReuseableDivider extends StatelessWidget {
-  const ReuseableDivider({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 40),
-      child: Divider(
-        color: Colors.amber,
-        thickness: 1,
       ),
     );
   }

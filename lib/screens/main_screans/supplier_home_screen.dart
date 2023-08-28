@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/screens/main_screans/category.dart';
-import 'package:multi_store_app/screens/main_screans/dashboard.dart';
-import 'package:multi_store_app/screens/main_screans/home.dart';
+import 'category.dart';
+import 'dashboard.dart';
+import 'home.dart';
 
-import 'package:multi_store_app/screens/main_screans/stores.dart';
+import 'stores.dart';
+
+import 'uplode_product.dart';
 
 //I have created a fulstatwidget for customer page that have a navigationbar.
 class SupplierHomeScreen extends StatefulWidget {
@@ -20,9 +22,7 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
     CategoryScreen(),
     StoresScreen(),
     DashbordScreen(),
-    Center(
-      child: Text("افزودن جنس جدید"),
-    ),
+    UplodeProduct(),
   ];
   @override
   Widget build(BuildContext context) {

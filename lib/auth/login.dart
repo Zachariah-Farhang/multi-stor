@@ -70,7 +70,6 @@ class _LogInState extends State<LogIn> with WidgetsBindingObserver {
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
         String? cusOrSup = await getSupOrcusByEmail(email);
-        debugPrint("from the method" + cusOrSup!);
         if (cusOrSup == 'customer' && customerOrSupplier == 'customer') {
           await FirebaseAuth.instance
               .signInWithEmailAndPassword(email: email, password: password);

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
+import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 
 import 'categ_widget.dart';
 
@@ -6,13 +8,12 @@ class CategoryViewModel extends StatelessWidget {
   final List<String> categoryList;
   final String headerLabel;
   final String assetImage;
-  final String callPleace;
+
   const CategoryViewModel({
     super.key,
     required this.categoryList,
     required this.headerLabel,
     required this.assetImage,
-    required this.callPleace,
   });
   @override
   Widget build(BuildContext context) {
@@ -27,38 +28,45 @@ class CategoryViewModel extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    callPleace == 'category'
-                        ? CategHeaderLebel(
-                            headerLebel: headerLabel,
-                          )
-                        : const SizedBox(
-                            height: 4,
-                          ),
+                    CategHeaderLebel(
+                      headerLebel: headerLabel,
+                    ),
                     Expanded(
-                      child: GridView.count(
-                        physics: const BouncingScrollPhysics(),
-                        mainAxisSpacing: 20,
-                        crossAxisCount: 3,
-                        children: List.generate(categoryList.length, (index) {
-                          return SubCategModel(
-                            callPleace: callPleace,
-                            maincategName: headerLabel,
-                            subcategName: categoryList[index],
-                            assteImage: 'assets/images/$assetImage$index.jpg',
-                            subcategLebel: categoryList[index],
-                          );
-                        }),
-                      ),
+                      child: StaggeredGridView.countBuilder(
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: categoryList.length,
+                          crossAxisCount: 2,
+                          itemBuilder: (context, index) {
+                            return SubCategModel(
+                              maincategName: headerLabel,
+                              subcategName: categoryList[index],
+                              assteImage: 'assets/images/$assetImage$index.jpg',
+                              subcategLebel: categoryList[index],
+                            );
+                          },
+                          staggeredTileBuilder: (context) =>
+                              const StaggeredTile.fit(1)),
+                      // child: GridView.count(
+                      //   physics: const BouncingScrollPhysics(),
+                      //   mainAxisSpacing: 20,
+                      //   crossAxisCount: 2,
+                      //   children: List.generate(categoryList.length, (index) {
+                      //     return SubCategModel(
+                      //       maincategName: headerLabel,
+                      //       subcategName: categoryList[index],
+                      //       assteImage: 'assets/images/$assetImage$index.jpg',
+                      //       subcategLebel: categoryList[index],
+                      //     );
+                      //   }),
+                      // ),
                     ),
                   ],
                 ),
               ]),
             ),
-            callPleace == 'category'
-                ? SliderBar(
-                    maincategName: headerLabel,
-                  )
-                : const SizedBox(),
+            SliderBar(
+              maincategName: headerLabel,
+            )
           ],
         ),
       ),
