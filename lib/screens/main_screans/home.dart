@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:multi_store_app/galleries/gallery.dart';
 import 'package:multi_store_app/widgets/tabs.dart';
 
-import '../../utilities/categ_list.dart';
-import '../../widgets/category_view_model.dart';
 import '../../widgets/search_bottom.dart';
 
 class HomeScrean extends StatefulWidget {

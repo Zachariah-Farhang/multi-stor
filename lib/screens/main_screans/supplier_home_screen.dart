@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import '../../utilities/connectivity_service.dart';
+import '../../widgets/internet_dialog.dart';
 import 'category.dart';
 import 'dashboard.dart';
 import 'home.dart';
@@ -9,13 +12,16 @@ import 'uplode_product.dart';
 
 //I have created a fulstatwidget for customer page that have a navigationbar.
 class SupplierHomeScreen extends StatefulWidget {
-  const SupplierHomeScreen({super.key});
+  const SupplierHomeScreen({
+    super.key,
+  });
 
   @override
   State<SupplierHomeScreen> createState() => _SupplierHomeScreenState();
 }
 
 class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
+  final ConnectivityService connectivityService = ConnectivityService();
   int _selectedIndex = 0;
   final List<Widget> _tabs = const [
     HomeScrean(),
@@ -24,6 +30,13 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
     DashbordScreen(),
     UplodeProduct(),
   ];
+
+  @override
+  void dispose() {
+    connectivityService.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     //Scaffold is the root widget of the customer page.
@@ -56,7 +69,16 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
             );
           },
         ),
-        body: _tabs.elementAt(_selectedIndex),
+        body: StreamBuilder<dynamic>(
+            stream: connectivityService.connectivityStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData &&
+                  snapshot.data == InternetConnectionStatus.connected) {
+                return _tabs.elementAt(_selectedIndex);
+              } else {
+                return const InternetAlertDialog();
+              }
+            }),
       ),
     );
   }

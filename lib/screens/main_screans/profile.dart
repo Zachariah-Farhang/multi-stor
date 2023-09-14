@@ -42,28 +42,32 @@ class ProfileScreenState extends State<ProfileScreen> {
   void getData() {
     userId = FirebaseAuth.instance.currentUser!.uid;
     customer.doc(userId).get().then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        var data = documentSnapshot.data() as Map<String, dynamic>;
-        setState(() {
-          userName = data['name'];
-          phoneNumber = data['phone'];
-          email = data['email'];
-          address = data['address'];
-          profileIamge = data['profileImage'] ?? '';
-        });
-      } else {
-        String defultName = 'User';
-        int id = Random().nextInt(100000);
+      
+        if (mounted) {
+          if (documentSnapshot.exists) {
+            var data = documentSnapshot.data() as Map<String, dynamic>;
+            setState(() {
+              userName = data['name'];
+              phoneNumber = data['phone'];
+              email = data['email'];
+              address = data['address'];
+              profileIamge = data['profileImage'] ?? '';
+            });
+          } else {
+            String defultName = 'User';
+            int id = Random().nextInt(100000);
 
-        String defultUserName = defultName + id.toString();
+            String defultUserName = defultName + id.toString();
 
-        setState(() {
-          userName = defultUserName;
-          email = '$defultUserName@gmail.com';
-          address = defultUserName;
-          phoneNumber = id.toString();
-        });
-      }
+            setState(() {
+              userName = defultUserName;
+              email = '$defultUserName@gmail.com';
+              address = defultUserName;
+              phoneNumber = id.toString();
+            });
+          }
+        }
+      
     });
   }
 

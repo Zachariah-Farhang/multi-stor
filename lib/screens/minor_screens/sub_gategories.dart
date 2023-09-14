@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
 import 'package:multi_store_app/galleries/gallery.dart';
-import 'package:multi_store_app/models/product_model.dart';
 
 import '../../widgets/app_bar_back_button.dart';
 

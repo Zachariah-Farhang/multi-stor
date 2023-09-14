@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/models/product_model.dart';
+import 'package:multi_store_app/screens/minor_screens/product_detiels.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 
@@ -25,9 +26,9 @@ class _GalleryScreenState extends State<GalleryScreen> {
       stream: productsStreem,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return const Text(
-            'اطلاعات یافت نشد در حال بررسی!',
-            style: TextStyle(fontSize: 18),
+          return Text(
+            ' !یک خطای ناشناخته رخ داد در حال بررسی $snapshot.error ',
+            style: const TextStyle(fontSize: 18),
           );
         }
 
@@ -60,13 +61,22 @@ class _GalleryScreenState extends State<GalleryScreen> {
             crossAxisCount: 2,
             itemBuilder: (context, index) {
               return ProductModel(
-                  imagePath: snapshot.data!.docs[index]['product_images'][0],
-                  productShortDetails: snapshot.data!.docs[index]
-                      ['product_name'],
-                  productPrice: snapshot.data!.docs[index]['product_price'],
-                  isFavorite: false,
-                  hasDescount: false,
-                  descount: 0);
+                imagePath: snapshot.data!.docs[index]['product_images'][0],
+                productShortDetails: snapshot.data!.docs[index]['product_name'],
+                productPrice: snapshot.data!.docs[index]['product_price'],
+                isFavorite: false,
+                hasDescount: false,
+                descount: 0,
+                onTop: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        settings: const RouteSettings(),
+                        builder: (context) => ProductDetiels(
+                              proId: snapshot.data!.docs[index]['proId'],
+                            )),
+                  );
+                },
+              );
             },
             staggeredTileBuilder: (context) => const StaggeredTile.fit(1));
         // return ListView(

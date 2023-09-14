@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
 import 'package:multi_store_app/widgets/snackbarr.dart';
+
+import '../utilities/connectivity_service.dart';
 // import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 bool _passwordVisibalty = false;
@@ -13,13 +15,16 @@ String email = '';
 String password = '';
 
 class LogIn extends StatefulWidget {
-  const LogIn({super.key});
+  const LogIn({
+    super.key,
+  });
 
   @override
   State<LogIn> createState() => _LogInState();
 }
 
 class _LogInState extends State<LogIn> with WidgetsBindingObserver {
+  final ConnectivityService connectivityService = ConnectivityService();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scafoldKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -107,6 +112,7 @@ class _LogInState extends State<LogIn> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    connectivityService.dispose();
     super.dispose();
   }
 

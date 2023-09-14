@@ -2,14 +2,16 @@ import 'dart:math';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity/connectivity.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+
+import 'package:multi_store_app/widgets/internet_dialog.dart';
 
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
-import 'package:permission_handler/permission_handler.dart';
 
-import '../../utilities/netwotk_checker.dart';
+import '../../utilities/connectivity_service.dart';
 import '../../widgets/login_bottun.dart';
 
 const colorizeColors = [
@@ -22,112 +24,21 @@ const colorizeColors = [
 ];
 
 class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({super.key});
+  const WelcomeScreen({
+    super.key,
+  });
 
   @override
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  bool isProcessing = false;
-  bool hasInternet = false;
-  // Stream<ConnectivityResult> internetStatusChange =
-  //     Connectivity().onConnectivityChanged;
-
-  Map _source = {ConnectivityResult.none: false};
-  final NetworkConnectivity _networkConnectivity = NetworkConnectivity.instance;
+  final ConnectivityService connectivityService = ConnectivityService();
   String string = '';
 
   @override
-  void initState() {
-    super.initState();
-    requestPermissions();
-    checkConectivity();
-    _networkConnectivity.initialise();
-    _networkConnectivity.myStream.listen((source) {
-      _source = source;
-
-      switch (_source.keys.toList()[0]) {
-        case ConnectivityResult.mobile:
-          string =
-              _source.values.toList()[0] ? 'Mobile: Online' : 'Mobile: Offline';
-          break;
-        case ConnectivityResult.wifi:
-          string =
-              _source.values.toList()[0] ? 'WiFi: Online' : 'WiFi: Offline';
-          break;
-        case ConnectivityResult.none:
-        default:
-          string = 'Offline';
-      }
-      // 2.
-      if (mounted) {
-        setState(() {
-          if (string == 'Mobile: Online' || string == 'WiFi: Online') {
-            hasInternet = true;
-            isProcessing = false;
-          } else {
-            isProcessing = true;
-          }
-        });
-      }
-
-      // 3.
-    });
-  }
-
-  Future<bool> requestPermissions() async {
-    // Request camera permission
-    final cameraStatus = await Permission.camera.request();
-    if (cameraStatus.isDenied) {
-      // Camera permission denied
-      return false;
-    }
-
-    // Request storage permission
-    final storageStatus = await Permission.storage.request();
-    if (storageStatus.isDenied) {
-      // Storage permission denied
-      return false;
-    }
-
-    // Request photo library permission
-    final photoLibraryStatus = await Permission.photos.request();
-    if (photoLibraryStatus.isDenied) {
-      // Photo library permission denied
-      return false;
-    }
-
-    // Request internet permission
-    // final internetStatus = await Permission.internet.request();
-    // if (internetStatus.isDenied) {
-    //   // Internet permission denied
-    //   return false;
-    // }
-
-    // All permissions granted
-    return true;
-  }
-
-  Future<bool> checkConectivity() async {
-    var connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi) {
-      // Internet is available
-      setState(() {
-        hasInternet = true;
-      });
-    } else {
-      // No internet connection
-      setState(() {
-        hasInternet = false;
-      });
-    }
-    return hasInternet;
-  }
-
-  @override
   void dispose() {
+    connectivityService.dispose();
     super.dispose();
   }
 
@@ -136,75 +47,79 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        body: Container(
-          constraints: const BoxConstraints.expand(),
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage("assets/images/welcome/welcamback.jpg"),
-            ),
-          ),
-          child: SafeArea(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 70,
-                        decoration: BoxDecoration(
-                            color: Colors.black87.withOpacity(0.4),
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                topRight: Radius.circular(15))),
-                        margin: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.26),
-                        child: AnimatedTextKit(
-                            repeatForever: true,
-                            animatedTexts: [
-                              ColorizeAnimatedText(
-                                "دیوار هرات",
-                                textAlign: TextAlign.right,
-                                textStyle: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                colors: colorizeColors,
-                              ),
-                            ]),
+          body: StreamBuilder<dynamic>(
+              stream: connectivityService.connectivityStream,
+              builder: (context, snapshot) {
+                // debugPrint(snapshot.data.toString());
+                if (snapshot.hasData &&
+                    snapshot.data == InternetConnectionStatus.disconnected) {
+                  return const InternetAlertDialog();
+                } else {
+                  return Container(
+                    constraints: const BoxConstraints.expand(),
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image:
+                            AssetImage("assets/images/welcome/welcamback.jpg"),
                       ),
-                    ],
-                  ),
-                  const SuplierSignInOrSignUp(),
-                  const BuyerSignInOrSignUp(),
-                  Container(
-                    color: Colors.grey.withOpacity(0.6),
-                    height: 80,
-                    child: Row(
-                      children: [
-                        LoginBottom(
-                          onTop: () {},
-                          text: "گوگل",
-                          imagePath: "assets/images/welcome/google.png",
-                        ),
-                        LoginBottom(
-                          onTop: () {},
-                          text: "فیسبوک",
-                          imagePath: "assets/images/welcome/facebook.png",
-                        ),
-                        isProcessing
-                            ? const Expanded(
-                                child:
-                                    Center(child: CircularProgressIndicator()))
-                            : LoginBottom(
-                                onTop: () async {
-                                  await checkConectivity();
-                                  setState(() {
-                                    isProcessing = true;
-                                  });
-                                  if (hasInternet) {
+                    ),
+                    child: SafeArea(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 70,
+                                decoration: BoxDecoration(
+                                    color: Colors.black87.withOpacity(0.4),
+                                    borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(15),
+                                        topRight: Radius.circular(15))),
+                                margin: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height *
+                                        0.26),
+                                child: AnimatedTextKit(
+                                    repeatForever: true,
+                                    animatedTexts: [
+                                      ColorizeAnimatedText(
+                                        "دیوار هرات",
+                                        textAlign: TextAlign.right,
+                                        textStyle: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        colors: colorizeColors,
+                                      ),
+                                    ]),
+                              ),
+                            ],
+                          ),
+                          const SuplierSignInOrSignUp(),
+                          const BuyerSignInOrSignUp(),
+                          Container(
+                            color: Colors.grey.withOpacity(0.6),
+                            height: 80,
+                            child: Row(
+                              children: [
+                                LoginBottom(
+                                  onTop: () {},
+                                  text: "گوگل",
+                                  imagePath: "assets/images/welcome/google.png",
+                                ),
+                                LoginBottom(
+                                  onTop: () {},
+                                  text: "فیسبوک",
+                                  imagePath:
+                                      "assets/images/welcome/facebook.png",
+                                ),
+                                LoginBottom(
+                                  onTop: () async {
                                     await FirebaseAuth.instance
                                         .signInAnonymously()
                                         .whenComplete(() {
@@ -237,18 +152,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       Navigator.pushReplacementNamed(
                                           context, '/customer_screen');
                                     });
-                                  }
-                                },
-                                text: "مهمان",
-                                imagePath: "assets/images/welcome/man.png",
-                              )
-                      ],
+                                  },
+                                  text: "مهمان",
+                                  imagePath: "assets/images/welcome/man.png",
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ]),
-          ),
-        ),
-      ),
+                  );
+                }
+              })),
     );
   }
 }

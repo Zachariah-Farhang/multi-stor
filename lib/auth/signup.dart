@@ -5,9 +5,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:multi_store_app/auth/auth_components.dart';
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
 import 'package:multi_store_app/widgets/snackbarr.dart';
+
+import '../utilities/connectivity_service.dart';
+import '../widgets/internet_dialog.dart';
 // import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 bool _passwordVisibalty = false;
@@ -18,7 +22,9 @@ String phoneNumber = '';
 String address = '';
 
 class RgisterScreen extends StatefulWidget {
-  const RgisterScreen({super.key});
+  const RgisterScreen({
+    super.key,
+  });
 
   @override
   State<RgisterScreen> createState() => _RgisterScreenState();
@@ -26,6 +32,7 @@ class RgisterScreen extends StatefulWidget {
 
 class _RgisterScreenState extends State<RgisterScreen>
     with WidgetsBindingObserver {
+  final ConnectivityService connectivityService = ConnectivityService();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scafoldKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -151,6 +158,7 @@ class _RgisterScreenState extends State<RgisterScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    connectivityService.dispose();
     super.dispose();
   }
 
@@ -170,173 +178,195 @@ class _RgisterScreenState extends State<RgisterScreen>
       textDirection: TextDirection.rtl,
       child: ScaffoldMessenger(
         key: _scafoldKey,
-        child: Scaffold(
-          bottomNavigationBar: AnimatedContainer(
-            duration: const Duration(milliseconds: 0),
-            padding: EdgeInsets.only(
-                bottom: _isKeyboardVisible
-                    ? MediaQuery.of(context).viewInsets.bottom
-                    : 0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: RawMaterialButton(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    fillColor: Colors.blue,
-                    onPressed: () {
-                      signUp();
-                    },
-                    child: const Text(
-                      'ثبت نام',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          body: SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                reverse: true,
-                physics: const BouncingScrollPhysics(),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                arguments == 'customer' ? 'خریدار' : 'فروشنده',
-                                style: const TextStyle(
-                                    fontSize: 40, fontWeight: FontWeight.bold),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  FocusScope.of(context).unfocus();
-                                  Navigator.pushReplacementNamed(
-                                      context, '/welcome_screen');
-                                },
-                                icon: const Icon(
-                                  Icons.home_work,
-                                  size: 30,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 20),
-                              child: CircleAvatar(
-                                radius: 60,
-                                backgroundColor: Colors.amber,
-                                backgroundImage: _imageFile == null
-                                    ? null
-                                    : FileImage(File(_imageFile!.path)),
-                              ),
-                            ),
-                            Column(
-                              children: [
-                                PickImage(
-                                    border: const BorderRadius.only(
-                                        topLeft: Radius.circular(12),
-                                        topRight: Radius.circular(12)),
-                                    icon: Icons.camera_alt,
-                                    onPressed: () {
-                                      _pickImageFromCamera();
-                                    }),
-                                PickImage(
-                                    border: const BorderRadius.only(
-                                        bottomLeft: Radius.circular(12),
-                                        bottomRight: Radius.circular(12)),
-                                    icon: Icons.photo,
-                                    onPressed: () {
-                                      _pickImageFromGallery();
-                                    }),
-                              ],
-                            )
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            const TextFormFiled(
-                              labelText: 'نام ',
-                              hintText: 'نام و تخلص خود را وارد کنید',
-                              textInputType: TextInputType.text,
-                            ),
-                            const TextFormFiled(
-                              labelText: 'شماره تماس',
-                              hintText: 'شماره تماس خود را وارد کنید',
-                              textInputType: TextInputType.phone,
-                            ),
-                            const TextFormFiled(
-                              labelText: 'ایمیل',
-                              hintText: 'ایمیل آدرس خود را وارد کنید',
-                              textInputType: TextInputType.emailAddress,
-                            ),
-                            const TextFormFiled(
-                              labelText: 'آدرس ',
-                              hintText: 'آدرس خود را وارد کنید',
-                              textInputType: TextInputType.streetAddress,
-                            ),
-                            TextFormFiled(
-                              labelText: 'پسورد ',
-                              hintText: 'پسورد خود را وارد کنید',
-                              textInputType: TextInputType.visiblePassword,
+        child: StreamBuilder<dynamic>(
+            stream: connectivityService.connectivityStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData &&
+                  snapshot.data == InternetConnectionStatus.connected) {
+                return Scaffold(
+                    bottomNavigationBar: AnimatedContainer(
+                      duration: const Duration(milliseconds: 0),
+                      padding: EdgeInsets.only(
+                          bottom: _isKeyboardVisible
+                              ? MediaQuery.of(context).viewInsets.bottom
+                              : 0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: RawMaterialButton(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              fillColor: Colors.blue,
                               onPressed: () {
-                                setState(() {
-                                  _passwordVisibalty = !_passwordVisibalty;
-                                });
+                                signUp();
                               },
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              const Text(
-                                'قبلا ثبت نام کردید؟',
+                              child: const Text(
+                                'ثبت نام',
                                 style: TextStyle(
-                                  fontSize: 14,
-                                  fontStyle: FontStyle.italic,
-                                ),
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24),
                               ),
-                              ReuseableButton(
-                                child: const Text(
-                                  'وارد شوید',
-                                  style: TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                ),
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(
-                                      context, '/login',
-                                      arguments: customerOrSupplier);
-                                },
-                              )
-                            ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    body: SafeArea(
+                      child: Center(
+                        child: SingleChildScrollView(
+                          reverse: true,
+                          physics: const BouncingScrollPhysics(),
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          arguments == 'customer'
+                                              ? 'خریدار'
+                                              : 'فروشنده',
+                                          style: const TextStyle(
+                                              fontSize: 40,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            FocusScope.of(context).unfocus();
+                                            Navigator.pushReplacementNamed(
+                                                context, '/welcome_screen');
+                                          },
+                                          icon: const Icon(
+                                            Icons.home_work,
+                                            size: 30,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 20),
+                                        child: CircleAvatar(
+                                          radius: 60,
+                                          backgroundColor: Colors.amber,
+                                          backgroundImage: _imageFile == null
+                                              ? null
+                                              : FileImage(
+                                                  File(_imageFile!.path)),
+                                        ),
+                                      ),
+                                      Column(
+                                        children: [
+                                          PickImage(
+                                              border: const BorderRadius.only(
+                                                  topLeft: Radius.circular(12),
+                                                  topRight:
+                                                      Radius.circular(12)),
+                                              icon: Icons.camera_alt,
+                                              onPressed: () {
+                                                _pickImageFromCamera();
+                                              }),
+                                          PickImage(
+                                              border: const BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(12),
+                                                  bottomRight:
+                                                      Radius.circular(12)),
+                                              icon: Icons.photo,
+                                              onPressed: () {
+                                                _pickImageFromGallery();
+                                              }),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      const TextFormFiled(
+                                        labelText: 'نام ',
+                                        hintText: 'نام و تخلص خود را وارد کنید',
+                                        textInputType: TextInputType.text,
+                                      ),
+                                      const TextFormFiled(
+                                        labelText: 'شماره تماس',
+                                        hintText: 'شماره تماس خود را وارد کنید',
+                                        textInputType: TextInputType.phone,
+                                      ),
+                                      const TextFormFiled(
+                                        labelText: 'ایمیل',
+                                        hintText: 'ایمیل آدرس خود را وارد کنید',
+                                        textInputType:
+                                            TextInputType.emailAddress,
+                                      ),
+                                      const TextFormFiled(
+                                        labelText: 'آدرس ',
+                                        hintText: 'آدرس خود را وارد کنید',
+                                        textInputType:
+                                            TextInputType.streetAddress,
+                                      ),
+                                      TextFormFiled(
+                                        labelText: 'پسورد ',
+                                        hintText: 'پسورد خود را وارد کنید',
+                                        textInputType:
+                                            TextInputType.visiblePassword,
+                                        onPressed: () {
+                                          setState(() {
+                                            _passwordVisibalty =
+                                                !_passwordVisibalty;
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        const Text(
+                                          'قبلا ثبت نام کردید؟',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontStyle: FontStyle.italic,
+                                          ),
+                                        ),
+                                        ReuseableButton(
+                                          child: const Text(
+                                            'وارد شوید',
+                                            style: TextStyle(
+                                                color: Colors.blue,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pushReplacementNamed(
+                                                context, '/login',
+                                                arguments: customerOrSupplier);
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ]),
                           ),
                         ),
-                      ]),
-                ),
-              ),
-            ),
-          ),
-        ),
+                      ),
+                    ));
+              } else {
+                return const InternetAlertDialog();
+              }
+            }),
       ),
     );
   }
