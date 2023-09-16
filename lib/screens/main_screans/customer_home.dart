@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
+
 import 'package:multi_store_app/screens/main_screans/cart.dart';
 import 'package:multi_store_app/screens/main_screans/category.dart';
 import 'package:multi_store_app/screens/main_screans/home.dart';
 import 'package:multi_store_app/screens/main_screans/profile.dart';
 import 'package:multi_store_app/screens/main_screans/stores.dart';
-
-import '../../utilities/connectivity_service.dart';
-import '../../widgets/internet_dialog.dart';
 
 //I have created a fulstatwidget for customer page that have a navigationbar.
 class CustomerHomeScrean extends StatefulWidget {
@@ -20,7 +17,6 @@ class CustomerHomeScrean extends StatefulWidget {
 }
 
 class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
-  ConnectivityService connectivityService = ConnectivityService();
   int _selectedIndex = 0;
   final List<Widget> _tabs = const [
     HomeScrean(),
@@ -32,7 +28,6 @@ class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
 
   @override
   void dispose() {
-    connectivityService.dispose();
     super.dispose();
   }
 
@@ -67,17 +62,7 @@ class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
             );
           },
         ),
-        body: StreamBuilder<dynamic>(
-            stream: connectivityService!.connectivityStream,
-            builder: (context, snapshot) {
-              debugPrint(snapshot.data.toString());
-              if (snapshot.hasData &&
-                  snapshot.data == InternetConnectionStatus.connected) {
-                return _tabs.elementAt(_selectedIndex);
-              } else {
-                return const InternetAlertDialog();
-              }
-            }),
+        body: _tabs.elementAt(_selectedIndex),
       ),
     );
   }

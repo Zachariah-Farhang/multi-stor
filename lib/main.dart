@@ -8,9 +8,7 @@ import 'package:multi_store_app/auth/signup.dart';
 import 'package:multi_store_app/screens/main_screans/customer_home.dart';
 import 'package:multi_store_app/screens/main_screans/supplier_home_screen.dart';
 import 'package:multi_store_app/screens/main_screans/welcome.dart';
-
 import 'package:permission_handler/permission_handler.dart';
-
 import 'firebase_options.dart';
 
 void main() async {
@@ -60,6 +58,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   //This widget is the root of ouer application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

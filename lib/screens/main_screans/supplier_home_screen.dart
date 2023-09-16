@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
-import '../../utilities/connectivity_service.dart';
-import '../../widgets/internet_dialog.dart';
 import 'category.dart';
 import 'dashboard.dart';
 import 'home.dart';
@@ -21,7 +18,6 @@ class SupplierHomeScreen extends StatefulWidget {
 }
 
 class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
-  final ConnectivityService connectivityService = ConnectivityService();
   int _selectedIndex = 0;
   final List<Widget> _tabs = const [
     HomeScrean(),
@@ -33,7 +29,6 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
 
   @override
   void dispose() {
-    connectivityService.dispose();
     super.dispose();
   }
 
@@ -41,45 +36,35 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
   Widget build(BuildContext context) {
     //Scaffold is the root widget of the customer page.
     return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          elevation: 0.0,
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.blueGrey.shade700,
-          // unselectedItemColor: Colors.red,
-          currentIndex: _selectedIndex,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'خانه'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.search), label: 'دسته بندی'),
-            BottomNavigationBarItem(icon: Icon(Icons.shop), label: 'فروشگاها'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.dashboard), label: 'داشبورد'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.upload), label: 'بارگذاری'),
-          ],
-          onTap: (index) {
-            setState(
-              () {
-                _selectedIndex = index;
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+            bottomNavigationBar: BottomNavigationBar(
+              backgroundColor: Colors.white,
+              elevation: 0.0,
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: Colors.blueGrey.shade700,
+              // unselectedItemColor: Colors.red,
+              currentIndex: _selectedIndex,
+              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
+              items: const [
+                BottomNavigationBarItem(icon: Icon(Icons.home), label: 'خانه'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.search), label: 'دسته بندی'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.shop), label: 'فروشگاها'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.dashboard), label: 'داشبورد'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.upload), label: 'بارگذاری'),
+              ],
+              onTap: (index) {
+                setState(
+                  () {
+                    _selectedIndex = index;
+                  },
+                );
               },
-            );
-          },
-        ),
-        body: StreamBuilder<dynamic>(
-            stream: connectivityService.connectivityStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasData &&
-                  snapshot.data == InternetConnectionStatus.connected) {
-                return _tabs.elementAt(_selectedIndex);
-              } else {
-                return const InternetAlertDialog();
-              }
-            }),
-      ),
-    );
+            ),
+            body: _tabs.elementAt(_selectedIndex)));
   }
 }

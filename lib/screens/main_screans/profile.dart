@@ -10,6 +10,7 @@ import 'package:multi_store_app/widgets/app_bar_back_button.dart';
 import '../../widgets/alirt_dialog.dart';
 import '../../widgets/divider.dart';
 import '../../widgets/reuseable_continer.dart';
+import '../../widgets/reuseable_divider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -42,32 +43,30 @@ class ProfileScreenState extends State<ProfileScreen> {
   void getData() {
     userId = FirebaseAuth.instance.currentUser!.uid;
     customer.doc(userId).get().then((DocumentSnapshot documentSnapshot) {
-      
-        if (mounted) {
-          if (documentSnapshot.exists) {
-            var data = documentSnapshot.data() as Map<String, dynamic>;
-            setState(() {
-              userName = data['name'];
-              phoneNumber = data['phone'];
-              email = data['email'];
-              address = data['address'];
-              profileIamge = data['profileImage'] ?? '';
-            });
-          } else {
-            String defultName = 'User';
-            int id = Random().nextInt(100000);
+      if (mounted) {
+        if (documentSnapshot.exists) {
+          var data = documentSnapshot.data() as Map<String, dynamic>;
+          setState(() {
+            userName = data['name'];
+            phoneNumber = data['phone'];
+            email = data['email'];
+            address = data['address'];
+            profileIamge = data['profileImage'] ?? '';
+          });
+        } else {
+          String defultName = 'User';
+          int id = Random().nextInt(100000);
 
-            String defultUserName = defultName + id.toString();
+          String defultUserName = defultName + id.toString();
 
-            setState(() {
-              userName = defultUserName;
-              email = '$defultUserName@gmail.com';
-              address = defultUserName;
-              phoneNumber = id.toString();
-            });
-          }
+          setState(() {
+            userName = defultUserName;
+            email = '$defultUserName@gmail.com';
+            address = defultUserName;
+            phoneNumber = id.toString();
+          });
         }
-      
+      }
     });
   }
 
@@ -351,52 +350,6 @@ class ReusableListTile extends StatelessWidget {
             leading: Icon(icon),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class ReuseableSizedBox extends StatelessWidget {
-  final String text;
-  const ReuseableSizedBox({
-    super.key,
-    required this.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 40,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(
-            height: 40,
-            width: 50,
-            child: Divider(
-              color: Colors.grey,
-              thickness: 1,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              text,
-              style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(
-            height: 40,
-            width: 50,
-            child: Divider(
-              color: Colors.grey,
-              thickness: 1,
-            ),
-          ),
-        ],
       ),
     );
   }

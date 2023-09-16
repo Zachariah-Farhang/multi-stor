@@ -73,6 +73,9 @@ class _GalleryScreenState extends State<GalleryScreen> {
                         settings: const RouteSettings(),
                         builder: (context) => ProductDetiels(
                               proId: snapshot.data!.docs[index]['proId'],
+                              mainCateg: snapshot.data!.docs[index]
+                                  ['maincatig'],
+                              subCateg: snapshot.data!.docs[index]['subcatig'],
                             )),
                   );
                 },
