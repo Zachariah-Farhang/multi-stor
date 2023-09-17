@@ -1,17 +1,10 @@
 import 'dart:math';
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
-
-import 'package:multi_store_app/widgets/internet_dialog.dart';
-
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
 
-import '../../utilities/connectivity_service.dart';
 import '../../widgets/login_bottun.dart';
 
 const colorizeColors = [
@@ -33,12 +26,10 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  final ConnectivityService connectivityService = ConnectivityService();
   String string = '';
 
   @override
   void dispose() {
-    connectivityService.dispose();
     super.dispose();
   }
 
@@ -47,124 +38,108 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-          body: StreamBuilder<dynamic>(
-              stream: connectivityService.connectivityStream,
-              builder: (context, snapshot) {
-                // debugPrint(snapshot.data.toString());
-                if (snapshot.hasData &&
-                    snapshot.data == InternetConnectionStatus.disconnected) {
-                  return const InternetAlertDialog();
-                } else {
-                  return Container(
-                    constraints: const BoxConstraints.expand(),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image:
-                            AssetImage("assets/images/welcome/welcamback.jpg"),
-                      ),
-                    ),
-                    child: SafeArea(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 70,
-                                decoration: BoxDecoration(
-                                    color: Colors.black87.withOpacity(0.4),
-                                    borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(15),
-                                        topRight: Radius.circular(15))),
-                                margin: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.26),
-                                child: AnimatedTextKit(
-                                    repeatForever: true,
-                                    animatedTexts: [
-                                      ColorizeAnimatedText(
-                                        "دیوار هرات",
-                                        textAlign: TextAlign.right,
-                                        textStyle: TextStyle(
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.12,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        colors: colorizeColors,
-                                      ),
-                                    ]),
-                              ),
-                            ],
+        body: Container(
+          constraints: const BoxConstraints.expand(),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage("assets/images/welcome/welcamback.jpg"),
+            ),
+          ),
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.black87.withOpacity(0.4),
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15))),
+                      margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.26),
+                      child:
+                          AnimatedTextKit(repeatForever: true, animatedTexts: [
+                        ColorizeAnimatedText(
+                          "دیوار هرات",
+                          textAlign: TextAlign.right,
+                          textStyle: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width * 0.12,
+                            fontWeight: FontWeight.bold,
                           ),
-                          const SuplierSignInOrSignUp(),
-                          const BuyerSignInOrSignUp(),
-                          Container(
-                            color: Colors.grey.withOpacity(0.6),
-                            height: 80,
-                            child: Row(
-                              children: [
-                                LoginBottom(
-                                  onTop: () {},
-                                  text: "گوگل",
-                                  imagePath: "assets/images/welcome/google.png",
-                                ),
-                                LoginBottom(
-                                  onTop: () {},
-                                  text: "فیسبوک",
-                                  imagePath:
-                                      "assets/images/welcome/facebook.png",
-                                ),
-                                LoginBottom(
-                                  onTop: () async {
-                                    await FirebaseAuth.instance
-                                        .signInAnonymously()
-                                        .whenComplete(() {
-                                      String defultName = 'User';
-                                      int id = Random().nextInt(100000);
+                          colors: colorizeColors,
+                        ),
+                      ]),
+                    ),
+                  ],
+                ),
+                const SuplierSignInOrSignUp(),
+                const BuyerSignInOrSignUp(),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  margin: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Row(
+                    children: [
+                      LoginBottom(
+                        onTop: () {},
+                        text: "گوگل",
+                        imagePath: "assets/images/welcome/google.png",
+                      ),
+                      LoginBottom(
+                        onTop: () {},
+                        text: "فیسبوک",
+                        imagePath: "assets/images/welcome/facebook.png",
+                      ),
+                      LoginBottom(
+                        onTop: () async {
+                          await FirebaseAuth.instance
+                              .signInAnonymously()
+                              .whenComplete(() {
+                            String defultName = 'User';
+                            int id = Random().nextInt(100000);
 
-                                      String defultUserName =
-                                          defultName + id.toString();
-                                      late String uid;
-                                      String phoneNumber = '';
-                                      String email = '';
-                                      String address = '';
-                                      String userName = '';
-                                      userName = defultUserName;
-                                      email = '$defultUserName@gmail.com';
-                                      address = defultUserName;
-                                      phoneNumber = id.toString();
-                                      CollectionReference customers =
-                                          FirebaseFirestore.instance
-                                              .collection('customers');
-                                      uid = FirebaseAuth
-                                          .instance.currentUser!.uid;
-                                      customers.doc(uid).set({
-                                        'name': userName,
-                                        'email': email,
-                                        'phone': phoneNumber,
-                                        'address': address,
-                                        'cid': uid,
-                                      });
-                                      Navigator.pushReplacementNamed(
-                                          context, '/customer_screen');
-                                    });
-                                  },
-                                  text: "مهمان",
-                                  imagePath: "assets/images/welcome/man.png",
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-              })),
+                            String defultUserName = defultName + id.toString();
+                            late String uid;
+                            String phoneNumber = '';
+                            String email = '';
+                            String address = '';
+                            String userName = '';
+                            userName = defultUserName;
+                            email = '$defultUserName@gmail.com';
+                            address = defultUserName;
+                            phoneNumber = id.toString();
+                            CollectionReference customers = FirebaseFirestore
+                                .instance
+                                .collection('customers');
+                            uid = FirebaseAuth.instance.currentUser!.uid;
+                            customers.doc(uid).set({
+                              'name': userName,
+                              'email': email,
+                              'phone': phoneNumber,
+                              'address': address,
+                              'cid': uid,
+                            });
+                            Navigator.pushReplacementNamed(
+                                context, '/customer_screen');
+                          });
+                        },
+                        text: "مهمان",
+                        imagePath: "assets/images/welcome/man.png",
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

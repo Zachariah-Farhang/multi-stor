@@ -204,7 +204,6 @@ class _RgisterScreenState extends State<RgisterScreen>
               body: SafeArea(
                 child: Center(
                   child: SingleChildScrollView(
-                    reverse: true,
                     physics: const BouncingScrollPhysics(),
                     child: Form(
                       key: _formKey,

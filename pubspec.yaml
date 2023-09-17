@@ -23,6 +23,8 @@ dependencies:
   firebase_storage: ^11.2.3
   firebase_core: ^2.14.0
   permission_handler: ^10.3.0
+
+
   connectivity: ^3.0.6
   flutter_native_splash: ^2.3.1
 
@@ -30,8 +32,8 @@ dependencies:
   path_provider: ^2.1.0
   uuid: ^3.0.7
   staggered_grid_view_flutter: ^0.0.4
-  flutter_swiper_null_safety: ^1.0.2
   internet_connection_checker: ^1.0.0+1
+  card_swiper: ^3.0.1
 
 dev_dependencies:
   flutter_test:

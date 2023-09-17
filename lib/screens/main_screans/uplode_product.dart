@@ -34,8 +34,7 @@ class _UplodeProductState extends State<UplodeProduct> {
   List<String> urlOfImages = [];
   final List<DropdownMenuEntry<String>> mainCateg =
       <DropdownMenuEntry<String>>[];
-  final List<DropdownMenuEntry<String>> subCateg =
-      <DropdownMenuEntry<String>>[];
+  List<DropdownMenuEntry<String>> subCateg = <DropdownMenuEntry<String>>[];
 
   String? selectedMianItem = '';
   String? selectedSubItem = '';
@@ -129,7 +128,6 @@ class _UplodeProductState extends State<UplodeProduct> {
               child: SingleChildScrollView(
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
-                reverse: true,
                 physics: const BouncingScrollPhysics(),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -159,133 +157,144 @@ class _UplodeProductState extends State<UplodeProduct> {
                                   }),
                         ),
                         const ReuseableDivider(),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: 10),
-                                child: Text(
-                                    'لطفا دسته بندی محصول خود را انتخاب کنید!'),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  DropdownMenu<String>(
-                                    label: const Text('دسته بندی اصلی'),
-                                    initialSelection: maincateg.first,
-                                    dropdownMenuEntries: mainCateg,
-                                    onSelected: (String? value) {
-                                      setState(() {
-                                        selectedMianItem = value!;
-                                        mainCagtegory = value;
-                                        debugPrint(mainCagtegory);
-                                        switch (value) {
-                                          case 'مردانه':
-                                            subCateg.clear();
-                                            for (final String value in men) {
-                                              subCateg.add(
-                                                DropdownMenuEntry<String>(
-                                                    value: value, label: value),
-                                              );
-                                            }
-                                            break;
-                                          case 'زنانه':
-                                            subCateg.clear();
-                                            for (final String value in women) {
-                                              subCateg.add(
-                                                DropdownMenuEntry<String>(
-                                                    value: value, label: value),
-                                              );
-                                            }
-                                            break;
-                                          case 'لوازم جانبی':
-                                            subCateg.clear();
-                                            for (final String value
-                                                in accessories) {
-                                              subCateg.add(
-                                                DropdownMenuEntry<String>(
-                                                    value: value, label: value),
-                                              );
-                                            }
-                                            break;
-                                          case 'الکترونیک':
-                                            subCateg.clear();
-                                            for (final String value
-                                                in electronics) {
-                                              subCateg.add(
-                                                DropdownMenuEntry<String>(
-                                                    value: value, label: value),
-                                              );
-                                            }
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.only(bottom: 10),
+                                  child: Text(
+                                      'لطفا دسته بندی محصول خود را انتخاب کنید!'),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    DropdownMenu<String>(
+                                      label: const Text('دسته بندی اصلی'),
+                                      initialSelection: maincateg.first,
+                                      dropdownMenuEntries: mainCateg,
+                                      onSelected: (String? value) {
+                                        setState(() {
+                                          selectedMianItem = value!;
+                                          mainCagtegory = value;
+                                          debugPrint(mainCagtegory);
+                                          subCateg =
+                                              <DropdownMenuEntry<String>>[];
+                                          switch (value) {
+                                            case 'مردانه':
+                                              for (final String value in men) {
+                                                subCateg.add(
+                                                  DropdownMenuEntry<String>(
+                                                      value: value,
+                                                      label: value),
+                                                );
+                                              }
+                                              break;
+                                            case 'زنانه':
+                                              for (final String value
+                                                  in women) {
+                                                subCateg.add(
+                                                  DropdownMenuEntry<String>(
+                                                      value: value,
+                                                      label: value),
+                                                );
+                                              }
+                                              break;
+                                            case 'لوازم جانبی':
+                                              for (final String value
+                                                  in accessories) {
+                                                subCateg.add(
+                                                  DropdownMenuEntry<String>(
+                                                      value: value,
+                                                      label: value),
+                                                );
+                                              }
+                                              break;
+                                            case 'الکترونیک':
+                                              for (final String value
+                                                  in electronics) {
+                                                subCateg.add(
+                                                  DropdownMenuEntry<String>(
+                                                      value: value,
+                                                      label: value),
+                                                );
+                                              }
 
-                                            break;
-                                          case 'کفش':
-                                            subCateg.clear();
-                                            for (final String value in shoes) {
-                                              subCateg.add(
-                                                DropdownMenuEntry<String>(
-                                                    value: value, label: value),
-                                              );
-                                            }
-                                            break;
-                                          case 'خانه و باغ':
-                                            subCateg.clear();
-                                            for (final String value
-                                                in homeandgarden) {
-                                              subCateg.add(
-                                                DropdownMenuEntry<String>(
-                                                    value: value, label: value),
-                                              );
-                                            }
-                                            break;
-                                          case 'زیبایی':
-                                            subCateg.clear();
-                                            for (final String value in beauty) {
-                                              subCateg.add(
-                                                DropdownMenuEntry<String>(
-                                                    value: value, label: value),
-                                              );
-                                            }
-                                            break;
-                                          case 'کودکان':
-                                            subCateg.clear();
-                                            for (final String value in kids) {
-                                              subCateg.add(
-                                                DropdownMenuEntry<String>(
-                                                    value: value, label: value),
-                                              );
-                                            }
-                                            break;
-                                          case 'کیف و کوله':
-                                            subCateg.clear();
-                                            for (final String value in bags) {
-                                              subCateg.add(
-                                                DropdownMenuEntry<String>(
-                                                    value: value, label: value),
-                                              );
-                                            }
-                                            break;
-                                          default:
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  DropdownMenu<String>(
-                                    label: const Text('دسته بندی فرعی'),
-                                    dropdownMenuEntries: subCateg,
-                                    onSelected: (String? value) {
-                                      setState(() {
-                                        selectedSubItem = value!;
-                                        subCagtegory = value;
-                                        debugPrint(subCagtegory);
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
+                                              break;
+                                            case 'کفش':
+                                              for (final String value
+                                                  in shoes) {
+                                                subCateg.add(
+                                                  DropdownMenuEntry<String>(
+                                                      value: value,
+                                                      label: value),
+                                                );
+                                              }
+                                              break;
+                                            case 'خانه و باغ':
+                                              for (final String value
+                                                  in homeandgarden) {
+                                                subCateg.add(
+                                                  DropdownMenuEntry<String>(
+                                                      value: value,
+                                                      label: value),
+                                                );
+                                              }
+                                              break;
+                                            case 'زیبایی':
+                                              for (final String value
+                                                  in beauty) {
+                                                subCateg.add(
+                                                  DropdownMenuEntry<String>(
+                                                      value: value,
+                                                      label: value),
+                                                );
+                                              }
+                                              break;
+                                            case 'کودکان':
+                                              for (final String value in kids) {
+                                                subCateg.add(
+                                                  DropdownMenuEntry<String>(
+                                                      value: value,
+                                                      label: value),
+                                                );
+                                              }
+                                              break;
+                                            case 'کیف و کوله':
+                                              for (final String value in bags) {
+                                                subCateg.add(
+                                                  DropdownMenuEntry<String>(
+                                                      value: value,
+                                                      label: value),
+                                                );
+                                              }
+                                              break;
+                                            default:
+                                          }
+                                        });
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    DropdownMenu<String>(
+                                      label: const Text('دسته بندی فرعی'),
+                                      dropdownMenuEntries: subCateg,
+                                      onSelected: (String? value) {
+                                        setState(() {
+                                          selectedSubItem = value!;
+                                          subCagtegory = value;
+                                          debugPrint(subCagtegory);
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         const ReuseableDivider(),
