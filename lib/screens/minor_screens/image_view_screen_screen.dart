@@ -2,8 +2,6 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:multi_store_app/widgets/app_bar_back_button.dart';
-
 class ImageViewScreen extends StatefulWidget {
   final List<dynamic> imageList;
 
@@ -28,64 +26,71 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
               children: [
                 Stack(
                   children: [
-                    SizedBox(
+                    Container(
                       height: MediaQuery.of(context).size.height * 0.70,
-                      child: Swiper(
-                          controller: _swiperController,
-                          pagination: SwiperPagination(
-                              margin: EdgeInsets.zero,
-                              builder: SwiperCustomPagination(
-                                  builder: (context, config) {
-                                return ConstrainedBox(
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: const DotSwiperPaginationBuilder(
-                                            color: Colors.amber,
-                                            activeColor: Colors.blueAccent,
-                                            size: 10.0,
-                                            activeSize: 20.0)
-                                        .build(context, config),
-                                  ),
-                                  constraints:
-                                      const BoxConstraints.expand(height: 50.0),
-                                );
-                              })),
-                          itemBuilder: (context, index) {
-                            return InteractiveViewer(
-                              transformationController:
-                                  TransformationController(),
-                              minScale: 0.5,
-                              maxScale: 3,
-                              child: Image.network(
-                                widget.imageList[index],
-                                fit: BoxFit.fill,
-                                loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                  if (loadingProgress == null) {
-                                    return child; // Return the child (the image) when loading is complete.
-                                  } else {
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                        value: loadingProgress
-                                                    .expectedTotalBytes !=
-                                                null
-                                            ? loadingProgress
-                                                    .cumulativeBytesLoaded /
-                                                loadingProgress
-                                                    .expectedTotalBytes!
-                                            : null,
-                                      ),
-                                    );
-                                  }
-                                },
-                                errorBuilder: (context, exception, stackTrace) {
-                                  return Text(
-                                      'Image not available'); // Optional: Handle image load errors.
-                                },
-                              ),
-                            );
-                          },
-                          itemCount: widget.imageList.length),
+                      color: Colors.black26,
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20)),
+                        child: Swiper(
+                            controller: _swiperController,
+                            pagination: SwiperPagination(
+                                margin: EdgeInsets.zero,
+                                builder: SwiperCustomPagination(
+                                    builder: (context, config) {
+                                  return ConstrainedBox(
+                                    constraints: const BoxConstraints.expand(
+                                        height: 50.0),
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: const DotSwiperPaginationBuilder(
+                                              color: Colors.amber,
+                                              activeColor: Colors.blueAccent,
+                                              size: 10.0,
+                                              activeSize: 20.0)
+                                          .build(context, config),
+                                    ),
+                                  );
+                                })),
+                            itemBuilder: (context, index) {
+                              return InteractiveViewer(
+                                transformationController:
+                                    TransformationController(),
+                                minScale: 0.5,
+                                maxScale: 3,
+                                child: Image.network(
+                                  widget.imageList[index],
+                                  fit: BoxFit.fill,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child; // Return the child (the image) when loading is complete.
+                                    } else {
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  errorBuilder:
+                                      (context, exception, stackTrace) {
+                                    return const Text(
+                                        'Image not available'); // Optional: Handle image load errors.
+                                  },
+                                ),
+                              );
+                            },
+                            itemCount: widget.imageList.length),
+                      ),
                     ),
                     Positioned(
                       top: 0,
@@ -96,8 +101,8 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
                         child: InkWell(
                           onTap: () => Navigator.pop(context),
                           child: Container(
-                            padding: EdgeInsets.all(10),
-                            child: Icon(
+                            padding: const EdgeInsets.all(10),
+                            child: const Icon(
                               CupertinoIcons.back,
                               size: 34,
                               color: Color.fromARGB(255, 238, 255, 2),
@@ -110,9 +115,10 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
                 ),
                 Expanded(
                   child: Container(
+                    padding: EdgeInsets.only(bottom: 4, top: 4),
                     color: Colors.black26,
                     child: ListView.builder(
-                        physics: BouncingScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         itemCount: widget.imageList.length,
                         itemBuilder: ((context, index) {
@@ -122,8 +128,8 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.3,
-                              margin: EdgeInsets.all(4),
-                              padding: EdgeInsets.all(2),
+                              margin: const EdgeInsets.all(4),
+                              padding: const EdgeInsets.all(2),
                               decoration: BoxDecoration(
                                   color: Colors.amber,
                                   borderRadius: BorderRadius.circular(8)),

@@ -22,18 +22,18 @@ dependencies:
   cloud_firestore: ^4.8.1
   firebase_storage: ^11.2.3
   firebase_core: ^2.14.0
+  
   permission_handler: ^10.3.0
-
-
   connectivity: ^3.0.6
   flutter_native_splash: ^2.3.1
 
 
   path_provider: ^2.1.0
   uuid: ^3.0.7
-  staggered_grid_view_flutter: ^0.0.4
+ 
   internet_connection_checker: ^1.0.0+1
   card_swiper: ^3.0.1
+  flutter_staggered_grid_view: ^0.7.0
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +58,7 @@ flutter:
     - assets/images/tabImages/
     - assets/images/supplierImages/
     - assets/images/welcome/
+    - assets/images/inapp/
 
 
 

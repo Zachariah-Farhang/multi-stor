@@ -69,7 +69,7 @@ class _RgisterScreenState extends State<RgisterScreen>
           source: ImageSource.gallery,
           maxHeight: 300,
           maxWidth: 300,
-          imageQuality: 95);
+          imageQuality: 100);
       setState(() {
         _imageFile = pickedImaae;
       });
@@ -116,7 +116,7 @@ class _RgisterScreenState extends State<RgisterScreen>
           profileImage = await ref.getDownloadURL();
           uid = FirebaseAuth.instance.currentUser!.uid;
           suppliers.doc(uid).set({
-            'name': name,
+            'storeName': name,
             'email': email,
             'profileImage': profileImage,
             'phone': phoneNumber,
@@ -251,6 +251,32 @@ class _RgisterScreenState extends State<RgisterScreen>
                                     backgroundImage: _imageFile == null
                                         ? null
                                         : FileImage(File(_imageFile!.path)),
+                                    child: arguments == 'customer' &&
+                                            _imageFile == null
+                                        ? const Padding(
+                                            padding: EdgeInsets.all(4.0),
+                                            child: Text(
+                                              "تصویر پروفایل خود را انتخاب کنید",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w900),
+                                            ),
+                                          )
+                                        : arguments == 'supplier' &&
+                                                _imageFile == null
+                                            ? const Padding(
+                                                padding: EdgeInsets.all(4.0),
+                                                child: Text(
+                                                  "لوگوی فروشگاه خود را انتخاب کنید",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w900),
+                                                ),
+                                              )
+                                            : null,
                                   ),
                                 ),
                                 Column(
@@ -277,9 +303,13 @@ class _RgisterScreenState extends State<RgisterScreen>
                             ),
                             Column(
                               children: [
-                                const TextFormFiled(
-                                  labelText: 'نام ',
-                                  hintText: 'نام و تخلص خود را وارد کنید',
+                                TextFormFiled(
+                                  labelText: arguments == 'customer'
+                                      ? 'نام '
+                                      : ' نام فروشگاه',
+                                  hintText: arguments == 'customer'
+                                      ? 'نام و تخلص خود را وارد کنید'
+                                      : 'نام فروشگاه خود را وارد کنید',
                                   textInputType: TextInputType.text,
                                 ),
                                 const TextFormFiled(

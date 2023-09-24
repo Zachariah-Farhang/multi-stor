@@ -37,6 +37,7 @@ class _HomeScreanState extends State<HomeScrean> {
               padding: EdgeInsets.zero,
               indicatorWeight: 0,
               indicatorPadding: EdgeInsets.zero,
+              labelStyle: const TextStyle(fontWeight: FontWeight.bold),
               labelPadding:
                   const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
               indicatorSize: TabBarIndicatorSize.tab,

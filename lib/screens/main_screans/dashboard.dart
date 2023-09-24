@@ -15,7 +15,7 @@ final List<String> imagePaht = [
   "$abslutPath" "manageproducts.png",
 ];
 final List<String> labels = [
-  "فروشگاهای من",
+  "فروشگاه من",
   "ویرایش پروفایل",
   "سفارشات",
   "مدریت سفارشات"

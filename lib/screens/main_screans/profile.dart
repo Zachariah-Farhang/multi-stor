@@ -23,14 +23,18 @@ class ProfileScreenState extends State<ProfileScreen> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference customer =
       FirebaseFirestore.instance.collection('customers');
+
   String userId = '';
   String userName = '';
   String phoneNumber = '';
   String email = '';
   String address = '';
   String profileIamge = '';
+
   void logOut() async {
+    FirebaseAuth.instance.currentUser!.delete();
     await FirebaseAuth.instance.signOut().whenComplete(() {
+      customer.doc(userId).delete();
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, '/welcome_screen');
     });
@@ -41,33 +45,37 @@ class ProfileScreenState extends State<ProfileScreen> {
   }
 
   void getData() {
-    userId = FirebaseAuth.instance.currentUser!.uid;
-    customer.doc(userId).get().then((DocumentSnapshot documentSnapshot) {
-      if (mounted) {
-        if (documentSnapshot.exists) {
-          var data = documentSnapshot.data() as Map<String, dynamic>;
-          setState(() {
-            userName = data['name'];
-            phoneNumber = data['phone'];
-            email = data['email'];
-            address = data['address'];
-            profileIamge = data['profileImage'] ?? '';
-          });
-        } else {
-          String defultName = 'User';
-          int id = Random().nextInt(100000);
+    try {
+      userId = FirebaseAuth.instance.currentUser!.uid;
+      customer.doc(userId).get().then((DocumentSnapshot documentSnapshot) {
+        if (mounted) {
+          if (documentSnapshot.exists) {
+            var data = documentSnapshot.data() as Map<String, dynamic>;
+            setState(() {
+              userName = data['name'];
+              phoneNumber = data['phone'];
+              email = data['email'];
+              address = data['address'];
+              profileIamge = data['profileImage'] ?? '';
+            });
+          } else {
+            String defultName = 'User';
+            int id = Random().nextInt(100000);
 
-          String defultUserName = defultName + id.toString();
+            String defultUserName = defultName + id.toString();
 
-          setState(() {
-            userName = defultUserName;
-            email = '$defultUserName@gmail.com';
-            address = defultUserName;
-            phoneNumber = id.toString();
-          });
+            setState(() {
+              userName = defultUserName;
+              email = '$defultUserName@gmail.com';
+              address = defultUserName;
+              phoneNumber = id.toString();
+            });
+          }
         }
-      }
-    });
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   @override
@@ -78,22 +86,18 @@ class ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final highet = MediaQuery.of(context).size.height;
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.grey.shade300,
-        body: Stack(children: [
-          Container(
-            height: 210,
-            decoration: const BoxDecoration(
-                gradient:
-                    LinearGradient(colors: [Colors.yellow, Colors.brown])),
-          ),
-          CustomScrollView(physics: const BouncingScrollPhysics(), slivers: [
+        child: Scaffold(
+      backgroundColor: Colors.grey.shade300,
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
             SliverAppBar(
               pinned: true,
               elevation: 0,
               backgroundColor: Colors.white,
-              expandedHeight: 160,
+              expandedHeight: highet >= 720 ? highet * 0.20 : highet * 0.25,
               flexibleSpace: LayoutBuilder(
                 builder: (context, constraints) {
                   return FlexibleSpaceBar(
@@ -123,6 +127,9 @@ class ProfileScreenState extends State<ProfileScreen> {
                               : const AssetImage(
                                   "assets/images/tabImages/men.png"),
                         ),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         Text(
                           userName,
                           style: const TextStyle(
@@ -134,191 +141,190 @@ class ProfileScreenState extends State<ProfileScreen> {
                 },
               ),
             ),
-            SliverToBoxAdapter(
+          ];
+        },
+        body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              height: 80,
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(50)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ReusableCotiner(
+                    decoration: const BoxDecoration(
+                        color: Colors.black54,
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(50),
+                            bottomRight: Radius.circular(50))),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CartScreen(
+                            backButtom: AppBarBackButton(),
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "سبدخرید",
+                      style: TextStyle(color: Colors.yellow, fontSize: 24),
+                    ),
+                  ),
+                  Expanded(
+                    child: ReusableCotiner(
+                      decoration: const BoxDecoration(
+                        color: Colors.black54,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CustomerOrders(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "سفارشات",
+                        style: TextStyle(color: Colors.yellow, fontSize: 24),
+                      ),
+                    ),
+                  ),
+                  ReusableCotiner(
+                    decoration: const BoxDecoration(
+                        color: Colors.black54,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(50),
+                            bottomLeft: Radius.circular(50))),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const WishlistScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "موردعلاقه ها",
+                      style: TextStyle(color: Colors.yellow, fontSize: 24),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              color: Colors.grey.shade300,
               child: Column(children: [
+                const SizedBox(
+                  height: 150,
+                  child: Image(
+                    image: AssetImage("assets/images/tabImages/bags.png"),
+                  ),
+                ),
+                const ReuseableSizedBox(
+                  text: "اطلاعات حساب",
+                ),
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: 80,
+                  margin: const EdgeInsets.all(8),
+                  height: 260,
                   decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      borderRadius: BorderRadius.circular(16)),
+                  child: Column(
                     children: [
-                      ReusableCotiner(
-                        decoration: const BoxDecoration(
-                            color: Colors.black54,
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(50),
-                                bottomRight: Radius.circular(50))),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const CartScreen(
-                                backButtom: AppBarBackButton(),
-                              ),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          "سبدخرید",
-                          style: TextStyle(color: Colors.yellow, fontSize: 24),
-                        ),
-                      ),
                       Expanded(
-                        child: ReusableCotiner(
-                          decoration: const BoxDecoration(
-                            color: Colors.black54,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const CustomerOrders(),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            "سفارشات",
-                            style:
-                                TextStyle(color: Colors.yellow, fontSize: 24),
-                          ),
+                        child: ReusableListTile(
+                          onTop: () {},
+                          title: "ایمیل آدرس",
+                          subTitle: email,
+                          icon: Icons.email,
                         ),
                       ),
-                      ReusableCotiner(
-                        decoration: const BoxDecoration(
-                            color: Colors.black54,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(50),
-                                bottomLeft: Radius.circular(50))),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const WishlistScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          "موردعلاقه ها",
-                          style: TextStyle(color: Colors.yellow, fontSize: 24),
+                      const ReuseableDivider(),
+                      Expanded(
+                        child: ReusableListTile(
+                          onTop: () {},
+                          title: "شماره تماس",
+                          subTitle: phoneNumber,
+                          icon: Icons.phone,
+                        ),
+                      ),
+                      const ReuseableDivider(),
+                      Expanded(
+                        child: ReusableListTile(
+                          onTop: () {},
+                          title: "آدرس",
+                          subTitle: address,
+                          icon: Icons.location_on,
                         ),
                       ),
                     ],
                   ),
                 ),
+                const ReuseableSizedBox(text: "تنظیمات حساب"),
                 Container(
-                  color: Colors.grey.shade300,
-                  child: Column(children: [
-                    const SizedBox(
-                      height: 150,
-                      child: Image(
-                        image: AssetImage("assets/images/tabImages/bags.png"),
+                  margin: const EdgeInsets.all(8),
+                  height: profileIamge.isNotEmpty ? 260 : 80,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16)),
+                  child: Column(
+                    children: [
+                      profileIamge.isNotEmpty
+                          ? Expanded(
+                              child: ReusableListTile(
+                                onTop: () {},
+                                title: "ویرایش پروفایل",
+                                icon: Icons.edit,
+                              ),
+                            )
+                          : const SizedBox(),
+                      profileIamge.isNotEmpty
+                          ? const ReuseableDivider()
+                          : const SizedBox(),
+                      profileIamge.isNotEmpty
+                          ? Expanded(
+                              child: ReusableListTile(
+                                onTop: () {},
+                                title: "تغیر رمز عبور",
+                                icon: Icons.lock,
+                              ),
+                            )
+                          : const SizedBox(),
+                      profileIamge.isNotEmpty
+                          ? const ReuseableDivider()
+                          : const SizedBox(),
+                      Expanded(
+                        child: ReusableListTile(
+                          onTop: () {
+                            CuperAlertDialog(
+                                    context: context,
+                                    agree: 'بلی',
+                                    desAgree: 'نخیر',
+                                    agreeFun: logOut,
+                                    desAgreeFun: popUp,
+                                    title: 'خارج شدن',
+                                    descreption:
+                                        'آیا مطمعین هستید که میخواهید خارج شوید؟')
+                                .showAlertDialog();
+                          },
+                          title: "خروج",
+                          icon: Icons.logout,
+                        ),
                       ),
-                    ),
-                    const ReuseableSizedBox(
-                      text: "اطلاعات حساب",
-                    ),
-                    Container(
-                      margin: const EdgeInsets.all(8),
-                      height: 260,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16)),
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: ReusableListTile(
-                              onTop: () {},
-                              title: "ایمیل آدرس",
-                              subTitle: email,
-                              icon: Icons.email,
-                            ),
-                          ),
-                          const ReuseableDivider(),
-                          Expanded(
-                            child: ReusableListTile(
-                              onTop: () {},
-                              title: "شماره تماس",
-                              subTitle: phoneNumber,
-                              icon: Icons.phone,
-                            ),
-                          ),
-                          const ReuseableDivider(),
-                          Expanded(
-                            child: ReusableListTile(
-                              onTop: () {},
-                              title: "آدرس",
-                              subTitle: address,
-                              icon: Icons.location_on,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const ReuseableSizedBox(text: "تنظیمات حساب"),
-                    Container(
-                      margin: const EdgeInsets.all(8),
-                      height: profileIamge.isNotEmpty ? 260 : 80,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16)),
-                      child: Column(
-                        children: [
-                          profileIamge.isNotEmpty
-                              ? Expanded(
-                                  child: ReusableListTile(
-                                    onTop: () {},
-                                    title: "ویرایش پروفایل",
-                                    icon: Icons.edit,
-                                  ),
-                                )
-                              : const SizedBox(),
-                          profileIamge.isNotEmpty
-                              ? const ReuseableDivider()
-                              : const SizedBox(),
-                          profileIamge.isNotEmpty
-                              ? Expanded(
-                                  child: ReusableListTile(
-                                    onTop: () {},
-                                    title: "تغیر رمز عبور",
-                                    icon: Icons.lock,
-                                  ),
-                                )
-                              : const SizedBox(),
-                          profileIamge.isNotEmpty
-                              ? const ReuseableDivider()
-                              : const SizedBox(),
-                          Expanded(
-                            child: ReusableListTile(
-                              onTop: () {
-                                CuperAlertDialog(
-                                        context: context,
-                                        agree: 'بلی',
-                                        desAgree: 'نخیر',
-                                        agreeFun: logOut,
-                                        desAgreeFun: popUp,
-                                        title: 'خارج شدن',
-                                        descreption:
-                                            'آیا مطمعین هستید که میخواهید خارج شوید؟')
-                                    .showAlertDialog();
-                              },
-                              title: "خروج",
-                              icon: Icons.logout,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ]),
+                    ],
+                  ),
                 ),
               ]),
             ),
           ]),
-        ]),
+        ),
       ),
-    );
+    ));
   }
 }
 

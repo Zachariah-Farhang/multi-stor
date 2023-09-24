@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
 
@@ -27,7 +28,7 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   String string = '';
-
+  bool isSingingUp = false;
   @override
   void dispose() {
     super.dispose();
@@ -79,62 +80,77 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 const SuplierSignInOrSignUp(),
                 const BuyerSignInOrSignUp(),
                 Container(
-                  padding: const EdgeInsets.all(8),
-                  margin: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Row(
-                    children: [
-                      LoginBottom(
-                        onTop: () {},
-                        text: "گوگل",
-                        imagePath: "assets/images/welcome/google.png",
-                      ),
-                      LoginBottom(
-                        onTop: () {},
-                        text: "فیسبوک",
-                        imagePath: "assets/images/welcome/facebook.png",
-                      ),
-                      LoginBottom(
-                        onTop: () async {
-                          await FirebaseAuth.instance
-                              .signInAnonymously()
-                              .whenComplete(() {
-                            String defultName = 'User';
-                            int id = Random().nextInt(100000);
+                    width: MediaQuery.of(context).size.width,
+                    height: 80,
+                    padding: const EdgeInsets.all(8),
+                    margin: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.6),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Row(
+                      children: [
+                        LoginBottom(
+                          onTop: () {},
+                          text: "گوگل",
+                          imagePath: "assets/images/welcome/google.png",
+                        ),
+                        LoginBottom(
+                          onTop: () {},
+                          text: "فیسبوک",
+                          imagePath: "assets/images/welcome/facebook.png",
+                        ),
+                        isSingingUp
+                            ? const Expanded(
+                                child: Center(
+                                    child: CupertinoActivityIndicator(
+                                  radius: 18,
+                                  color: Colors.amber,
+                                )),
+                              )
+                            : LoginBottom(
+                                onTop: () async {
+                                  setState(() {
+                                    isSingingUp = true;
+                                  });
+                                  await FirebaseAuth.instance
+                                      .signInAnonymously()
+                                      .whenComplete(() {
+                                    String defultName = 'User';
+                                    int id = Random().nextInt(100000) +
+                                        Random().nextInt(100000);
 
-                            String defultUserName = defultName + id.toString();
-                            late String uid;
-                            String phoneNumber = '';
-                            String email = '';
-                            String address = '';
-                            String userName = '';
-                            userName = defultUserName;
-                            email = '$defultUserName@gmail.com';
-                            address = defultUserName;
-                            phoneNumber = id.toString();
-                            CollectionReference customers = FirebaseFirestore
-                                .instance
-                                .collection('customers');
-                            uid = FirebaseAuth.instance.currentUser!.uid;
-                            customers.doc(uid).set({
-                              'name': userName,
-                              'email': email,
-                              'phone': phoneNumber,
-                              'address': address,
-                              'cid': uid,
-                            });
-                            Navigator.pushReplacementNamed(
-                                context, '/customer_screen');
-                          });
-                        },
-                        text: "مهمان",
-                        imagePath: "assets/images/welcome/man.png",
-                      )
-                    ],
-                  ),
-                ),
+                                    String defultUserName =
+                                        defultName + id.toString();
+                                    late String uid;
+                                    String phoneNumber = '';
+                                    String email = '';
+                                    String address = '';
+                                    String userName = '';
+                                    userName = defultUserName;
+                                    email = '$defultUserName@gmail.com';
+                                    address = defultUserName;
+                                    phoneNumber = id.toString();
+                                    CollectionReference customers =
+                                        FirebaseFirestore.instance
+                                            .collection('customers');
+                                    uid =
+                                        FirebaseAuth.instance.currentUser!.uid;
+                                    customers.doc(uid).set({
+                                      'name': userName,
+                                      'email': email,
+                                      'phone': phoneNumber,
+                                      'address': address,
+                                      'cid': uid,
+                                    });
+                                    Navigator.pushReplacementNamed(
+                                        context, '/customer_screen');
+                                  });
+                                },
+                                text: "مهمان",
+                                imagePath: "assets/images/welcome/man.png",
+                              )
+                      ],
+                    )),
               ],
             ),
           ),

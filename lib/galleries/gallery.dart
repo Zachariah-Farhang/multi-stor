@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:multi_store_app/models/product_model.dart';
 import 'package:multi_store_app/screens/minor_screens/product_detiels.dart';
-import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
-import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 
 class GalleryScreen extends StatefulWidget {
   final String category;
@@ -55,33 +54,32 @@ class _GalleryScreenState extends State<GalleryScreen> {
             ),
           );
         }
-        return StaggeredGridView.countBuilder(
-            physics: const BouncingScrollPhysics(),
-            itemCount: snapshot.data!.docs.length,
-            crossAxisCount: 2,
-            itemBuilder: (context, index) {
-              return ProductModel(
-                imagePath: snapshot.data!.docs[index]['product_images'][0],
-                productShortDetails: snapshot.data!.docs[index]['product_name'],
-                productPrice: snapshot.data!.docs[index]['product_price'],
-                isFavorite: false,
-                hasDescount: false,
-                descount: 0,
-                onTop: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        settings: const RouteSettings(),
-                        builder: (context) => ProductDetiels(
-                              proId: snapshot.data!.docs[index]['proId'],
-                              mainCateg: snapshot.data!.docs[index]
-                                  ['maincatig'],
-                              subCateg: snapshot.data!.docs[index]['subcatig'],
-                            )),
-                  );
-                },
-              );
-            },
-            staggeredTileBuilder: (context) => const StaggeredTile.fit(1));
+        return MasonryGridView.count(
+          physics: const BouncingScrollPhysics(),
+          itemCount: snapshot.data!.docs.length,
+          crossAxisCount: 2,
+          itemBuilder: (context, index) {
+            return ProductModel(
+              imagePath: snapshot.data!.docs[index]['product_images'][0],
+              productShortDetails: snapshot.data!.docs[index]['product_name'],
+              productPrice: snapshot.data!.docs[index]['product_price'],
+              isFavorite: false,
+              hasDescount: false,
+              descount: 0,
+              onTop: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      settings: const RouteSettings(),
+                      builder: (context) => ProductDetiels(
+                            proId: snapshot.data!.docs[index]['proId'],
+                            mainCateg: snapshot.data!.docs[index]['maincatig'],
+                            subCateg: snapshot.data!.docs[index]['subcatig'],
+                          )),
+                );
+              },
+            );
+          },
+        );
         // return ListView(
         //   children: snapshot.data!.docs
         //       .map((DocumentSnapshot document) {

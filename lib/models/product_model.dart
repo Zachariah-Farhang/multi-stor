@@ -33,12 +33,12 @@ class ProductModel extends StatelessWidget {
                   constraints: const BoxConstraints(
                     minHeight: 100,
                   ),
-                  child: const ClipRRect(
-                    borderRadius: BorderRadius.only(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(16),
                         topRight: Radius.circular(16)),
                     child: Image(
-                      image: AssetImage('assets/images/welcome/man.png'),
+                      image: NetworkImage(imagePath),
                       // image: NetworkImage(imagePath),
                     ),
                   )),

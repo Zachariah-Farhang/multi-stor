@@ -2,10 +2,9 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
 import 'package:multi_store_app/widgets/reuseable_divider.dart';
-import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
-import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import '../../models/product_model.dart';
 import 'image_view_screen_screen.dart';
 
@@ -86,7 +85,7 @@ class _ProductDetielsState extends State<ProductDetiels> {
             elevation: 0,
             leading: InkWell(
               onTap: () => Navigator.pop(context),
-              child: Icon(
+              child: const Icon(
                 CupertinoIcons.back,
                 size: 32,
                 color: Colors.black,
@@ -95,9 +94,8 @@ class _ProductDetielsState extends State<ProductDetiels> {
             actions: [
               InkWell(
                 onTap: () => Navigator.pop(context),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   child: Icon(
                     CupertinoIcons.share,
                     size: 32,
@@ -132,6 +130,8 @@ class _ProductDetielsState extends State<ProductDetiels> {
                                   builder: SwiperCustomPagination(
                                       builder: (context, config) {
                                     return ConstrainedBox(
+                                      constraints: const BoxConstraints.expand(
+                                          height: 50.0),
                                       child: Align(
                                         alignment: Alignment.center,
                                         child: const DotSwiperPaginationBuilder(
@@ -141,8 +141,6 @@ class _ProductDetielsState extends State<ProductDetiels> {
                                                 activeSize: 20.0)
                                             .build(context, config),
                                       ),
-                                      constraints: const BoxConstraints.expand(
-                                          height: 50.0),
                                     );
                                   })),
                               itemBuilder: (context, index) {
@@ -261,49 +259,92 @@ class _ProductDetielsState extends State<ProductDetiels> {
                                   }
                                   return SingleChildScrollView(
                                     physics: const BouncingScrollPhysics(),
-                                    child: StaggeredGridView.countBuilder(
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        shrinkWrap: true,
-                                        itemCount: snapshot.data!.docs.length,
-                                        crossAxisCount: 2,
-                                        itemBuilder: (context, index) {
-                                          return ProductModel(
-                                            imagePath:
-                                                snapshot.data!.docs[index]
-                                                    ['product_images'][0],
-                                            productShortDetails: snapshot.data!
-                                                .docs[index]['product_name'],
-                                            productPrice: snapshot.data!
-                                                .docs[index]['product_price'],
-                                            isFavorite: false,
-                                            hasDescount: false,
-                                            descount: 0,
-                                            onTop: () {
-                                              Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    settings:
-                                                        const RouteSettings(),
-                                                    builder: (context) =>
-                                                        ProductDetiels(
-                                                          proId: snapshot.data!
-                                                                  .docs[index]
-                                                              ['proId'],
-                                                          mainCateg: snapshot
-                                                                  .data!
-                                                                  .docs[index]
-                                                              ['maincatig'],
-                                                          subCateg: snapshot
-                                                                  .data!
-                                                                  .docs[index]
-                                                              ['subcatig'],
-                                                        )),
-                                              );
-                                            },
-                                          );
-                                        },
-                                        staggeredTileBuilder: (context) =>
-                                            const StaggeredTile.fit(1)),
+                                    child: MasonryGridView.count(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 4,
+                                      crossAxisSpacing: 4,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: snapshot.data!.docs.length,
+                                      itemBuilder: ((context, index) {
+                                        return ProductModel(
+                                          imagePath: snapshot.data!.docs[index]
+                                              ['product_images'][0],
+                                          productShortDetails: snapshot.data!
+                                              .docs[index]['product_name'],
+                                          productPrice: snapshot.data!
+                                              .docs[index]['product_price'],
+                                          isFavorite: false,
+                                          hasDescount: false,
+                                          descount: 0,
+                                          onTop: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  settings:
+                                                      const RouteSettings(),
+                                                  builder: (context) =>
+                                                      ProductDetiels(
+                                                        proId: snapshot.data!
+                                                                .docs[index]
+                                                            ['proId'],
+                                                        mainCateg: snapshot
+                                                                .data!
+                                                                .docs[index]
+                                                            ['maincatig'],
+                                                        subCateg: snapshot.data!
+                                                                .docs[index]
+                                                            ['subcatig'],
+                                                      )),
+                                            );
+                                          },
+                                        );
+                                      }),
+                                    ),
+
+                                    // StaggeredGridView.countBuilder(
+                                    //     physics:
+                                    //         const NeverScrollableScrollPhysics(),
+                                    //     shrinkWrap: true,
+                                    //     itemCount: snapshot.data!.docs.length,
+                                    //     crossAxisCount: 2,
+                                    //     itemBuilder: (context, index) {
+                                    //       return ProductModel(
+                                    //         imagePath:
+                                    //             snapshot.data!.docs[index]
+                                    //                 ['product_images'][0],
+                                    //         productShortDetails: snapshot.data!
+                                    //             .docs[index]['product_name'],
+                                    //         productPrice: snapshot.data!
+                                    //             .docs[index]['product_price'],
+                                    //         isFavorite: false,
+                                    //         hasDescount: false,
+                                    //         descount: 0,
+                                    //         onTop: () {
+                                    //           Navigator.of(context).push(
+                                    //             MaterialPageRoute(
+                                    //                 settings:
+                                    //                     const RouteSettings(),
+                                    //                 builder: (context) =>
+                                    //                     ProductDetiels(
+                                    //                       proId: snapshot.data!
+                                    //                               .docs[index]
+                                    //                           ['proId'],
+                                    //                       mainCateg: snapshot
+                                    //                               .data!
+                                    //                               .docs[index]
+                                    //                           ['maincatig'],
+                                    //                       subCateg: snapshot
+                                    //                               .data!
+                                    //                               .docs[index]
+                                    //                           ['subcatig'],
+                                    //                     )),
+                                    //           );
+                                    //         },
+                                    //       );
+                                    //     },
+                                    //     staggeredTileBuilder: (context) =>
+                                    //         const StaggeredTile.fit(1)),
                                   );
                                 },
                               ),
