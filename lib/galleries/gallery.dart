@@ -60,6 +60,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
           crossAxisCount: 2,
           itemBuilder: (context, index) {
             return ProductModel(
+              productSid: snapshot.data!.docs[index]['sid'],
               imagePath: snapshot.data!.docs[index]['product_images'][0],
               productShortDetails: snapshot.data!.docs[index]['product_name'],
               productPrice: snapshot.data!.docs[index]['product_price'],
@@ -80,21 +81,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
             );
           },
         );
-        // return ListView(
-        //   children: snapshot.data!.docs
-        //       .map((DocumentSnapshot document) {
-        //         Map<String, dynamic> data =
-        //             document.data()! as Map<String, dynamic>;
-        //         return ListTile(
-        //           leading:
-        //               Image(image: NetworkImage(data['product_images'][0])),
-        //           title: Text(data['product_name']),
-        //           subtitle: Text(data['product_price']),
-        //         );
-        //       })
-        //       .toList()
-        //       .cast(),
-        // );
       },
     );
   }

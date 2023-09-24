@@ -18,6 +18,7 @@ class _StoresScreenState extends State<StoresScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.blueGrey.shade100,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
@@ -32,10 +33,11 @@ class _StoresScreenState extends State<StoresScreen> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return GridView.builder(
+                padding: const EdgeInsets.all(8),
                 physics: const BouncingScrollPhysics(),
                 itemCount: snapshot.data!.docs.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, mainAxisSpacing: 4, crossAxisSpacing: 4),
+                    crossAxisCount: 2, mainAxisSpacing: 8, crossAxisSpacing: 8),
                 itemBuilder: ((context, index) {
                   debugPrint(
                       snapshot.data!.docs[index]['profileImage'].toString());

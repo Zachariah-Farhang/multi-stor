@@ -32,8 +32,11 @@ class CategoryViewModel extends StatelessWidget {
                     ),
                     Expanded(
                       child: MasonryGridView.count(
+                        padding: const EdgeInsets.all(8),
                         physics: const BouncingScrollPhysics(),
                         itemCount: categoryList.length,
+                        mainAxisSpacing: 8,
+                        crossAxisSpacing: 8,
                         crossAxisCount: 2,
                         itemBuilder: (context, index) {
                           return SubCategModel(

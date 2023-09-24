@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:multi_store_app/screens/main_screans/visit_store.dart';
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
 import 'package:multi_store_app/widgets/reuseable_divider.dart';
 import '../../models/product_model.dart';
@@ -34,6 +35,7 @@ class _ProductDetielsState extends State<ProductDetiels> {
   String proDetiels = '';
   String proPrice = '';
   String proName = '';
+  String userId = '';
 
   Future<void> getdata(String proId) async {
     try {
@@ -60,6 +62,7 @@ class _ProductDetielsState extends State<ProductDetiels> {
       proQuantity = data['product_covantity'];
       proMainCateg = data['maincatig'];
       proSubCateg = data['subcatig'];
+      userId = data['sid'];
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -269,6 +272,8 @@ class _ProductDetielsState extends State<ProductDetiels> {
                                       itemCount: snapshot.data!.docs.length,
                                       itemBuilder: ((context, index) {
                                         return ProductModel(
+                                          productSid: snapshot.data!.docs[index]
+                                              ['sid'],
                                           imagePath: snapshot.data!.docs[index]
                                               ['product_images'][0],
                                           productShortDetails: snapshot.data!
@@ -301,50 +306,6 @@ class _ProductDetielsState extends State<ProductDetiels> {
                                         );
                                       }),
                                     ),
-
-                                    // StaggeredGridView.countBuilder(
-                                    //     physics:
-                                    //         const NeverScrollableScrollPhysics(),
-                                    //     shrinkWrap: true,
-                                    //     itemCount: snapshot.data!.docs.length,
-                                    //     crossAxisCount: 2,
-                                    //     itemBuilder: (context, index) {
-                                    //       return ProductModel(
-                                    //         imagePath:
-                                    //             snapshot.data!.docs[index]
-                                    //                 ['product_images'][0],
-                                    //         productShortDetails: snapshot.data!
-                                    //             .docs[index]['product_name'],
-                                    //         productPrice: snapshot.data!
-                                    //             .docs[index]['product_price'],
-                                    //         isFavorite: false,
-                                    //         hasDescount: false,
-                                    //         descount: 0,
-                                    //         onTop: () {
-                                    //           Navigator.of(context).push(
-                                    //             MaterialPageRoute(
-                                    //                 settings:
-                                    //                     const RouteSettings(),
-                                    //                 builder: (context) =>
-                                    //                     ProductDetiels(
-                                    //                       proId: snapshot.data!
-                                    //                               .docs[index]
-                                    //                           ['proId'],
-                                    //                       mainCateg: snapshot
-                                    //                               .data!
-                                    //                               .docs[index]
-                                    //                           ['maincatig'],
-                                    //                       subCateg: snapshot
-                                    //                               .data!
-                                    //                               .docs[index]
-                                    //                           ['subcatig'],
-                                    //                     )),
-                                    //           );
-                                    //         },
-                                    //       );
-                                    //     },
-                                    //     staggeredTileBuilder: (context) =>
-                                    //         const StaggeredTile.fit(1)),
                                   );
                                 },
                               ),
@@ -368,7 +329,15 @@ class _ProductDetielsState extends State<ProductDetiels> {
           children: [
             Row(
               children: [
-                IconButton(onPressed: () {}, icon: const Icon(Icons.store)),
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  VisitStore(userId: userId)));
+                    },
+                    icon: const Icon(Icons.store)),
                 const SizedBox(
                   width: 10,
                 ),

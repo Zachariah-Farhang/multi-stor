@@ -25,7 +25,9 @@ class _SubGategoriesState extends State<SubGategories> {
           centerTitle: true,
           elevation: 0.0,
           backgroundColor: Colors.white,
-          leading: const AppBarBackButton(),
+          leading: const AppBarBackButton(
+            color: Colors.black87,
+          ),
           title: Text(
             widget.subcategName,
             style: const TextStyle(color: Colors.black87),

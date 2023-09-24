@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProductModel extends StatelessWidget {
   final String imagePath;
   final String productShortDetails;
   final String productPrice;
+  final String productSid;
   final bool isFavorite;
   final bool hasDescount;
   final int descount;
@@ -16,7 +18,8 @@ class ProductModel extends StatelessWidget {
       required this.isFavorite,
       required this.hasDescount,
       required this.descount,
-      required this.onTop});
+      required this.onTop,
+      required this.productSid});
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +64,11 @@ class ProductModel extends StatelessWidget {
                     Text(
                       "\$ $productPrice ",
                     ),
-                    Icon(isFavorite
-                        ? Icons.favorite
-                        : Icons.favorite_border_outlined)
+                    productSid == FirebaseAuth.instance.currentUser!.uid
+                        ? Icon(Icons.edit)
+                        : Icon(isFavorite
+                            ? Icons.favorite
+                            : Icons.favorite_border_outlined)
                   ],
                 ),
               )

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_store_app/auth/auth_components.dart';
@@ -12,6 +13,7 @@ import 'package:multi_store_app/widgets/snackbarr.dart';
 // import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 bool _passwordVisibalty = false;
+bool signingInUp = false;
 String name = '';
 String email = '';
 String password = '';
@@ -81,15 +83,11 @@ class _RgisterScreenState extends State<RgisterScreen>
     }
   }
 
-  void signUp() async {
+  Future<void> signUp() async {
     if (_formKey.currentState!.validate() && _imageFile != null) {
       try {
         await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
-
-        // firebase_storage.Reference ref = firebase_storage
-        //     .FirebaseStorage.instance
-        //     .ref('customer-images/$email.jpg');
 
         if (customerOrSupplier.isNotEmpty && customerOrSupplier == 'customer') {
           Reference ref =
@@ -183,20 +181,35 @@ class _RgisterScreenState extends State<RgisterScreen>
                 child: Row(
                   children: [
                     Expanded(
-                      child: RawMaterialButton(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        fillColor: Colors.blue,
-                        onPressed: () {
-                          signUp();
-                        },
-                        child: const Text(
-                          'ثبت نام',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24),
-                        ),
-                      ),
+                      child: signingInUp
+                          ? const Material(
+                              child: Center(
+                                child: CupertinoActivityIndicator(
+                                  radius: 30,
+                                ),
+                              ),
+                            )
+                          : RawMaterialButton(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              fillColor: Colors.blue,
+                              onPressed: () {
+                                setState(() {
+                                  signingInUp = true;
+                                });
+                                signUp().whenComplete(() {
+                                  setState(() {
+                                    signingInUp = false;
+                                  });
+                                });
+                              },
+                              child: const Text(
+                                'ثبت نام',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24),
+                              ),
+                            ),
                     ),
                   ],
                 ),

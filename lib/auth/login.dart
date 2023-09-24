@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 
@@ -28,6 +29,7 @@ class _LogInState extends State<LogIn> with WidgetsBindingObserver {
       GlobalKey<ScaffoldMessengerState>();
 
   bool _isKeyboardVisible = false;
+  bool loginingIn = false;
   double keyboardHeight = 0;
   String customerOrSupplier = '';
 
@@ -69,7 +71,7 @@ class _LogInState extends State<LogIn> with WidgetsBindingObserver {
     }
   }
 
-  void logIn() async {
+  Future<void> logIn() async {
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
         String? cusOrSup = await getSupOrcusByEmail(email);
@@ -126,8 +128,6 @@ class _LogInState extends State<LogIn> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as String;
     customerOrSupplier = arguments;
-
-    debugPrint(customerOrSupplier);
     return Directionality(
       textDirection: TextDirection.rtl,
       child: ScaffoldMessenger(
@@ -142,20 +142,33 @@ class _LogInState extends State<LogIn> with WidgetsBindingObserver {
             child: Row(
               children: [
                 Expanded(
-                  child: RawMaterialButton(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    fillColor: Colors.blue,
-                    onPressed: () {
-                      logIn();
-                    },
-                    child: const Text(
-                      'وارد شدن',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24),
-                    ),
-                  ),
+                  child: loginingIn
+                      ? const Center(
+                          child: CupertinoActivityIndicator(
+                            radius: 30,
+                          ),
+                        )
+                      : RawMaterialButton(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          fillColor: Colors.blue,
+                          onPressed: () {
+                            setState(() {
+                              loginingIn = true;
+                            });
+                            logIn().whenComplete(() {
+                              setState(() {
+                                loginingIn = false;
+                              });
+                            });
+                          },
+                          child: const Text(
+                            'وارد شدن',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24),
+                          ),
+                        ),
                 ),
               ],
             ),

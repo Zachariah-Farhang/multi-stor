@@ -18,13 +18,7 @@ class CustomerHomeScrean extends StatefulWidget {
 
 class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
   int _selectedIndex = 0;
-  final List<Widget> _tabs = const [
-    HomeScrean(),
-    CategoryScreen(),
-    StoresScreen(),
-    CartScreen(),
-    ProfileScreen(),
-  ];
+  List<Widget> tabs = [];
 
   @override
   void dispose() {
@@ -32,8 +26,24 @@ class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     //Scaffold is the root widget of the customer page.
+    String arguments = ModalRoute.of(context)!.settings.arguments.toString();
+
+    tabs = [
+      const HomeScrean(),
+      const CategoryScreen(),
+      const StoresScreen(),
+      const CartScreen(),
+      ProfileScreen(
+        userTyope: arguments,
+      ),
+    ];
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -62,7 +72,7 @@ class _CustomerHomeScreanState extends State<CustomerHomeScrean> {
             );
           },
         ),
-        body: _tabs.elementAt(_selectedIndex),
+        body: tabs.elementAt(_selectedIndex),
       ),
     );
   }

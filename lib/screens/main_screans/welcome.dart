@@ -29,6 +29,10 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   String string = '';
   bool isSingingUp = false;
+
+  CollectionReference anonymous =
+      FirebaseFirestore.instance.collection('anonymous');
+
   @override
   void dispose() {
     super.dispose();
@@ -118,7 +122,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     String defultName = 'User';
                                     int id = Random().nextInt(100000) +
                                         Random().nextInt(100000);
-
                                     String defultUserName =
                                         defultName + id.toString();
                                     late String uid;
@@ -130,12 +133,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     email = '$defultUserName@gmail.com';
                                     address = defultUserName;
                                     phoneNumber = id.toString();
-                                    CollectionReference customers =
-                                        FirebaseFirestore.instance
-                                            .collection('customers');
+
                                     uid =
                                         FirebaseAuth.instance.currentUser!.uid;
-                                    customers.doc(uid).set({
+                                    anonymous.doc(uid).set({
                                       'name': userName,
                                       'email': email,
                                       'phone': phoneNumber,
@@ -143,7 +144,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       'cid': uid,
                                     });
                                     Navigator.pushReplacementNamed(
-                                        context, '/customer_screen');
+                                        context, '/customer_screen',
+                                        arguments: 'anonymous');
                                   });
                                 },
                                 text: "مهمان",

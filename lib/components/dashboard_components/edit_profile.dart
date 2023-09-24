@@ -17,7 +17,9 @@ class EditProfile extends StatelessWidget {
             color: Colors.black87,
           ),
         ),
-        leading: const AppBarBackButton(),
+        leading: const AppBarBackButton(
+          color: Colors.black87,
+        ),
       ),
     );
   }

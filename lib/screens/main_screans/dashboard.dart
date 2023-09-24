@@ -4,6 +4,7 @@ import 'package:multi_store_app/components/dashboard_components/edit_profile.dar
 import 'package:multi_store_app/components/dashboard_components/manage_products.dart';
 import 'package:multi_store_app/components/dashboard_components/my_sotre.dart';
 import 'package:multi_store_app/components/dashboard_components/supplier_orders.dart';
+import 'package:multi_store_app/screens/main_screans/visit_store.dart';
 
 import '../../widgets/alirt_dialog.dart';
 
@@ -21,8 +22,10 @@ final List<String> labels = [
   "مدریت سفارشات"
 ];
 
-const List<Widget> pagesOnDashboard = [
-  MyStore(),
+List<Widget> pagesOnDashboard = [
+  VisitStore(
+    userId: FirebaseAuth.instance.currentUser!.uid,
+  ),
   EditProfile(),
   SupplierOrders(),
   ManageProducts()

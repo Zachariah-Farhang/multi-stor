@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -13,17 +11,14 @@ import '../../widgets/reuseable_continer.dart';
 import '../../widgets/reuseable_divider.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final String userTyope;
+  const ProfileScreen({Key? key, required this.userTyope}) : super(key: key);
 
   @override
   ProfileScreenState createState() => ProfileScreenState();
 }
 
 class ProfileScreenState extends State<ProfileScreen> {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  CollectionReference customer =
-      FirebaseFirestore.instance.collection('customers');
-
   String userId = '';
   String userName = '';
   String phoneNumber = '';
@@ -32,9 +27,7 @@ class ProfileScreenState extends State<ProfileScreen> {
   String profileIamge = '';
 
   void logOut() async {
-    FirebaseAuth.instance.currentUser!.delete();
     await FirebaseAuth.instance.signOut().whenComplete(() {
-      customer.doc(userId).delete();
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, '/welcome_screen');
     });
@@ -45,9 +38,11 @@ class ProfileScreenState extends State<ProfileScreen> {
   }
 
   void getData() {
+    CollectionReference collection = FirebaseFirestore.instance.collection(
+        widget.userTyope == 'anonymous' ? 'anonymous' : 'customers');
     try {
       userId = FirebaseAuth.instance.currentUser!.uid;
-      customer.doc(userId).get().then((DocumentSnapshot documentSnapshot) {
+      collection.doc(userId).get().then((DocumentSnapshot documentSnapshot) {
         if (mounted) {
           if (documentSnapshot.exists) {
             var data = documentSnapshot.data() as Map<String, dynamic>;
@@ -57,18 +52,6 @@ class ProfileScreenState extends State<ProfileScreen> {
               email = data['email'];
               address = data['address'];
               profileIamge = data['profileImage'] ?? '';
-            });
-          } else {
-            String defultName = 'User';
-            int id = Random().nextInt(100000);
-
-            String defultUserName = defultName + id.toString();
-
-            setState(() {
-              userName = defultUserName;
-              email = '$defultUserName@gmail.com';
-              address = defultUserName;
-              phoneNumber = id.toString();
             });
           }
         }
@@ -81,6 +64,7 @@ class ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+
     getData();
   }
 
@@ -114,28 +98,37 @@ class ProfileScreenState extends State<ProfileScreen> {
                     background: Container(
                       padding: const EdgeInsets.only(top: 20),
                       decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage(
+                                'assets/images/inapp/coverimage.jpg')),
                         gradient: LinearGradient(colors: [
                           Colors.yellow,
                           Colors.brown,
                         ]),
                       ),
-                      child: Column(children: [
-                        CircleAvatar(
-                          radius: 40,
-                          backgroundImage: profileIamge.isNotEmpty
-                              ? Image.network(profileIamge).image
-                              : const AssetImage(
-                                  "assets/images/tabImages/men.png"),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          userName,
-                          style: const TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
-                        )
-                      ]),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 40,
+                              backgroundImage: profileIamge.isNotEmpty
+                                  ? Image.network(profileIamge).image
+                                  : const AssetImage(
+                                      "assets/images/tabImages/men.png"),
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Text(
+                              userName,
+                              style: TextStyle(
+                                  color: Colors.amberAccent.shade700,
+                                  fontSize: 24,
+                                  fontFamily: 'Kanun',
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ]),
                     ),
                   );
                 },
@@ -165,7 +158,9 @@ class ProfileScreenState extends State<ProfileScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => const CartScreen(
-                            backButtom: AppBarBackButton(),
+                            backButtom: AppBarBackButton(
+                              color: Colors.black87,
+                            ),
                           ),
                         ),
                       );
