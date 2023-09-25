@@ -2,13 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/components/dashboard_components/edit_profile.dart';
 import 'package:multi_store_app/components/dashboard_components/manage_products.dart';
-import 'package:multi_store_app/components/dashboard_components/my_sotre.dart';
 import 'package:multi_store_app/components/dashboard_components/supplier_orders.dart';
 import 'package:multi_store_app/screens/main_screans/visit_store.dart';
 
 import '../../widgets/alirt_dialog.dart';
 
 const String abslutPath = "assets/images/supplierImages/";
+
 final List<String> imagePaht = [
   "$abslutPath" "mystores.png",
   "$abslutPath" "editprofile.png",
@@ -22,20 +22,21 @@ final List<String> labels = [
   "مدریت سفارشات"
 ];
 
-List<Widget> pagesOnDashboard = [
-  VisitStore(
-    userId: FirebaseAuth.instance.currentUser!.uid,
-  ),
-  EditProfile(),
-  SupplierOrders(),
-  ManageProducts()
-];
+List<Widget> pagesOnDashboard = [];
 
 class DashbordScreen extends StatelessWidget {
   const DashbordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    pagesOnDashboard = [
+      VisitStore(
+        userId: FirebaseAuth.instance.currentUser!.uid,
+      ),
+      const EditProfile(),
+      const SupplierOrders(),
+      const ManageProducts()
+    ];
     void logOut() async {
       await FirebaseAuth.instance.signOut().whenComplete(() {
         Navigator.pop(context);

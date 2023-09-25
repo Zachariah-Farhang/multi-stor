@@ -79,7 +79,8 @@ class _LogInState extends State<LogIn> with WidgetsBindingObserver {
           await FirebaseAuth.instance
               .signInWithEmailAndPassword(email: email, password: password);
           _formKey.currentState!.reset();
-          Navigator.pushReplacementNamed(context, '/customer_screen');
+          Navigator.pushReplacementNamed(context, '/customer_screen',
+              arguments: 'customer');
         } else if (cusOrSup == 'supplier' && customerOrSupplier == 'supplier') {
           await FirebaseAuth.instance
               .signInWithEmailAndPassword(email: email, password: password);

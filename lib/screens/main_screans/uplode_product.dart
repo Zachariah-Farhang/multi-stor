@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,9 +16,9 @@ import 'package:path/path.dart' as path;
 
 String mainCagtegory = '';
 String subCagtegory = '';
-String price = '';
+double price = 0.0;
 String descount = '';
-String covantity = '';
+String qntty = '';
 String nameOfProduct = '';
 String detielsOfProduct = '';
 String proId = '';
@@ -80,7 +81,7 @@ class _UplodeProductState extends State<UplodeProduct> {
             'product_name': nameOfProduct,
             'product_detiels': detielsOfProduct,
             'product_price': price,
-            'product_covantity': covantity,
+            'product_qnnty': qntty,
             'product_descount': descount,
             'proId': proId,
             'sid': FirebaseAuth.instance.currentUser!.uid,
@@ -473,7 +474,7 @@ class ResuseableTextField extends StatelessWidget {
         onChanged: (value) {
           switch (fieldName) {
             case 'price':
-              price = value;
+              price = double.parse(value);
               break;
             case 'descount':
               descount = value;
@@ -484,7 +485,7 @@ class ResuseableTextField extends StatelessWidget {
 
               break;
             case 'covantity':
-              covantity = value;
+              qntty = value;
 
               break;
             case 'productDetiels':

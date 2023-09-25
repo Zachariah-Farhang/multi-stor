@@ -105,7 +105,8 @@ class _RgisterScreenState extends State<RgisterScreen>
             'cid': uid,
             'supOrcus': customerOrSupplier
           });
-          Navigator.pushReplacementNamed(context, '/customer_screen');
+          Navigator.pushReplacementNamed(context, '/customer_screen',
+              arguments: 'customer');
         } else {
           Reference ref =
               FirebaseStorage.instance.ref('supl-images/$email.jpg');

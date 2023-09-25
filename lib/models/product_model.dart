@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ProductModel extends StatelessWidget {
   final String imagePath;
   final String productShortDetails;
-  final String productPrice;
+  final double productPrice;
   final String productSid;
   final bool isFavorite;
   final bool hasDescount;

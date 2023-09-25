@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_store_app/auth/login.dart';
 import 'package:multi_store_app/auth/signup.dart';
-import 'package:multi_store_app/screens/main_screans/customer_home.dart';
+import 'package:multi_store_app/providers/cart_provider.dart';
+import 'package:multi_store_app/screens/main_screans/customer_home_screen.dart';
 import 'package:multi_store_app/screens/main_screans/supplier_home_screen.dart';
 import 'package:multi_store_app/screens/main_screans/welcome.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -21,7 +23,9 @@ void main() async {
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
   );
 
-  runApp(const MyApp());
+  runApp(MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => Cart())],
+      child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {

@@ -120,8 +120,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       .signInAnonymously()
                                       .whenComplete(() {
                                     String defultName = 'User';
-                                    int id = Random().nextInt(100000) +
-                                        Random().nextInt(100000);
+                                    int id =
+                                        Random(100000000).nextInt(100000000);
+
                                     String defultUserName =
                                         defultName + id.toString();
                                     late String uid;

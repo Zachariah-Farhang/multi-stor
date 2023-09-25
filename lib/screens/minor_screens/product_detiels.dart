@@ -3,9 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:multi_store_app/providers/cart_provider.dart';
+import 'package:multi_store_app/screens/main_screans/cart.dart';
 import 'package:multi_store_app/screens/main_screans/visit_store.dart';
+import 'package:multi_store_app/widgets/app_bar_back_button.dart';
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
 import 'package:multi_store_app/widgets/reuseable_divider.dart';
+import 'package:provider/provider.dart';
 import '../../models/product_model.dart';
 import 'image_view_screen_screen.dart';
 
@@ -33,15 +37,16 @@ class _ProductDetielsState extends State<ProductDetiels> {
   String proSubCateg = '';
   String proDescount = '';
   String proDetiels = '';
-  String proPrice = '';
+  double proPrice = 0.0;
   String proName = '';
-  String userId = '';
+  String proId = '';
+  String suppId = '';
 
-  Future<void> getdata(String proId) async {
+  Future<void> getdata(String productId) async {
     try {
       productQuerySnapshot = await FirebaseFirestore.instance
           .collection('products')
-          .where('proId', isEqualTo: proId)
+          .where('proId', isEqualTo: widget.proId)
           .get();
       productsStreem = FirebaseFirestore.instance
           .collection('products')
@@ -50,7 +55,7 @@ class _ProductDetielsState extends State<ProductDetiels> {
             'subcatig',
             isEqualTo: widget.subCateg,
           )
-          .where('proId', isNotEqualTo: proId)
+          .where('proId', isNotEqualTo: widget.proId)
           .snapshots();
 
       var data = productQuerySnapshot!.docs[0].data() as Map<String, dynamic>;
@@ -59,10 +64,11 @@ class _ProductDetielsState extends State<ProductDetiels> {
       proDetiels = data['product_detiels'];
       proName = data['product_name'];
       proPrice = data['product_price'];
-      proQuantity = data['product_covantity'];
+      proQuantity = data['product_qnnty'];
       proMainCateg = data['maincatig'];
       proSubCateg = data['subcatig'];
-      userId = data['sid'];
+      proId = data['proId'];
+      suppId = data['sid'];
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -70,6 +76,7 @@ class _ProductDetielsState extends State<ProductDetiels> {
 
   @override
   void initState() {
+    proId = widget.proId;
     super.initState();
   }
 
@@ -174,7 +181,7 @@ class _ProductDetielsState extends State<ProductDetiels> {
                                   Row(
                                     children: [
                                       Text(
-                                        proPrice,
+                                        proPrice.toString(),
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w500,
@@ -192,7 +199,7 @@ class _ProductDetielsState extends State<ProductDetiels> {
                                       ),
                                     ],
                                   ),
-                                  const Icon(Icons.access_time)
+                                  const Icon(Icons.favorite_border)
                                 ],
                               ),
                             ),
@@ -335,14 +342,22 @@ class _ProductDetielsState extends State<ProductDetiels> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  VisitStore(userId: userId)));
+                                  VisitStore(userId: suppId)));
                     },
                     icon: const Icon(Icons.store)),
                 const SizedBox(
                   width: 10,
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CartScreen(
+                                  backButtom:
+                                      AppBarBackButton(color: Colors.black),
+                                )));
+                  },
                   icon: const Icon(Icons.shopping_cart),
                 ),
               ],
@@ -350,12 +365,28 @@ class _ProductDetielsState extends State<ProductDetiels> {
             Padding(
               padding: const EdgeInsets.only(left: 8),
               child: ReuseableButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<Cart>().addItem(
+                          proName,
+                          proPrice,
+                          1,
+                          proQuantity,
+                          proImages,
+                          proId,
+                          suppId,
+                        );
+                  },
                   color: Colors.amber,
                   child: const Padding(
                     padding:
                         EdgeInsets.only(left: 32, right: 32, top: 4, bottom: 4),
-                    child: Text('افزودن به سبد خرید'),
+                    child: Text(
+                      'افزودن به سبد خرید',
+                      style: TextStyle(
+                          fontFamily: 'Kanun',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14),
+                    ),
                   )),
             )
           ],
