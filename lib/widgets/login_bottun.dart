@@ -17,6 +17,7 @@ class LoginBottom extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
+          borderRadius: BorderRadius.circular(8),
           onTap: onTop,
           splashColor: Colors.black38,
           child: Column(

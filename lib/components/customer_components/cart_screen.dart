@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../providers/cart_provider.dart';
-import '../providers/product_class.dart';
+import '../../providers/cart_provider.dart';
+import '../../models/product_model.dart';
 
 class CartModel extends StatelessWidget {
   const CartModel({Key? key, required this.product, required this.cart})
@@ -50,6 +50,7 @@ class CartModel extends StatelessWidget {
                         style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            fontFamily: 'Grunge',
                             color: Colors.red),
                       ),
                       Container(

@@ -39,11 +39,8 @@ class _StoresScreenState extends State<StoresScreen> {
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, mainAxisSpacing: 8, crossAxisSpacing: 8),
                 itemBuilder: ((context, index) {
-                  debugPrint(
-                      snapshot.data!.docs[index]['profileImage'].toString());
-                  debugPrint(
-                      snapshot.data!.docs[index]['storeName'].toString());
                   return MaterialReuseableCotiner(
+                    
                     imagePath: snapshot.data!.docs[index]['profileImage'],
                     text: snapshot.data!.docs[index]['storeName'],
                     onTap: () {

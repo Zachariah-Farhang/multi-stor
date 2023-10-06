@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/components/dashboard_components/edit_profile.dart';
-import 'package:multi_store_app/components/dashboard_components/manage_products.dart';
-import 'package:multi_store_app/components/dashboard_components/supplier_orders.dart';
+import 'package:multi_store_app/components/supplier_components/edit_profile.dart';
+import 'package:multi_store_app/components/supplier_components/manage_products.dart';
+import 'package:multi_store_app/components/supplier_components/supplier_orders.dart';
 import 'package:multi_store_app/screens/main_screans/visit_store.dart';
 
 import '../../widgets/alirt_dialog.dart';

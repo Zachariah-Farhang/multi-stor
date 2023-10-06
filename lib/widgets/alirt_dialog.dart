@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class CuperAlertDialog {
   final BuildContext context;
@@ -20,12 +23,21 @@ class CuperAlertDialog {
   void showAlertDialog() {
     showCupertinoModalPopup<void>(
       barrierDismissible: false,
+      barrierColor: Colors.black54,
       context: context,
       builder: (BuildContext context) => Directionality(
         textDirection: TextDirection.rtl,
         child: CupertinoAlertDialog(
-          title: Text(title),
-          content: Text(descreption),
+          insetAnimationCurve: Curves.easeInToLinear,
+          title: Text(
+            title,
+            style: TextStyle(
+                fontSize: 22, fontFamily: 'Kanun', color: Colors.red.shade900),
+          ),
+          content: Text(
+            descreption,
+            style: const TextStyle(fontSize: 16, fontFamily: 'Kanun'),
+          ),
           actions: <CupertinoDialogAction>[
             CupertinoDialogAction(
               isDefaultAction: true,

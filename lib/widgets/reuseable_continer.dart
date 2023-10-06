@@ -5,11 +5,13 @@ class ReusableCotiner extends StatelessWidget {
   final Widget child;
   final void Function() onPressed;
   final BoxDecoration decoration;
+  final ShapeBorder? shape;
   const ReusableCotiner({
     super.key,
     required this.child,
     required this.onPressed,
     required this.decoration,
+    this.shape,
   });
 
   @override
@@ -18,6 +20,7 @@ class ReusableCotiner extends StatelessWidget {
       margin: const EdgeInsets.all(8),
       decoration: decoration,
       child: ReuseableButton(
+        shape: shape,
         onPressed: onPressed,
         child: Center(
           child: Padding(

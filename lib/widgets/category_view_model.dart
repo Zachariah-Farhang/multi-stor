@@ -4,16 +4,17 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'categ_widget.dart';
 
 class CategoryViewModel extends StatelessWidget {
-  final List<String> categoryList;
-  final String headerLabel;
-  final String assetImage;
-
   const CategoryViewModel({
     super.key,
     required this.categoryList,
     required this.headerLabel,
     required this.assetImage,
   });
+
+  final String assetImage;
+  final List<String> categoryList;
+  final String headerLabel;
+
   @override
   Widget build(BuildContext context) {
     return Directionality(

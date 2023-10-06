@@ -37,7 +37,9 @@ dependencies:
   dotted_border: ^2.0.0+3
   font_awesome_flutter: ^10.5.0
   provider: ^6.0.5
-
+  easy_localization: ^3.0.3
+  badges: ^3.1.2
+  cached_network_image: ^3.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -66,14 +68,6 @@ flutter:
 
 
   fonts:
-    - family: Vazir
-      fonts:
-        - asset: assets/fonts/Vazir-Black.ttf
-          weight: 900
-        - asset: assets/fonts/Vazir-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/Vazir-Light.ttf
-          weight: 400
     - family: Kanun
       fonts:
         - asset: assets/fonts/Kanun_Bold.otf
@@ -82,4 +76,8 @@ flutter:
           weight: 500
         - asset: assets/fonts/Kanun_Regular.otf
           weight: 300
+    - family: Grunge
+      fonts:
+        - asset: assets/fonts/Grunge.ttf
+          
 

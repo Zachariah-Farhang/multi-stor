@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ImageViewScreen extends StatefulWidget {
-  final List<dynamic> imageList;
-
   const ImageViewScreen({super.key, required this.imageList});
+
+  final List<dynamic> imageList;
 
   @override
   State<ImageViewScreen> createState() => _ImageViewScreenState();

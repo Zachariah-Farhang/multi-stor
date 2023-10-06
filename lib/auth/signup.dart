@@ -132,14 +132,16 @@ class _RgisterScreenState extends State<RgisterScreen>
         });
       } on FirebaseAuthException catch (e) {
         if (e.code == 'email-already-in-use') {
-          Snackbar(_scafoldKey, 'این ایمیل قبلا استفاده شده!').showsnackBar();
+          Snackbar(key: _scafoldKey, content: 'این ایمیل قبلا استفاده شده!')
+              .showsnackBar();
         }
       }
     } else if (_formKey.currentState!.validate() && _imageFile == null) {
-      Snackbar(_scafoldKey, 'لطفا عکس پروفایل خود را انتخاب کنید!')
+      Snackbar(
+              key: _scafoldKey, content: 'لطفا عکس پروفایل خود را انتخاب کنید!')
           .showsnackBar();
     } else {
-      Snackbar(_scafoldKey, 'لطفا همه بخش ها را خانه پری نمایید!')
+      Snackbar(key: _scafoldKey, content: 'لطفا همه بخش ها را خانه پری نمایید!')
           .showsnackBar();
     }
   }

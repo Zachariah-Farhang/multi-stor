@@ -1,13 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:multi_store_app/models/product_model.dart';
+import 'package:multi_store_app/components/supplier_components/product.dart';
 import 'package:multi_store_app/screens/minor_screens/product_detiels.dart';
 
 class GalleryScreen extends StatefulWidget {
+  const GalleryScreen(
+      {super.key,
+      required this.category,
+      this.subCategory,
+      required this.scafoldKey});
+
   final String category;
+  final GlobalKey<ScaffoldMessengerState> scafoldKey;
   final String? subCategory;
-  const GalleryScreen({super.key, required this.category, this.subCategory});
 
   @override
   State<GalleryScreen> createState() => _GalleryScreenState();
@@ -61,12 +67,14 @@ class _GalleryScreenState extends State<GalleryScreen> {
           itemBuilder: (context, index) {
             return ProductModel(
               productSid: snapshot.data!.docs[index]['sid'],
-              imagePath: snapshot.data!.docs[index]['product_images'][0],
-              productShortDetails: snapshot.data!.docs[index]['product_name'],
+              productQntty: snapshot.data!.docs[index]['product_qnnty'],
+              imagesUrl: snapshot.data!.docs[index]['product_images'],
+              productName: snapshot.data!.docs[index]['product_name'],
               productPrice: snapshot.data!.docs[index]['product_price'],
-              isFavorite: false,
               hasDescount: false,
               descount: 0,
+              scafoldKey: widget.scafoldKey,
+              productId: snapshot.data!.docs[index]['proId'],
               onTop: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(

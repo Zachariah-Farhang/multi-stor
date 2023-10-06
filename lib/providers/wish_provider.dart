@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../models/product_model.dart';
 
-class Cart extends ChangeNotifier {
+class Wish extends ChangeNotifier {
   final List<Product> _list = [];
 
-  List<Product> get getCartItem {
+  List<Product> get getWishItem {
     return _list;
   }
 
@@ -13,15 +13,7 @@ class Cart extends ChangeNotifier {
     return _list.length;
   }
 
-  double get totalPrice {
-    double total = 0.0;
-    for (var item in _list) {
-      total += item.price * item.qty;
-    }
-    return total;
-  }
-
-  void addToCartItem(
+  void addToWishItem(
     String name,
     double price,
     int qty,
@@ -39,29 +31,16 @@ class Cart extends ChangeNotifier {
         productId: productId,
         suppId: suppId);
     _list.add(product);
+    notifyListeners();
+  }
+
+  void removeItem(String id) {
+    _list.removeWhere((element) => element.productId == id);
 
     notifyListeners();
   }
 
-  void increment(Product product) {
-    product.increase();
-
-    notifyListeners();
-  }
-
-  void decrement(Product product) {
-    product.decrease();
-
-    notifyListeners();
-  }
-
-  void removeItem(Product product) {
-    _list.remove(product);
-
-    notifyListeners();
-  }
-
-  void clearCart() {
+  void clearWisList() {
     _list.clear();
 
     notifyListeners();

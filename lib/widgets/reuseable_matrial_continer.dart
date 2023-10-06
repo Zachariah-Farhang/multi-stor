@@ -31,26 +31,28 @@ class MaterialReuseableCotiner extends StatelessWidget {
             Expanded(
               flex: 5,
               child: Container(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  constraints: const BoxConstraints.expand(),
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    color: Colors.white,
+                padding: const EdgeInsets.only(bottom: 4),
+                constraints: const BoxConstraints.expand(),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.fitHeight,
+                    image: imagePath.contains('assets')
+                        ? AssetImage(
+                            imagePath,
+                          )
+                        : NetworkImage(imagePath) as ImageProvider<Object>,
                   ),
-                  child: imagePath.contains('assets')
-                      ? Image.asset(
-                          imagePath,
-                        )
-                      : Image.network(
-                          imagePath,
-                        )),
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  color: Colors.white,
+                ),
+              ),
             ),
             Expanded(
               flex: 2,
               child: Center(
                 child: AutoSizeText(
                   text,
-                  minFontSize: 18,
+                  minFontSize: 14,
                   maxLines: 1,
                   textAlign: TextAlign.center,
                   style: const TextStyle(

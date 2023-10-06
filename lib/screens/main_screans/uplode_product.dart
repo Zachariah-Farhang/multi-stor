@@ -1,16 +1,12 @@
-import 'dart:ffi';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
-
 import 'package:multi_store_app/widgets/divider.dart';
 import 'package:uuid/uuid.dart';
-
 import '../../widgets/snackbarr.dart';
 import 'package:path/path.dart' as path;
 
@@ -108,7 +104,9 @@ class _UplodeProductState extends State<UplodeProduct> {
           });
         }
       } else {
-        Snackbar(_scafoldKey, 'لطفا حد اقل یک عکس برای محصول خود انتخاب کنید')
+        Snackbar(
+                key: _scafoldKey,
+                content: 'لطفا حد اقل یک عکس برای محصول خود انتخاب کنید')
             .showsnackBar();
       }
     } catch (e) {

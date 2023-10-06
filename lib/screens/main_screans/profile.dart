@@ -1,11 +1,15 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/components/customer_components/customer_orders.dart';
 import 'package:multi_store_app/components/customer_components/wishlist.dart';
+import 'package:multi_store_app/providers/cart_provider.dart';
+import 'package:multi_store_app/providers/wish_provider.dart';
 import 'package:multi_store_app/screens/main_screans/cart.dart';
 import 'package:multi_store_app/widgets/app_bar_back_button.dart';
+import 'package:provider/provider.dart';
 import '../../widgets/alirt_dialog.dart';
 import '../../widgets/divider.dart';
 import '../../widgets/reuseable_continer.dart';
@@ -29,6 +33,8 @@ class ProfileScreenState extends State<ProfileScreen> {
   String profileIamge = '';
 
   void logOut() async {
+    context.read<Cart>().clearCart();
+    context.read<Wish>().clearWisList();
     await FirebaseAuth.instance.signOut().whenComplete(() {
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, '/welcome_screen');
@@ -63,15 +69,14 @@ class ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    super.initState();
-
+    collection = FirebaseFirestore.instance.collection(
+        widget.userTyope == 'anonymous' ? 'anonymous' : 'customers');
     getData();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    collection = FirebaseFirestore.instance.collection(
-        widget.userTyope == 'anonymous' ? 'anonymous' : 'customers');
     final highet = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
@@ -161,6 +166,12 @@ class ProfileScreenState extends State<ProfileScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ReusableCotiner(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(30),
+                                  bottomRight: Radius.circular(30),
+                                ),
+                              ),
                               decoration: const BoxDecoration(
                                   color: Colors.black54,
                                   borderRadius: BorderRadius.only(
@@ -178,14 +189,19 @@ class ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 );
                               },
-                              child: const Text(
+                              child: const AutoSizeText(
                                 "سبدخرید",
+                                minFontSize: 18,
                                 style: TextStyle(
-                                    color: Colors.yellow, fontSize: 24),
+                                  color: Colors.yellow,
+                                ),
                               ),
                             ),
                             Expanded(
                               child: ReusableCotiner(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.zero,
+                                ),
                                 decoration: const BoxDecoration(
                                   color: Colors.black54,
                                 ),
@@ -198,14 +214,22 @@ class ProfileScreenState extends State<ProfileScreen> {
                                     ),
                                   );
                                 },
-                                child: const Text(
+                                child: const AutoSizeText(
                                   "سفارشات",
+                                  minFontSize: 20,
                                   style: TextStyle(
-                                      color: Colors.yellow, fontSize: 24),
+                                    color: Colors.yellow,
+                                  ),
                                 ),
                               ),
                             ),
                             ReusableCotiner(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  bottomLeft: Radius.circular(30),
+                                ),
+                              ),
                               decoration: const BoxDecoration(
                                   color: Colors.black54,
                                   borderRadius: BorderRadius.only(
@@ -220,10 +244,12 @@ class ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 );
                               },
-                              child: const Text(
+                              child: const AutoSizeText(
                                 "موردعلاقه ها",
+                                minFontSize: 18,
                                 style: TextStyle(
-                                    color: Colors.yellow, fontSize: 24),
+                                  color: Colors.yellow,
+                                ),
                               ),
                             ),
                           ],

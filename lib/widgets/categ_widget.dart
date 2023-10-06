@@ -5,11 +5,12 @@ import 'package:multi_store_app/widgets/reuseable_matrial_continer.dart';
 import '../screens/minor_screens/sub_gategories.dart';
 
 class SliderBar extends StatelessWidget {
-  final String maincategName;
   const SliderBar({
     super.key,
     required this.maincategName,
   });
+
+  final String maincategName;
 
   @override
   Widget build(BuildContext context) {
@@ -63,11 +64,6 @@ class SliderBar extends StatelessWidget {
 }
 
 class SubCategModel extends StatelessWidget {
-  final String maincategName;
-  final String subcategName;
-  final String assteImage;
-  final String subcategLebel;
-
   const SubCategModel({
     super.key,
     required this.maincategName,
@@ -75,6 +71,11 @@ class SubCategModel extends StatelessWidget {
     required this.assteImage,
     required this.subcategLebel,
   });
+
+  final String assteImage;
+  final String maincategName;
+  final String subcategLebel;
+  final String subcategName;
 
   @override
   Widget build(BuildContext context) {
@@ -97,11 +98,12 @@ class SubCategModel extends StatelessWidget {
 }
 
 class CategHeaderLebel extends StatelessWidget {
-  final String headerLebel;
   const CategHeaderLebel({
     super.key,
     required this.headerLebel,
   });
+
+  final String headerLebel;
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +113,7 @@ class CategHeaderLebel extends StatelessWidget {
         child: AutoSizeText(
           headerLebel,
           maxLines: 2,
-          minFontSize: 22,
+          minFontSize: 18,
           style: const TextStyle(
             fontSize: 24,
             letterSpacing: 1.5,

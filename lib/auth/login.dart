@@ -87,18 +87,24 @@ class _LogInState extends State<LogIn> with WidgetsBindingObserver {
           _formKey.currentState!.reset();
           Navigator.pushReplacementNamed(context, '/supplier_screen');
         } else {
-          Snackbar(_scafoldKey, 'حساب ندارید ابتدا حساب ایجاد کنید !')
+          Snackbar(
+                  key: _scafoldKey,
+                  content: 'حساب ندارید ابتدا حساب ایجاد کنید !')
               .showsnackBar();
         }
       } else {
-        Snackbar(_scafoldKey, 'ایمیل و پسورد خود را وارد کنید!').showsnackBar();
+        Snackbar(key: _scafoldKey, content: 'ایمیل و پسورد خود را وارد کنید!')
+            .showsnackBar();
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        Snackbar(_scafoldKey, 'حساب ندارید ابتدا حساب ایجاد کنید !')
+        Snackbar(
+                key: _scafoldKey,
+                content: 'حساب ندارید ابتدا حساب ایجاد کنید !')
             .showsnackBar();
       } else if (e.code == 'wrong-password') {
-        Snackbar(_scafoldKey, 'پسورد خود را درست وارد کنید!').showsnackBar();
+        Snackbar(key: _scafoldKey, content: 'پسورد خود را درست وارد کنید!')
+            .showsnackBar();
       }
     }
   }

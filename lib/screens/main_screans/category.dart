@@ -16,17 +16,11 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen>
     with SingleTickerProviderStateMixin {
-  final PageController _pageController = PageController();
-  late TabController _tabController;
-  final Tabs _getTabs = Tabs(isRotated: true);
   bool isAnimating = false;
 
-  @override
-  void initState() {
-    _tabController = TabController(initialIndex: 0, length: 9, vsync: this);
-    tabBarControllerListner();
-    super.initState();
-  }
+  final Tabs _getTabs = Tabs(isRotated: true);
+  final PageController _pageController = PageController();
+  late TabController _tabController;
 
   @override
   void dispose() {
@@ -37,29 +31,10 @@ class _CategoryScreenState extends State<CategoryScreen>
   }
 
   @override
-  Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.white,
-        title: const SearchBottom(),
-      ),
-      body: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            right: 0,
-            child: sideNavigator(size),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            child: categView(size),
-          ),
-        ],
-      ),
-    );
+  void initState() {
+    _tabController = TabController(initialIndex: 0, length: 9, vsync: this);
+    tabBarControllerListner();
+    super.initState();
   }
 
   Widget sideNavigator(Size size) {
@@ -167,5 +142,31 @@ class _CategoryScreenState extends State<CategoryScreen>
         });
       }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        title: const SearchBottom(),
+      ),
+      body: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            right: 0,
+            child: sideNavigator(size),
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            child: categView(size),
+          ),
+        ],
+      ),
+    );
   }
 }

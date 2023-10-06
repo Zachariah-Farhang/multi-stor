@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:multi_store_app/auth/login.dart';
 import 'package:multi_store_app/auth/signup.dart';
 import 'package:multi_store_app/providers/cart_provider.dart';
+import 'package:multi_store_app/providers/wish_provider.dart';
 import 'package:multi_store_app/screens/main_screans/customer_home_screen.dart';
 import 'package:multi_store_app/screens/main_screans/supplier_home_screen.dart';
 import 'package:multi_store_app/screens/main_screans/welcome.dart';
@@ -23,9 +24,14 @@ void main() async {
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
   );
 
-  runApp(MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => Cart())],
-      child: const MyApp()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+      create: (_) => Cart(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => Wish(),
+    ),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -40,8 +46,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    super.initState();
     requestPermissions();
+    super.initState();
   }
 
   Future<bool> requestPermissions() async {
@@ -66,9 +72,102 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.light(),
+      theme: ThemeData(fontFamily: 'Kanun').copyWith(
+        snackBarTheme: const SnackBarThemeData(
+            contentTextStyle: TextStyle(
+                fontSize: 16,
+                color: Colors.black87,
+                fontFamily: 'Kanun',
+                fontWeight: FontWeight.bold)),
+        // textTheme: const TextTheme(
+        //   // Display Styles
+        //   displayLarge: TextStyle(
+        //       fontFamily: 'Kanun',
+        //       fontSize: 40,
+        //       fontWeight: FontWeight.bold,
+        //       color: Colors.black54),
+        //   displayMedium: TextStyle(
+        //       fontFamily: 'Kanun',
+        //       fontSize: 32,
+        //       fontWeight: FontWeight.bold,
+        //       color: Colors.black54),
+        //   displaySmall: TextStyle(
+        //       fontFamily: 'Kanun',
+        //       fontSize: 24,
+        //       fontWeight: FontWeight.bold,
+        //       color: Colors.black54),
+
+        //   // Headline Styles
+        //   headlineLarge: TextStyle(
+        //       fontFamily: 'Kanun',
+        //       fontSize: 28,
+        //       fontWeight: FontWeight.bold,
+        //       color: Colors.black54),
+        //   headlineMedium: TextStyle(
+        //       fontFamily: 'Kanun',
+        //       fontSize: 22,
+        //       fontWeight: FontWeight.bold,
+        //       color: Colors.black54),
+        //   headlineSmall: TextStyle(
+        //       fontFamily: 'Kanun',
+        //       fontSize: 18,
+        //       fontWeight: FontWeight.bold,
+        //       color: Colors.black54),
+
+        //   // Title Styles
+        //   titleLarge: TextStyle(
+        //       fontFamily: 'Kanun',
+        //       fontSize: 24,
+        //       fontWeight: FontWeight.bold,
+        //       color: Colors.black54),
+        //   titleMedium: TextStyle(
+        //       fontFamily: 'Kanun',
+        //       fontSize: 20,
+        //       fontWeight: FontWeight.bold,
+        //       color: Colors.black54),
+        //   titleSmall: TextStyle(
+        //       fontFamily: 'Kanun',
+        //       fontSize: 16,
+        //       fontWeight: FontWeight.bold,
+        //       color: Colors.black54),
+
+        //   // Body Styles
+
+        //   bodyLarge: TextStyle(
+        //     fontFamily: 'Kanun',
+        //     fontSize: 18,
+        //     color: Colors.black54,
+        //   ),
+        //   bodyMedium: TextStyle(
+        //     fontFamily: 'Kanun',
+        //     fontSize: 16,
+        //     color: Colors.black54,
+        //   ),
+        //   bodySmall: TextStyle(
+        //     fontFamily: 'Kanun',
+        //     fontSize: 14,
+        //     color: Colors.black54,
+        //   ),
+
+        //   // Label Styles
+        //   labelLarge: TextStyle(
+        //       fontFamily: 'Kanun',
+        //       fontSize: 18,
+        //       fontWeight: FontWeight.bold,
+        //       color: Colors.black54),
+        //   labelMedium: TextStyle(
+        //       fontFamily: 'Kanun',
+        //       fontSize: 16,
+        //       fontWeight: FontWeight.bold,
+        //       color: Colors.black54),
+        //   labelSmall: TextStyle(
+        //       fontFamily: 'Kanun',
+        //       fontSize: 14,
+        //       fontWeight: FontWeight.bold,
+        //       color: Colors.black54),
+        // ),
+      ),
       debugShowCheckedModeBanner: false,
-      //This widget is the main screan that is showing now on the app CustomerHomeScrean().
       initialRoute: "/welcome_screen",
       routes: {
         '/welcome_screen': ((context) => const WelcomeScreen()),
