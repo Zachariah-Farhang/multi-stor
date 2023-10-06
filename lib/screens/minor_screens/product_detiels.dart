@@ -16,10 +16,9 @@ import 'package:multi_store_app/widgets/reuseable_bottun.dart';
 import 'package:multi_store_app/widgets/reuseable_divider.dart';
 import 'package:multi_store_app/widgets/snackbarr.dart';
 import 'package:provider/provider.dart';
-import '../../components/supplier_components/product.dart';
+import '../../widgets/product.dart';
 import 'image_view_screen.dart';
 import 'package:collection/collection.dart';
-import 'package:badges/badges.dart' as badges;
 
 class ProductDetiels extends StatefulWidget {
   const ProductDetiels({

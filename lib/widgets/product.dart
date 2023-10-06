@@ -1,11 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/screens/main_screans/uplode_product.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
-import '../../providers/wish_provider.dart';
-import '../../widgets/snackbarr.dart';
+import '../providers/wish_provider.dart';
+import 'snackbarr.dart';
 
 class ProductModel extends StatelessWidget {
   const ProductModel(

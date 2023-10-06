@@ -6,7 +6,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:multi_store_app/widgets/app_bar_back_button.dart';
 
-import '../../components/supplier_components/product.dart';
+import '../../widgets/product.dart';
 import '../minor_screens/product_detiels.dart';
 
 class VisitStore extends StatefulWidget {
