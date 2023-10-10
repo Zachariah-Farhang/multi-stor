@@ -1,5 +1,4 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_store_app/auth/login.dart';
@@ -8,12 +7,10 @@ import 'package:multi_store_app/providers/cart_provider.dart';
 import 'package:multi_store_app/providers/internet_provider.dart';
 import 'package:multi_store_app/providers/wish_provider.dart';
 import 'package:multi_store_app/screens/main_screans/customer_home_screen.dart';
-import 'package:multi_store_app/widgets/no_internet_widget.dart';
 import 'package:multi_store_app/screens/main_screans/supplier_home_screen.dart';
 import 'package:multi_store_app/screens/main_screans/welcome.dart';
 
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
 void main() async {
