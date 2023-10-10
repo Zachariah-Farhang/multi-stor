@@ -1,14 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:multi_store_app/providers/cart_provider.dart';
-import 'package:multi_store_app/widgets/alirt_dialog.dart';
+import 'package:multi_store_app/widgets/alirt_dialog_widget.dart';
 import 'package:provider/provider.dart';
 import '../../providers/wish_provider.dart';
 import '../../widgets/reuseable_bottun.dart';
-import '../../widgets/snackbarr.dart';
+import '../../widgets/snackbarr_widget.dart';
 import 'package:collection/collection.dart';
 
 class CartScreen extends StatefulWidget {
@@ -27,10 +26,10 @@ class _CartScreenState extends State<CartScreen> {
   void replacePage() {
     Navigator.canPop(context)
         ? Navigator.pop(context)
-        : Navigator.pushReplacementNamed(context, '/customer_screen',
-            arguments: FirebaseAuth.instance.currentUser!.isAnonymous
-                ? 'anonymous'
-                : 'customer');
+        : Navigator.pushReplacementNamed(
+            context,
+            '/customer_screen',
+          );
   }
 
   @override

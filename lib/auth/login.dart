@@ -5,7 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
-import 'package:multi_store_app/widgets/snackbarr.dart';
+import 'package:multi_store_app/widgets/snackbarr_widget.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/internet_provider.dart';
+import '../widgets/no_internet_widget.dart';
+import '../utilities/global_values.dart';
 
 // import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -14,16 +19,16 @@ bool _passwordVisibalty = false;
 String email = '';
 String password = '';
 
-class LogIn extends StatefulWidget {
-  const LogIn({
+class LogInScreen extends StatefulWidget {
+  const LogInScreen({
     super.key,
   });
 
   @override
-  State<LogIn> createState() => _LogInState();
+  State<LogInScreen> createState() => _LogInScreenState();
 }
 
-class _LogInState extends State<LogIn> with WidgetsBindingObserver {
+class _LogInScreenState extends State<LogInScreen> with WidgetsBindingObserver {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scafoldKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -76,16 +81,25 @@ class _LogInState extends State<LogIn> with WidgetsBindingObserver {
       if (email.isNotEmpty && password.isNotEmpty) {
         String? cusOrSup = await getSupOrcusByEmail(email);
         if (cusOrSup == 'customer' && customerOrSupplier == 'customer') {
+          GlobalValues().userType = 'customer';
           await FirebaseAuth.instance
               .signInWithEmailAndPassword(email: email, password: password);
           _formKey.currentState!.reset();
-          Navigator.pushReplacementNamed(context, '/customer_screen',
-              arguments: 'customer');
+          Future.delayed(const Duration(microseconds: 100))
+              .whenComplete(() => Navigator.pushReplacementNamed(
+                    context,
+                    '/customer_screen',
+                  ));
         } else if (cusOrSup == 'supplier' && customerOrSupplier == 'supplier') {
+          GlobalValues().userType = 'supplier';
           await FirebaseAuth.instance
               .signInWithEmailAndPassword(email: email, password: password);
           _formKey.currentState!.reset();
-          Navigator.pushReplacementNamed(context, '/supplier_screen');
+          Future.delayed(const Duration(microseconds: 100))
+              .whenComplete(() => Navigator.pushReplacementNamed(
+                    context,
+                    '/supplier_screen',
+                  ));
         } else {
           Snackbar(
                   key: _scafoldKey,
@@ -119,13 +133,12 @@ class _LogInState extends State<LogIn> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-
     super.dispose();
   }
 
   @override
   void didChangeMetrics() {
-    keyboardHeight = WidgetsBinding.instance.window.viewInsets.bottom;
+    keyboardHeight = View.of(context).viewInsets.bottom;
     setState(() {
       _isKeyboardVisible = keyboardHeight > 0;
     });
@@ -139,134 +152,152 @@ class _LogInState extends State<LogIn> with WidgetsBindingObserver {
       textDirection: TextDirection.rtl,
       child: ScaffoldMessenger(
         key: _scafoldKey,
-        child: Scaffold(
-          bottomNavigationBar: AnimatedContainer(
-            duration: const Duration(milliseconds: 0),
-            padding: EdgeInsets.only(
-                bottom: _isKeyboardVisible
-                    ? MediaQuery.of(context).viewInsets.bottom
-                    : 0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: loginingIn
-                      ? const Center(
-                          child: CupertinoActivityIndicator(
-                            radius: 30,
-                          ),
-                        )
-                      : RawMaterialButton(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          fillColor: Colors.blue,
-                          onPressed: () {
-                            setState(() {
-                              loginingIn = true;
-                            });
-                            logIn().whenComplete(() {
+        child: Consumer<ConnectivityProvider>(
+            builder: (context, connection, child) {
+          return Scaffold(
+            bottomNavigationBar: AnimatedContainer(
+              duration: const Duration(milliseconds: 0),
+              padding: EdgeInsets.only(
+                  bottom: _isKeyboardVisible
+                      ? MediaQuery.of(context).viewInsets.bottom
+                      : 0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: loginingIn
+                        ? const Center(
+                            child: CupertinoActivityIndicator(
+                              radius: 30,
+                            ),
+                          )
+                        : RawMaterialButton(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            fillColor: Colors.blue,
+                            onPressed: () {
+                              FocusScope.of(context).unfocus();
                               setState(() {
-                                loginingIn = false;
+                                loginingIn = true;
                               });
-                            });
-                          },
-                          child: const Text(
-                            'وارد شدن',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24),
-                          ),
-                        ),
-                ),
-              ],
-            ),
-          ),
-          body: SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                arguments == 'customer' ? 'خریدار' : 'فروشنده',
-                                style: const TextStyle(
-                                    fontSize: 40, fontWeight: FontWeight.bold),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  FocusScope.of(context).unfocus();
-                                  Navigator.pushReplacementNamed(
-                                      context, '/welcome_screen');
-                                },
-                                icon: const Icon(
-                                  Icons.home_work,
-                                  size: 30,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            const TextFormFiled(
-                              labelText: 'ایمیل',
-                              hintText: 'ایمیل آدرس خود را وارد کنید',
-                              textInputType: TextInputType.emailAddress,
-                            ),
-                            TextFormFiled(
-                              labelText: 'پسورد ',
-                              hintText: 'پسورد خود را وارد کنید',
-                              textInputType: TextInputType.visiblePassword,
-                              onPressed: () {
+                              logIn().whenComplete(() {
                                 setState(() {
-                                  _passwordVisibalty = !_passwordVisibalty;
+                                  loginingIn = false;
                                 });
-                              },
+                              });
+                            },
+                            child: const Text(
+                              'وارد شدن',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24),
                             ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              const Text(
-                                'حساب ندارید؟',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                              ReuseableButton(
-                                child: const Text(
-                                  'ثبت نام',
-                                  style: TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                ),
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(
-                                      context, '/signup',
-                                      arguments: customerOrSupplier);
-                                },
-                              )
-                            ],
                           ),
-                        ),
-                      ]),
-                ),
+                  ),
+                ],
               ),
             ),
-          ),
-        ),
+            body: Stack(
+              children: [
+                SafeArea(
+                  child: Center(
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      arguments == 'customer'
+                                          ? 'خریدار'
+                                          : 'فروشنده',
+                                      style: const TextStyle(
+                                          fontSize: 40,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        FocusScope.of(context).unfocus();
+                                        Navigator.pushReplacementNamed(
+                                            context, '/welcome_screen');
+                                      },
+                                      icon: const Icon(
+                                        Icons.home_work,
+                                        size: 30,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  const TextFormFiled(
+                                    labelText: 'ایمیل',
+                                    hintText: 'ایمیل آدرس خود را وارد کنید',
+                                    textInputType: TextInputType.emailAddress,
+                                  ),
+                                  TextFormFiled(
+                                    labelText: 'پسورد ',
+                                    hintText: 'پسورد خود را وارد کنید',
+                                    textInputType:
+                                        TextInputType.visiblePassword,
+                                    onPressed: () {
+                                      setState(() {
+                                        _passwordVisibalty =
+                                            !_passwordVisibalty;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    const Text(
+                                      'حساب ندارید؟',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    ),
+                                    ReuseableButton(
+                                      child: const Text(
+                                        'ثبت نام',
+                                        style: TextStyle(
+                                            color: Colors.blue,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pushReplacementNamed(
+                                            context, '/signup',
+                                            arguments: customerOrSupplier);
+                                      },
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ]),
+                      ),
+                    ),
+                  ),
+                ),
+                if (!connection.isInternetStable)
+                  NoInternetScreen(context: context).showModel()
+              ],
+            ),
+          );
+        }),
       ),
     );
   }

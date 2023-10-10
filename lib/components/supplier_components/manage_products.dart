@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/widgets/app_bar_back_button.dart';
+import 'package:multi_store_app/widgets/app_bar_back_button_widget.dart';
 
 class ManageProducts extends StatelessWidget {
   const ManageProducts({super.key});

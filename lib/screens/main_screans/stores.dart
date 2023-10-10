@@ -5,7 +5,9 @@ import 'package:multi_store_app/widgets/reuseable_matrial_continer.dart';
 import 'visit_store.dart';
 
 class StoresScreen extends StatefulWidget {
-  const StoresScreen({super.key});
+  const StoresScreen({
+    super.key,
+  });
 
   @override
   State<StoresScreen> createState() => _StoresScreenState();
@@ -40,7 +42,6 @@ class _StoresScreenState extends State<StoresScreen> {
                     crossAxisCount: 2, mainAxisSpacing: 8, crossAxisSpacing: 8),
                 itemBuilder: ((context, index) {
                   return MaterialReuseableCotiner(
-                    
                     imagePath: snapshot.data!.docs[index]['profileImage'],
                     text: snapshot.data!.docs[index]['storeName'],
                     onTap: () {

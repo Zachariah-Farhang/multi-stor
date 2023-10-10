@@ -1,10 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/providers/cart_provider.dart';
 import 'package:multi_store_app/providers/wish_provider.dart';
-import 'package:multi_store_app/widgets/app_bar_back_button.dart';
+
+import 'package:multi_store_app/widgets/app_bar_back_button_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
@@ -24,10 +24,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
   void replacePage() {
     Navigator.canPop(context)
         ? Navigator.pop(context)
-        : Navigator.pushReplacementNamed(context, '/customer_screen',
-            arguments: FirebaseAuth.instance.currentUser!.isAnonymous
-                ? 'anonymous'
-                : 'customer');
+        : Navigator.pushReplacementNamed(
+            context,
+            '/customer_screen',
+          );
   }
 
   @override

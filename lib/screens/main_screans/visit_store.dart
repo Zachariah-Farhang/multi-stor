@@ -1,17 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:multi_store_app/widgets/app_bar_back_button.dart';
+import 'package:multi_store_app/widgets/app_bar_back_button_widget.dart';
 
-import '../../widgets/product.dart';
+import '../../models/product_view_model.dart';
 import '../minor_screens/product_detiels.dart';
 
 class VisitStore extends StatefulWidget {
+  const VisitStore({
+    super.key,
+    required this.userId,
+  });
   final String userId;
-  const VisitStore({super.key, required this.userId});
 
   @override
   State<VisitStore> createState() => _VisitStoreState();
@@ -22,7 +26,7 @@ class _VisitStoreState extends State<VisitStore> {
       GlobalKey<ScaffoldMessengerState>();
 
   bool following = false;
-  CollectionReference customer =
+  CollectionReference supplier =
       FirebaseFirestore.instance.collection('suppliers');
   @override
   Widget build(BuildContext context) {
@@ -37,7 +41,7 @@ class _VisitStoreState extends State<VisitStore> {
           key: _scafoldKey,
           child: SafeArea(
             child: FutureBuilder(
-                future: customer.doc(widget.userId).get(),
+                future: supplier.doc(widget.userId).get(),
                 builder: (BuildContext context,
                     AsyncSnapshot<DocumentSnapshot> snapshot) {
                   if (snapshot.hasError) {
@@ -95,7 +99,7 @@ class _VisitStoreState extends State<VisitStore> {
                                     borderRadius: BorderRadius.circular(16),
                                     image: DecorationImage(
                                         fit: BoxFit.fill,
-                                        image: NetworkImage(
+                                        image: CachedNetworkImageProvider(
                                             data['profileImage']))),
                               ),
                             ),
@@ -235,8 +239,9 @@ class _VisitStoreState extends State<VisitStore> {
                                     ['product_price'],
                                 hasDescount: false,
                                 descount: 0,
-                                scafoldKey: _scafoldKey,
                                 productId: snapshot.data!.docs[index]['proId'],
+                                usePlace: 'visitStore',
+                                scafoldKey: _scafoldKey,
                                 onTop: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(

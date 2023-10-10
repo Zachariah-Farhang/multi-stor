@@ -10,13 +10,14 @@ import 'package:multi_store_app/providers/cart_provider.dart';
 import 'package:multi_store_app/providers/wish_provider.dart';
 import 'package:multi_store_app/screens/main_screans/cart.dart';
 import 'package:multi_store_app/screens/main_screans/visit_store.dart';
-import 'package:multi_store_app/widgets/app_bar_back_button.dart';
+import 'package:multi_store_app/widgets/app_bar_back_button_widget.dart';
 import 'package:multi_store_app/widgets/badge_widget.dart';
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
 import 'package:multi_store_app/widgets/reuseable_divider.dart';
-import 'package:multi_store_app/widgets/snackbarr.dart';
+import 'package:multi_store_app/widgets/snackbarr_widget.dart';
 import 'package:provider/provider.dart';
-import '../../widgets/product.dart';
+import '../../utilities/global_values.dart';
+import '../../models/product_view_model.dart';
 import 'image_view_screen.dart';
 import 'package:collection/collection.dart';
 
@@ -28,8 +29,8 @@ class ProductDetiels extends StatefulWidget {
     required this.subCateg,
   });
 
-  final String mainCateg;
   final String proId;
+  final String mainCateg;
   final String subCateg;
 
   @override
@@ -230,56 +231,74 @@ class _ProductDetielsState extends State<ProductDetiels> {
                                             FirebaseAuth
                                                 .instance.currentUser!.uid
                                         ? const Icon(Icons.edit)
-                                        : IconButton(
-                                            onPressed: () {
-                                              if (context
-                                                      .read<Wish>()
-                                                      .getWishItem
-                                                      .firstWhereOrNull(
-                                                          (product) =>
-                                                              product
-                                                                  .productId ==
-                                                              widget.proId) !=
-                                                  null) {
-                                                context
-                                                    .read<Wish>()
-                                                    .removeItem(proId);
-                                                Snackbar(
-                                                  key: _scafoldKey,
-                                                  content:
-                                                      'محصول از مورد علاقه ها حذف شد',
-                                                ).showsnackBar();
-                                              } else {
-                                                context
-                                                    .read<Wish>()
-                                                    .addToWishItem(
-                                                      proName,
-                                                      proPrice,
-                                                      1,
-                                                      proQuantity,
-                                                      proImages,
-                                                      proId,
-                                                      suppId,
-                                                    );
-                                                Snackbar(
-                                                  key: _scafoldKey,
-                                                  content:
-                                                      'محصول به مورد علاقه ها اضافه شد',
-                                                ).showsnackBar();
-                                              }
-                                            },
-                                            icon: context
-                                                        .watch<Wish>()
-                                                        .getWishItem
-                                                        .firstWhereOrNull(
-                                                            (product) =>
-                                                                product
-                                                                    .productId ==
-                                                                widget.proId) ==
-                                                    null
-                                                ? const Icon(
-                                                    Icons.favorite_border)
-                                                : const Icon(Icons.favorite))
+                                        : GlobalValues().userType == 'supplier'
+                                            ? IconButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          VisitStore(
+                                                        userId: suppId,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                icon: const Icon(Icons.store),
+                                              )
+                                            : IconButton(
+                                                onPressed: () {
+                                                  if (context
+                                                          .read<Wish>()
+                                                          .getWishItem
+                                                          .firstWhereOrNull(
+                                                              (product) =>
+                                                                  product
+                                                                      .productId ==
+                                                                  widget
+                                                                      .proId) !=
+                                                      null) {
+                                                    context
+                                                        .read<Wish>()
+                                                        .removeItem(proId);
+                                                    Snackbar(
+                                                      key: _scafoldKey,
+                                                      content:
+                                                          'محصول از مورد علاقه ها حذف شد',
+                                                    ).showsnackBar();
+                                                  } else {
+                                                    context
+                                                        .read<Wish>()
+                                                        .addToWishItem(
+                                                          proName,
+                                                          proPrice,
+                                                          1,
+                                                          proQuantity,
+                                                          proImages,
+                                                          proId,
+                                                          suppId,
+                                                        );
+                                                    Snackbar(
+                                                      key: _scafoldKey,
+                                                      content:
+                                                          'محصول به مورد علاقه ها اضافه شد',
+                                                    ).showsnackBar();
+                                                  }
+                                                },
+                                                icon: context
+                                                            .watch<Wish>()
+                                                            .getWishItem
+                                                            .firstWhereOrNull(
+                                                                (product) =>
+                                                                    product
+                                                                        .productId ==
+                                                                    widget
+                                                                        .proId) ==
+                                                        null
+                                                    ? const Icon(
+                                                        Icons.favorite_border)
+                                                    : const Icon(
+                                                        Icons.favorite))
                                   ],
                                 ),
                               ),
@@ -371,9 +390,9 @@ class _ProductDetielsState extends State<ProductDetiels> {
                                             productPrice: snapshot.data!
                                                 .docs[index]['product_price'],
                                             hasDescount: false,
-                                            scafoldKey: _scafoldKey,
                                             productId: snapshot
                                                 .data!.docs[index]['proId'],
+                                            scafoldKey: _scafoldKey,
                                             descount: 0,
                                             onTop: () {
                                               Navigator.of(context).push(
@@ -430,105 +449,113 @@ class _ProductDetielsState extends State<ProductDetiels> {
               ),
             ),
           ),
-          bottomNavigationBar: Container(
-            color: Colors.white,
-            child: FutureBuilder<void>(
-              future: getdata(widget.proId),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SizedBox();
-                }
+          bottomNavigationBar: GlobalValues().userType == 'supplier'
+              ? null
+              : Container(
+                  color: Colors.white,
+                  child: FutureBuilder<void>(
+                    future: getdata(widget.proId),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const SizedBox();
+                      }
 
-                if (snapshot.connectionState == ConnectionState.done &&
-                    proName != '') {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      VisitStore(userId: suppId),
+                      if (snapshot.connectionState == ConnectionState.done &&
+                          proName != '') {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => VisitStore(
+                                          userId: suppId,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.store),
                                 ),
-                              );
-                            },
-                            icon: const Icon(Icons.store),
-                          ),
-                          const SizedBox(width: 10),
-                          BadgeWidget(
-                            content: context
-                                .watch<Cart>()
-                                .getCartItem
-                                .length
-                                .toString(),
-                            child: IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const CartScreen(
-                                      backButtom:
-                                          AppBarBackButton(color: Colors.black),
+                                const SizedBox(width: 10),
+                                BadgeWidget(
+                                  content: context
+                                      .watch<Cart>()
+                                      .getCartItem
+                                      .length
+                                      .toString(),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const CartScreen(
+                                            backButtom: AppBarBackButton(
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.shopping_cart),
+                                  ),
+                                )
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: ReuseableButton(
+                                onPressed: () {
+                                  context
+                                              .read<Cart>()
+                                              .getCartItem
+                                              .firstWhereOrNull(
+                                                (product) =>
+                                                    product.productId ==
+                                                    widget.proId,
+                                              ) !=
+                                          null
+                                      ? Snackbar(
+                                          key: _scafoldKey,
+                                          content:
+                                              'این آیتم در حال حاضر در کارت موجود هست',
+                                        ).showsnackBar()
+                                      : context.read<Cart>().addToCartItem(
+                                            proName,
+                                            proPrice,
+                                            1,
+                                            proQuantity,
+                                            proImages,
+                                            proId,
+                                            suppId,
+                                          );
+                                },
+                                color: Colors.amber,
+                                child: const Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 32, right: 32, top: 4, bottom: 4),
+                                  child: Text(
+                                    'افزودن به سبد خرید',
+                                    style: TextStyle(
+                                      fontFamily: 'Kanun',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
                                     ),
                                   ),
-                                );
-                              },
-                              icon: const Icon(Icons.shopping_cart),
-                            ),
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: ReuseableButton(
-                          onPressed: () {
-                            context.read<Cart>().getCartItem.firstWhereOrNull(
-                                          (product) =>
-                                              product.productId == widget.proId,
-                                        ) !=
-                                    null
-                                ? Snackbar(
-                                    key: _scafoldKey,
-                                    content:
-                                        'این آیتم در حال حاضر در کارت موجود هست',
-                                  ).showsnackBar()
-                                : context.read<Cart>().addToCartItem(
-                                      proName,
-                                      proPrice,
-                                      1,
-                                      proQuantity,
-                                      proImages,
-                                      proId,
-                                      suppId,
-                                    );
-                          },
-                          color: Colors.amber,
-                          child: const Padding(
-                            padding: EdgeInsets.only(
-                                left: 32, right: 32, top: 4, bottom: 4),
-                            child: Text(
-                              'افزودن به سبد خرید',
-                              style: TextStyle(
-                                fontFamily: 'Kanun',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                }
+                          ],
+                        );
+                      }
 
-                return const SizedBox();
-              },
-            ),
-          ),
+                      return const SizedBox();
+                    },
+                  ),
+                ),
         ),
       ),
     );

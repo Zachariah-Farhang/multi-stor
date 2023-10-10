@@ -5,9 +5,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
-import 'package:multi_store_app/widgets/divider.dart';
+import 'package:multi_store_app/widgets/divider_widget.dart';
 import 'package:uuid/uuid.dart';
-import '../../widgets/snackbarr.dart';
+import '../../widgets/snackbarr_widget.dart';
 import 'package:path/path.dart' as path;
 
 String mainCagtegory = '';

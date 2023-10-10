@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/galleries/gallery.dart';
-import 'package:multi_store_app/widgets/tabs.dart';
+import 'package:multi_store_app/widgets/tabs_widget.dart';
 
-import '../../widgets/search_bottom.dart';
+import '../../widgets/search_bottom_widget.dart';
 
 class HomeScrean extends StatefulWidget {
   const HomeScrean({

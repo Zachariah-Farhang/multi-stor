@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class MaterialReuseableCotiner extends StatelessWidget {
@@ -35,12 +36,13 @@ class MaterialReuseableCotiner extends StatelessWidget {
                 constraints: const BoxConstraints.expand(),
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    fit: BoxFit.fitHeight,
+                    fit: BoxFit.fill,
                     image: imagePath.contains('assets')
                         ? AssetImage(
                             imagePath,
                           )
-                        : NetworkImage(imagePath) as ImageProvider<Object>,
+                        : CachedNetworkImageProvider(imagePath)
+                            as ImageProvider<Object>,
                   ),
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
                   color: Colors.white,

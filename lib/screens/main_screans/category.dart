@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 import 'package:multi_store_app/utilities/categ_list.dart';
-import 'package:multi_store_app/widgets/category_view_model.dart';
-import 'package:multi_store_app/widgets/search_bottom.dart';
-import 'package:multi_store_app/widgets/tabs.dart';
+import 'package:multi_store_app/models/category_view_model.dart';
+import 'package:multi_store_app/widgets/search_bottom_widget.dart';
+import 'package:multi_store_app/widgets/tabs_widget.dart';
 
 double appBarHeight = AppBar().preferredSize.height;
 
 class CategoryScreen extends StatefulWidget {
-  const CategoryScreen({Key? key}) : super(key: key);
+  const CategoryScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<CategoryScreen> createState() => _CategoryScreenState();
@@ -87,41 +89,50 @@ class _CategoryScreenState extends State<CategoryScreen>
         scrollDirection: Axis.vertical,
         children: [
           CategoryViewModel(
-              categoryList: men,
-              headerLabel: maincateg[0],
-              assetImage: 'men/men'),
+            categoryList: men,
+            headerLabel: maincateg[0],
+            assetImage: 'men/men',
+          ),
           CategoryViewModel(
-              categoryList: women,
-              headerLabel: maincateg[1],
-              assetImage: 'women/women'),
+            categoryList: women,
+            headerLabel: maincateg[1],
+            assetImage: 'women/women',
+          ),
           CategoryViewModel(
-              categoryList: accessories,
-              headerLabel: maincateg[2],
-              assetImage: 'accessories/accessories'),
+            categoryList: accessories,
+            headerLabel: maincateg[2],
+            assetImage: 'accessories/accessories',
+          ),
           CategoryViewModel(
-              categoryList: electronics,
-              headerLabel: maincateg[3],
-              assetImage: 'electronics/electronics'),
+            categoryList: electronics,
+            headerLabel: maincateg[3],
+            assetImage: 'electronics/electronics',
+          ),
           CategoryViewModel(
-              categoryList: shoes,
-              headerLabel: maincateg[4],
-              assetImage: 'shoes/shoes'),
+            categoryList: shoes,
+            headerLabel: maincateg[4],
+            assetImage: 'shoes/shoes',
+          ),
           CategoryViewModel(
-              categoryList: homeandgarden,
-              headerLabel: maincateg[5],
-              assetImage: 'homegarden/home'),
+            categoryList: homeandgarden,
+            headerLabel: maincateg[5],
+            assetImage: 'homegarden/home',
+          ),
           CategoryViewModel(
-              categoryList: beauty,
-              headerLabel: maincateg[6],
-              assetImage: 'beauty/beauty'),
+            categoryList: beauty,
+            headerLabel: maincateg[6],
+            assetImage: 'beauty/beauty',
+          ),
           CategoryViewModel(
-              categoryList: kids,
-              headerLabel: maincateg[7],
-              assetImage: 'kids/kids'),
+            categoryList: kids,
+            headerLabel: maincateg[7],
+            assetImage: 'kids/kids',
+          ),
           CategoryViewModel(
-              categoryList: bags,
-              headerLabel: maincateg[8],
-              assetImage: 'bags/bags'),
+            categoryList: bags,
+            headerLabel: maincateg[8],
+            assetImage: 'bags/bags',
+          ),
         ],
       ),
     );

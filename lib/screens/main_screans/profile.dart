@@ -8,16 +8,18 @@ import 'package:multi_store_app/components/customer_components/wishlist.dart';
 import 'package:multi_store_app/providers/cart_provider.dart';
 import 'package:multi_store_app/providers/wish_provider.dart';
 import 'package:multi_store_app/screens/main_screans/cart.dart';
-import 'package:multi_store_app/widgets/app_bar_back_button.dart';
+import 'package:multi_store_app/utilities/global_values.dart';
+import 'package:multi_store_app/widgets/app_bar_back_button_widget.dart';
 import 'package:provider/provider.dart';
-import '../../widgets/alirt_dialog.dart';
-import '../../widgets/divider.dart';
+import '../../widgets/alirt_dialog_widget.dart';
+import '../../widgets/divider_widget.dart';
 import '../../widgets/reuseable_continer.dart';
 import '../../widgets/reuseable_divider.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final String userTyope;
-  const ProfileScreen({Key? key, required this.userTyope}) : super(key: key);
+  const ProfileScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   ProfileScreenState createState() => ProfileScreenState();
@@ -69,8 +71,7 @@ class ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    collection = FirebaseFirestore.instance.collection(
-        widget.userTyope == 'anonymous' ? 'anonymous' : 'customers');
+    collection = FirebaseFirestore.instance.collection('anonymous');
     getData();
     super.initState();
   }
@@ -126,7 +127,8 @@ class ProfileScreenState extends State<ProfileScreen> {
                                     children: [
                                       CircleAvatar(
                                         radius: 40,
-                                        backgroundImage: widget.userTyope ==
+                                        backgroundImage: GlobalValues()
+                                                    .userType ==
                                                 'customer'
                                             ? Image.network(snapshot
                                                     .data!['profileImage'])
@@ -308,13 +310,15 @@ class ProfileScreenState extends State<ProfileScreen> {
                           const ReuseableSizedBox(text: "تنظیمات حساب"),
                           Container(
                             margin: const EdgeInsets.all(8),
-                            height: widget.userTyope == 'customer' ? 260 : 80,
+                            height: GlobalValues().userType == 'customer'
+                                ? 260
+                                : 80,
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(16)),
                             child: Column(
                               children: [
-                                widget.userTyope == 'customer'
+                                GlobalValues().userType == 'customer'
                                     ? Expanded(
                                         child: ReusableListTile(
                                           onTop: () {},
@@ -323,10 +327,10 @@ class ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                       )
                                     : const SizedBox(),
-                                widget.userTyope == 'customer'
+                                GlobalValues().userType == 'customer'
                                     ? const ReuseableDivider()
                                     : const SizedBox(),
-                                widget.userTyope == 'customer'
+                                GlobalValues().userType == 'customer'
                                     ? Expanded(
                                         child: ReusableListTile(
                                           onTop: () {},
@@ -335,7 +339,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                       )
                                     : const SizedBox(),
-                                widget.userTyope == 'customer'
+                                GlobalValues().userType == 'customer'
                                     ? const ReuseableDivider()
                                     : const SizedBox(),
                                 Expanded(

@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:multi_store_app/galleries/gallery.dart';
 
-import '../../widgets/app_bar_back_button.dart';
+import '../../widgets/app_bar_back_button_widget.dart';
 
 class SubGategories extends StatefulWidget {
-  const SubGategories(
-      {super.key, required this.subcategName, required this.maincategName});
+  const SubGategories({
+    super.key,
+    required this.subcategName,
+    required this.maincategName,
+  });
 
   final String maincategName;
   final String subcategName;

@@ -1,17 +1,19 @@
-import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_store_app/auth/login.dart';
 import 'package:multi_store_app/auth/signup.dart';
 import 'package:multi_store_app/providers/cart_provider.dart';
+import 'package:multi_store_app/providers/internet_provider.dart';
 import 'package:multi_store_app/providers/wish_provider.dart';
 import 'package:multi_store_app/screens/main_screans/customer_home_screen.dart';
+import 'package:multi_store_app/widgets/no_internet_widget.dart';
 import 'package:multi_store_app/screens/main_screans/supplier_home_screen.dart';
 import 'package:multi_store_app/screens/main_screans/welcome.dart';
-import 'package:permission_handler/permission_handler.dart';
+
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -31,6 +33,9 @@ void main() async {
     ChangeNotifierProvider(
       create: (_) => Wish(),
     ),
+    ChangeNotifierProvider(
+      create: (_) => ConnectivityProvider(),
+    ),
   ], child: const MyApp()));
 }
 
@@ -46,25 +51,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    requestPermissions();
     super.initState();
-  }
-
-  Future<bool> requestPermissions() async {
-    // Request camera permission
-    final cameraStatus = await Permission.camera.request();
-    if (cameraStatus.isDenied) {
-      // Camera permission denied
-      return false;
-    }
-
-    // Request storage permission
-    final storageStatus = await Permission.storage.request();
-    if (storageStatus.isDenied) {
-      // Storage permission denied
-      return false;
-    }
-    return true;
   }
 
   //This widget is the root of ouer application.
@@ -170,11 +157,12 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: "/welcome_screen",
       routes: {
+        // '/splash_screen': ((context) => const SplashScreen()),
         '/welcome_screen': ((context) => const WelcomeScreen()),
         '/customer_screen': ((context) => const CustomerHomeScrean()),
         '/supplier_screen': ((context) => const SupplierHomeScreen()),
         '/signup': ((context) => const RgisterScreen()),
-        '/login': ((context) => const LogIn()),
+        '/login': ((context) => const LogInScreen()),
       },
     );
   }

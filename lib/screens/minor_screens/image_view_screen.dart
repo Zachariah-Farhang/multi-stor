@@ -115,7 +115,7 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
                 ),
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.only(bottom: 4, top: 4),
+                    padding: const EdgeInsets.only(bottom: 4, top: 4),
                     color: Colors.black26,
                     child: ListView.builder(
                         physics: const BouncingScrollPhysics(),

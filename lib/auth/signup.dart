@@ -8,7 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_store_app/auth/auth_components.dart';
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
-import 'package:multi_store_app/widgets/snackbarr.dart';
+import 'package:multi_store_app/widgets/snackbarr_widget.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/internet_provider.dart';
+import '../widgets/no_internet_widget.dart';
+import '../utilities/global_values.dart';
 
 // import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -105,8 +110,13 @@ class _RgisterScreenState extends State<RgisterScreen>
             'cid': uid,
             'supOrcus': customerOrSupplier
           });
-          Navigator.pushReplacementNamed(context, '/customer_screen',
-              arguments: 'customer');
+          Future.delayed(const Duration(microseconds: 100))
+              .whenComplete(() => Navigator.pushReplacementNamed(
+                    context,
+                    '/customer_screen',
+                  ));
+
+          GlobalValues().userType = 'customer';
         } else {
           Reference ref =
               FirebaseStorage.instance.ref('supl-images/$email.jpg');
@@ -123,7 +133,10 @@ class _RgisterScreenState extends State<RgisterScreen>
             'sid': uid,
             'supOrcus': customerOrSupplier
           });
-          Navigator.pushReplacementNamed(context, '/supplier_screen');
+
+          Future.delayed(const Duration(microseconds: 100)).whenComplete(() =>
+              Navigator.pushReplacementNamed(context, '/supplier_screen'));
+          GlobalValues().userType = 'supplier';
         }
 
         _formKey.currentState!.reset();
@@ -160,7 +173,7 @@ class _RgisterScreenState extends State<RgisterScreen>
 
   @override
   void didChangeMetrics() {
-    keyboardHeight = WidgetsBinding.instance.window.viewInsets.bottom;
+    keyboardHeight = View.of(context).viewInsets.bottom;
     setState(() {
       _isKeyboardVisible = keyboardHeight > 0;
     });
@@ -174,223 +187,246 @@ class _RgisterScreenState extends State<RgisterScreen>
         textDirection: TextDirection.rtl,
         child: ScaffoldMessenger(
             key: _scafoldKey,
-            child: Scaffold(
-              bottomNavigationBar: AnimatedContainer(
-                duration: const Duration(milliseconds: 0),
-                padding: EdgeInsets.only(
-                    bottom: _isKeyboardVisible
-                        ? MediaQuery.of(context).viewInsets.bottom
-                        : 0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: signingInUp
-                          ? const Material(
-                              child: Center(
-                                child: CupertinoActivityIndicator(
-                                  radius: 30,
+            child: Consumer<ConnectivityProvider>(
+                builder: (context, connection, child) {
+              return Scaffold(
+                bottomNavigationBar: AnimatedContainer(
+                  duration: const Duration(milliseconds: 0),
+                  padding: EdgeInsets.only(
+                      bottom: _isKeyboardVisible
+                          ? MediaQuery.of(context).viewInsets.bottom
+                          : 0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: signingInUp
+                            ? const Material(
+                                child: Center(
+                                  child: CupertinoActivityIndicator(
+                                    radius: 30,
+                                  ),
                                 ),
-                              ),
-                            )
-                          : RawMaterialButton(
-                              padding: const EdgeInsets.symmetric(vertical: 4),
-                              fillColor: Colors.blue,
-                              onPressed: () {
-                                setState(() {
-                                  signingInUp = true;
-                                });
-                                signUp().whenComplete(() {
+                              )
+                            : RawMaterialButton(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4),
+                                fillColor: Colors.blue,
+                                onPressed: () {
+                                  FocusScope.of(context).unfocus();
                                   setState(() {
-                                    signingInUp = false;
+                                    signingInUp = true;
                                   });
-                                });
-                              },
-                              child: const Text(
-                                'ثبت نام',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 24),
-                              ),
-                            ),
-                    ),
-                  ],
-                ),
-              ),
-              body: SafeArea(
-                child: Center(
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    arguments == 'customer'
-                                        ? 'خریدار'
-                                        : 'فروشنده',
-                                    style: const TextStyle(
-                                        fontSize: 40,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      FocusScope.of(context).unfocus();
-                                      Navigator.pushReplacementNamed(
-                                          context, '/welcome_screen');
-                                    },
-                                    icon: const Icon(
-                                      Icons.home_work,
-                                      size: 30,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 20),
-                                  child: CircleAvatar(
-                                    radius: 60,
-                                    backgroundColor: Colors.amber,
-                                    backgroundImage: _imageFile == null
-                                        ? null
-                                        : FileImage(File(_imageFile!.path)),
-                                    child: arguments == 'customer' &&
-                                            _imageFile == null
-                                        ? const Padding(
-                                            padding: EdgeInsets.all(4.0),
-                                            child: Text(
-                                              "تصویر پروفایل خود را انتخاب کنید",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w900),
-                                            ),
-                                          )
-                                        : arguments == 'supplier' &&
-                                                _imageFile == null
-                                            ? const Padding(
-                                                padding: EdgeInsets.all(4.0),
-                                                child: Text(
-                                                  "لوگوی فروشگاه خود را انتخاب کنید",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w900),
-                                                ),
-                                              )
-                                            : null,
-                                  ),
-                                ),
-                                Column(
-                                  children: [
-                                    PickImage(
-                                        border: const BorderRadius.only(
-                                            topLeft: Radius.circular(12),
-                                            topRight: Radius.circular(12)),
-                                        icon: Icons.camera_alt,
-                                        onPressed: () {
-                                          _pickImageFromCamera();
-                                        }),
-                                    PickImage(
-                                        border: const BorderRadius.only(
-                                            bottomLeft: Radius.circular(12),
-                                            bottomRight: Radius.circular(12)),
-                                        icon: Icons.photo,
-                                        onPressed: () {
-                                          _pickImageFromGallery();
-                                        }),
-                                  ],
-                                )
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                TextFormFiled(
-                                  labelText: arguments == 'customer'
-                                      ? 'نام '
-                                      : ' نام فروشگاه',
-                                  hintText: arguments == 'customer'
-                                      ? 'نام و تخلص خود را وارد کنید'
-                                      : 'نام فروشگاه خود را وارد کنید',
-                                  textInputType: TextInputType.text,
-                                ),
-                                const TextFormFiled(
-                                  labelText: 'شماره تماس',
-                                  hintText: 'شماره تماس خود را وارد کنید',
-                                  textInputType: TextInputType.phone,
-                                ),
-                                const TextFormFiled(
-                                  labelText: 'ایمیل',
-                                  hintText: 'ایمیل آدرس خود را وارد کنید',
-                                  textInputType: TextInputType.emailAddress,
-                                ),
-                                const TextFormFiled(
-                                  labelText: 'آدرس ',
-                                  hintText: 'آدرس خود را وارد کنید',
-                                  textInputType: TextInputType.streetAddress,
-                                ),
-                                TextFormFiled(
-                                  labelText: 'پسورد ',
-                                  hintText: 'پسورد خود را وارد کنید',
-                                  textInputType: TextInputType.visiblePassword,
-                                  onPressed: () {
+                                  signUp().whenComplete(() {
                                     setState(() {
-                                      _passwordVisibalty = !_passwordVisibalty;
+                                      signingInUp = false;
                                     });
-                                  },
+                                  });
+                                },
+                                child: const Text(
+                                  'ثبت نام',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24),
                                 ),
-                              ],
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  const Text(
-                                    'قبلا ثبت نام کردید؟',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontStyle: FontStyle.italic,
-                                    ),
-                                  ),
-                                  ReuseableButton(
-                                    child: const Text(
-                                      'وارد شوید',
-                                      style: TextStyle(
-                                          color: Colors.blue,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushReplacementNamed(
-                                          context, '/login',
-                                          arguments: customerOrSupplier);
-                                    },
-                                  )
-                                ],
                               ),
-                            ),
-                          ]),
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            )));
+                body: Stack(
+                  children: [
+                    SafeArea(
+                      child: Center(
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          arguments == 'customer'
+                                              ? 'خریدار'
+                                              : 'فروشنده',
+                                          style: const TextStyle(
+                                              fontSize: 40,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            FocusScope.of(context).unfocus();
+                                            Navigator.pushReplacementNamed(
+                                                context, '/welcome_screen');
+                                          },
+                                          icon: const Icon(
+                                            Icons.home_work,
+                                            size: 30,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 20),
+                                        child: CircleAvatar(
+                                          radius: 60,
+                                          backgroundColor: Colors.amber,
+                                          backgroundImage: _imageFile == null
+                                              ? null
+                                              : FileImage(
+                                                  File(_imageFile!.path)),
+                                          child: arguments == 'customer' &&
+                                                  _imageFile == null
+                                              ? const Padding(
+                                                  padding: EdgeInsets.all(4.0),
+                                                  child: Text(
+                                                    "تصویر پروفایل خود را انتخاب کنید",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w900),
+                                                  ),
+                                                )
+                                              : arguments == 'supplier' &&
+                                                      _imageFile == null
+                                                  ? const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(4.0),
+                                                      child: Text(
+                                                        "لوگوی فروشگاه خود را انتخاب کنید",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w900),
+                                                      ),
+                                                    )
+                                                  : null,
+                                        ),
+                                      ),
+                                      Column(
+                                        children: [
+                                          PickImage(
+                                              border: const BorderRadius.only(
+                                                  topLeft: Radius.circular(12),
+                                                  topRight:
+                                                      Radius.circular(12)),
+                                              icon: Icons.camera_alt,
+                                              onPressed: () {
+                                                _pickImageFromCamera();
+                                              }),
+                                          PickImage(
+                                              border: const BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(12),
+                                                  bottomRight:
+                                                      Radius.circular(12)),
+                                              icon: Icons.photo,
+                                              onPressed: () {
+                                                _pickImageFromGallery();
+                                              }),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      TextFormFiled(
+                                        labelText: arguments == 'customer'
+                                            ? 'نام '
+                                            : ' نام فروشگاه',
+                                        hintText: arguments == 'customer'
+                                            ? 'نام و تخلص خود را وارد کنید'
+                                            : 'نام فروشگاه خود را وارد کنید',
+                                        textInputType: TextInputType.text,
+                                      ),
+                                      const TextFormFiled(
+                                        labelText: 'شماره تماس',
+                                        hintText: 'شماره تماس خود را وارد کنید',
+                                        textInputType: TextInputType.phone,
+                                      ),
+                                      const TextFormFiled(
+                                        labelText: 'ایمیل',
+                                        hintText: 'ایمیل آدرس خود را وارد کنید',
+                                        textInputType:
+                                            TextInputType.emailAddress,
+                                      ),
+                                      const TextFormFiled(
+                                        labelText: 'آدرس ',
+                                        hintText: 'آدرس خود را وارد کنید',
+                                        textInputType:
+                                            TextInputType.streetAddress,
+                                      ),
+                                      TextFormFiled(
+                                        labelText: 'پسورد ',
+                                        hintText: 'پسورد خود را وارد کنید',
+                                        textInputType:
+                                            TextInputType.visiblePassword,
+                                        onPressed: () {
+                                          setState(() {
+                                            _passwordVisibalty =
+                                                !_passwordVisibalty;
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        const Text(
+                                          'قبلا ثبت نام کردید؟',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontStyle: FontStyle.italic,
+                                          ),
+                                        ),
+                                        ReuseableButton(
+                                          child: const Text(
+                                            'وارد شوید',
+                                            style: TextStyle(
+                                                color: Colors.blue,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pushReplacementNamed(
+                                                context, '/login',
+                                                arguments: customerOrSupplier);
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ]),
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (!connection.isInternetStable)
+                      NoInternetScreen(context: context).showModel()
+                  ],
+                ),
+              );
+            })));
   }
 }
 

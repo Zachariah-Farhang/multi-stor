@@ -5,7 +5,7 @@ import 'package:multi_store_app/components/supplier_components/manage_products.d
 import 'package:multi_store_app/components/supplier_components/supplier_orders.dart';
 import 'package:multi_store_app/screens/main_screans/visit_store.dart';
 
-import '../../widgets/alirt_dialog.dart';
+import '../../widgets/alirt_dialog_widget.dart';
 
 const String abslutPath = "assets/images/supplierImages/";
 
@@ -25,7 +25,9 @@ final List<String> labels = [
 List<Widget> pagesOnDashboard = [];
 
 class DashbordScreen extends StatelessWidget {
-  const DashbordScreen({super.key});
+  const DashbordScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
