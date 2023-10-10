@@ -45,7 +45,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                 elevation: 0,
                 backgroundColor: Colors.white,
                 title: const Text(
-                  'مورد علاقه ها',
+                  'علاقه مندی ها',
                   style: TextStyle(color: Colors.black87),
                 ),
                 leading: const AppBarBackButton(color: Colors.black),
@@ -255,7 +255,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                         )
                       : const Center(
                           child: AutoSizeText(
-                            'لیست مورد علاقه های شما خالی است !',
+                            'لیست علاقه مندی های شما خالی است !',
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 30),
                           ),

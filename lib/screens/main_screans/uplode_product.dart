@@ -179,7 +179,6 @@ class _UplodeProductState extends State<UplodeProduct> {
                                         setState(() {
                                           selectedMianItem = value!;
                                           mainCagtegory = value;
-                                          debugPrint(mainCagtegory);
                                           subCateg =
                                               <DropdownMenuEntry<String>>[];
                                           switch (value) {
@@ -286,7 +285,6 @@ class _UplodeProductState extends State<UplodeProduct> {
                                         setState(() {
                                           selectedSubItem = value!;
                                           subCagtegory = value;
-                                          debugPrint(subCagtegory);
                                         });
                                       },
                                     ),

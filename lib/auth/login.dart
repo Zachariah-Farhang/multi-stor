@@ -154,51 +154,52 @@ class _LogInScreenState extends State<LogInScreen> with WidgetsBindingObserver {
         key: _scafoldKey,
         child: Consumer<ConnectivityProvider>(
             builder: (context, connection, child) {
-          return Scaffold(
-            bottomNavigationBar: AnimatedContainer(
-              duration: const Duration(milliseconds: 0),
-              padding: EdgeInsets.only(
-                  bottom: _isKeyboardVisible
-                      ? MediaQuery.of(context).viewInsets.bottom
-                      : 0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: loginingIn
-                        ? const Center(
-                            child: CupertinoActivityIndicator(
-                              radius: 30,
-                            ),
-                          )
-                        : RawMaterialButton(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            fillColor: Colors.blue,
-                            onPressed: () {
-                              FocusScope.of(context).unfocus();
-                              setState(() {
-                                loginingIn = true;
-                              });
-                              logIn().whenComplete(() {
-                                setState(() {
-                                  loginingIn = false;
-                                });
-                              });
-                            },
-                            child: const Text(
-                              'وارد شدن',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 24),
-                            ),
-                          ),
+          return Stack(
+            children: [
+              Scaffold(
+                bottomNavigationBar: AnimatedContainer(
+                  duration: const Duration(milliseconds: 0),
+                  padding: EdgeInsets.only(
+                      bottom: _isKeyboardVisible
+                          ? MediaQuery.of(context).viewInsets.bottom
+                          : 0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: loginingIn
+                            ? const Center(
+                                child: CupertinoActivityIndicator(
+                                  radius: 30,
+                                ),
+                              )
+                            : RawMaterialButton(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4),
+                                fillColor: Colors.blue,
+                                onPressed: () {
+                                  FocusScope.of(context).unfocus();
+                                  setState(() {
+                                    loginingIn = true;
+                                  });
+                                  logIn().whenComplete(() {
+                                    setState(() {
+                                      loginingIn = false;
+                                    });
+                                  });
+                                },
+                                child: const Text(
+                                  'وارد شدن',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24),
+                                ),
+                              ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            body: Stack(
-              children: [
-                SafeArea(
+                ),
+                body: SafeArea(
                   child: Center(
                     child: SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
@@ -292,10 +293,10 @@ class _LogInScreenState extends State<LogInScreen> with WidgetsBindingObserver {
                     ),
                   ),
                 ),
-                if (!connection.isInternetStable)
-                  NoInternetScreen(context: context).showModel()
-              ],
-            ),
+              ),
+              if (!connection.isInternetStable)
+                NoInternetScreen(context: context).showModel(),
+            ],
           );
         }),
       ),

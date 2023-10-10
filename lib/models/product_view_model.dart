@@ -108,7 +108,6 @@ class ProductModel extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(30),
                                   child: IconButton(
                                       onPressed: () {
-                                        debugPrint(productId);
                                         if (context
                                                 .read<Wish>()
                                                 .getWishItem
@@ -122,7 +121,7 @@ class ProductModel extends StatelessWidget {
                                           Snackbar(
                                             key: scafoldKey,
                                             content:
-                                                'محصول از مورد علاقه ها حذف شد',
+                                                'محصول از علاقه مندی ها حذف شد',
                                           ).showsnackBar();
                                         } else {
                                           context.read<Wish>().addToWishItem(
@@ -136,7 +135,7 @@ class ProductModel extends StatelessWidget {
                                           Snackbar(
                                             key: scafoldKey,
                                             content:
-                                                'محصول به مورد علاقه ها اضافه شد',
+                                                'محصول به علاقه مندی ها اضافه شد',
                                           ).showsnackBar();
                                         }
                                       },
