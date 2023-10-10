@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_store_app/utilities/categ_list.dart';
 import 'package:multi_store_app/widgets/divider_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import '../../providers/internet_provider.dart';
+import '../../widgets/no_internet_widget.dart';
 import '../../widgets/snackbarr_widget.dart';
 import 'package:path/path.dart' as path;
 
@@ -119,297 +122,318 @@ class _UplodeProductState extends State<UplodeProduct> {
     return SafeArea(
         child: ScaffoldMessenger(
       key: _scafoldKey,
-      child: Scaffold(
-        body: Stack(
+      child:
+          Consumer<ConnectivityProvider>(builder: (context, connection, child) {
+        return Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 40),
-              child: SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                physics: const BouncingScrollPhysics(),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 200,
-                          width: double.maxFinite,
-                          child: images.isEmpty
-                              ? const Center(
-                                  child:
-                                      Text('هنوز هیچ تصویری انتخاب نکرده اید!'),
-                                )
-                              : ListView.builder(
-                                  physics: const BouncingScrollPhysics(),
-                                  itemCount: images.length,
-                                  itemBuilder: (context, index) {
-                                    return SizedBox(
-                                      height: 200,
-                                      child: Image.file(
-                                        File(images[index]),
-                                        fit: BoxFit.contain,
+            Scaffold(
+              body: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 40),
+                    child: SingleChildScrollView(
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      physics: const BouncingScrollPhysics(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 200,
+                                width: double.maxFinite,
+                                child: images.isEmpty
+                                    ? const Center(
+                                        child: Text(
+                                            'هنوز هیچ تصویری انتخاب نکرده اید!'),
+                                      )
+                                    : ListView.builder(
+                                        physics: const BouncingScrollPhysics(),
+                                        itemCount: images.length,
+                                        itemBuilder: (context, index) {
+                                          return SizedBox(
+                                            height: 200,
+                                            child: Image.file(
+                                              File(images[index]),
+                                              fit: BoxFit.contain,
+                                            ),
+                                          );
+                                        }),
+                              ),
+                              const ReuseableDivider(),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(bottom: 10),
+                                        child: Text(
+                                            'لطفا دسته بندی محصول خود را انتخاب کنید!'),
                                       ),
-                                    );
-                                  }),
-                        ),
-                        const ReuseableDivider(),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.only(bottom: 10),
-                                  child: Text(
-                                      'لطفا دسته بندی محصول خود را انتخاب کنید!'),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    DropdownMenu<String>(
-                                      label: const Text('دسته بندی اصلی'),
-                                      initialSelection: maincateg.first,
-                                      dropdownMenuEntries: mainCateg,
-                                      onSelected: (String? value) {
-                                        setState(() {
-                                          selectedMianItem = value!;
-                                          mainCagtegory = value;
-                                          subCateg =
-                                              <DropdownMenuEntry<String>>[];
-                                          switch (value) {
-                                            case 'مردانه':
-                                              for (final String value in men) {
-                                                subCateg.add(
-                                                  DropdownMenuEntry<String>(
-                                                      value: value,
-                                                      label: value),
-                                                );
-                                              }
-                                              break;
-                                            case 'زنانه':
-                                              for (final String value
-                                                  in women) {
-                                                subCateg.add(
-                                                  DropdownMenuEntry<String>(
-                                                      value: value,
-                                                      label: value),
-                                                );
-                                              }
-                                              break;
-                                            case 'لوازم جانبی':
-                                              for (final String value
-                                                  in accessories) {
-                                                subCateg.add(
-                                                  DropdownMenuEntry<String>(
-                                                      value: value,
-                                                      label: value),
-                                                );
-                                              }
-                                              break;
-                                            case 'الکترونیک':
-                                              for (final String value
-                                                  in electronics) {
-                                                subCateg.add(
-                                                  DropdownMenuEntry<String>(
-                                                      value: value,
-                                                      label: value),
-                                                );
-                                              }
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          DropdownMenu<String>(
+                                            label: const Text('دسته بندی اصلی'),
+                                            initialSelection: maincateg.first,
+                                            dropdownMenuEntries: mainCateg,
+                                            onSelected: (String? value) {
+                                              setState(() {
+                                                selectedMianItem = value!;
+                                                mainCagtegory = value;
+                                                subCateg = <DropdownMenuEntry<
+                                                    String>>[];
+                                                switch (value) {
+                                                  case 'مردانه':
+                                                    for (final String value
+                                                        in men) {
+                                                      subCateg.add(
+                                                        DropdownMenuEntry<
+                                                                String>(
+                                                            value: value,
+                                                            label: value),
+                                                      );
+                                                    }
+                                                    break;
+                                                  case 'زنانه':
+                                                    for (final String value
+                                                        in women) {
+                                                      subCateg.add(
+                                                        DropdownMenuEntry<
+                                                                String>(
+                                                            value: value,
+                                                            label: value),
+                                                      );
+                                                    }
+                                                    break;
+                                                  case 'لوازم جانبی':
+                                                    for (final String value
+                                                        in accessories) {
+                                                      subCateg.add(
+                                                        DropdownMenuEntry<
+                                                                String>(
+                                                            value: value,
+                                                            label: value),
+                                                      );
+                                                    }
+                                                    break;
+                                                  case 'الکترونیک':
+                                                    for (final String value
+                                                        in electronics) {
+                                                      subCateg.add(
+                                                        DropdownMenuEntry<
+                                                                String>(
+                                                            value: value,
+                                                            label: value),
+                                                      );
+                                                    }
 
-                                              break;
-                                            case 'کفش':
-                                              for (final String value
-                                                  in shoes) {
-                                                subCateg.add(
-                                                  DropdownMenuEntry<String>(
-                                                      value: value,
-                                                      label: value),
-                                                );
-                                              }
-                                              break;
-                                            case 'خانه و باغ':
-                                              for (final String value
-                                                  in homeandgarden) {
-                                                subCateg.add(
-                                                  DropdownMenuEntry<String>(
-                                                      value: value,
-                                                      label: value),
-                                                );
-                                              }
-                                              break;
-                                            case 'زیبایی':
-                                              for (final String value
-                                                  in beauty) {
-                                                subCateg.add(
-                                                  DropdownMenuEntry<String>(
-                                                      value: value,
-                                                      label: value),
-                                                );
-                                              }
-                                              break;
-                                            case 'کودکان':
-                                              for (final String value in kids) {
-                                                subCateg.add(
-                                                  DropdownMenuEntry<String>(
-                                                      value: value,
-                                                      label: value),
-                                                );
-                                              }
-                                              break;
-                                            case 'کیف و کوله':
-                                              for (final String value in bags) {
-                                                subCateg.add(
-                                                  DropdownMenuEntry<String>(
-                                                      value: value,
-                                                      label: value),
-                                                );
-                                              }
-                                              break;
-                                            default:
-                                          }
-                                        });
-                                      },
+                                                    break;
+                                                  case 'کفش':
+                                                    for (final String value
+                                                        in shoes) {
+                                                      subCateg.add(
+                                                        DropdownMenuEntry<
+                                                                String>(
+                                                            value: value,
+                                                            label: value),
+                                                      );
+                                                    }
+                                                    break;
+                                                  case 'خانه و باغ':
+                                                    for (final String value
+                                                        in homeandgarden) {
+                                                      subCateg.add(
+                                                        DropdownMenuEntry<
+                                                                String>(
+                                                            value: value,
+                                                            label: value),
+                                                      );
+                                                    }
+                                                    break;
+                                                  case 'زیبایی':
+                                                    for (final String value
+                                                        in beauty) {
+                                                      subCateg.add(
+                                                        DropdownMenuEntry<
+                                                                String>(
+                                                            value: value,
+                                                            label: value),
+                                                      );
+                                                    }
+                                                    break;
+                                                  case 'کودکان':
+                                                    for (final String value
+                                                        in kids) {
+                                                      subCateg.add(
+                                                        DropdownMenuEntry<
+                                                                String>(
+                                                            value: value,
+                                                            label: value),
+                                                      );
+                                                    }
+                                                    break;
+                                                  case 'کیف و کوله':
+                                                    for (final String value
+                                                        in bags) {
+                                                      subCateg.add(
+                                                        DropdownMenuEntry<
+                                                                String>(
+                                                            value: value,
+                                                            label: value),
+                                                      );
+                                                    }
+                                                    break;
+                                                  default:
+                                                }
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(
+                                            width: 20,
+                                          ),
+                                          DropdownMenu<String>(
+                                            label: const Text('دسته بندی فرعی'),
+                                            dropdownMenuEntries: subCateg,
+                                            onSelected: (String? value) {
+                                              setState(() {
+                                                selectedSubItem = value!;
+                                                subCagtegory = value;
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const ReuseableDivider(),
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: ResuseableTextField(
+                                        fieldName: 'price',
+                                        maxLength: 20,
+                                        inputType: TextInputType.number,
+                                        labelText: 'قیمت',
+                                        hintText: '9,9',
+                                      ),
                                     ),
-                                    const SizedBox(
-                                      width: 20,
+                                    SizedBox(
+                                      width: 10,
                                     ),
-                                    DropdownMenu<String>(
-                                      label: const Text('دسته بندی فرعی'),
-                                      dropdownMenuEntries: subCateg,
-                                      onSelected: (String? value) {
-                                        setState(() {
-                                          selectedSubItem = value!;
-                                          subCagtegory = value;
-                                        });
-                                      },
+                                    Expanded(
+                                      child: ResuseableTextField(
+                                        fieldName: 'descount',
+                                        maxLength: 2,
+                                        labelText: 'تخفیف ٪',
+                                        hintText: 'تخفیف',
+                                        inputType: TextInputType.number,
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const ReuseableDivider(),
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Expanded(
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
                                 child: ResuseableTextField(
-                                  fieldName: 'price',
-                                  maxLength: 20,
+                                  fieldName: 'covantity',
+                                  maxLength: 10,
                                   inputType: TextInputType.number,
-                                  labelText: 'قیمت',
-                                  hintText: '9,9',
+                                  labelText: 'تعداد',
+                                  hintText: '2',
                                 ),
                               ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
                                 child: ResuseableTextField(
-                                  fieldName: 'descount',
-                                  maxLength: 2,
-                                  labelText: 'تخفیف ٪',
-                                  hintText: 'تخفیف',
-                                  inputType: TextInputType.number,
+                                  fieldName: 'productName',
+                                  maxLength: 100,
+                                  inputType: TextInputType.text,
+                                  labelText: 'نام محصول',
+                                  hintText: 'ساعت',
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: ResuseableTextField(
+                                  fieldName: 'productDetiels',
+                                  maxLength: 1000,
+                                  inputType: TextInputType.text,
+                                  maxLines: 10,
+                                  minLines: 5,
+                                  labelText: 'اطلااعات محصول',
+                                  hintText:
+                                      'این ساعت از برند مشهور و جهانی رولکس است',
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: ResuseableTextField(
-                            fieldName: 'covantity',
-                            maxLength: 10,
-                            inputType: TextInputType.number,
-                            labelText: 'تعداد',
-                            hintText: '2',
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: ResuseableTextField(
-                            fieldName: 'productName',
-                            maxLength: 100,
-                            inputType: TextInputType.text,
-                            labelText: 'نام محصول',
-                            hintText: 'ساعت',
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: ResuseableTextField(
-                            fieldName: 'productDetiels',
-                            maxLength: 1000,
-                            inputType: TextInputType.text,
-                            maxLines: 10,
-                            minLines: 5,
-                            labelText: 'اطلااعات محصول',
-                            hintText:
-                                'این ساعت از برند مشهور و جهانی رولکس است',
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    FloatingActionButton(
-                        child: uplodingProduct
-                            ? const CircularProgressIndicator(
-                                color: Colors.white,
-                              )
-                            : const Icon(Icons.upload),
-                        onPressed: () async {
-                          setState(() {
-                            uplodingProduct = true;
-                          });
-                          await uplodProduct().whenComplete(() {
-                            setState(() {
-                              images.clear();
-                              _formKey.currentState!.reset();
-                              urlOfImages.clear();
-                              uplodingProduct = false;
-                            });
-                          });
-                        }),
-                    const SizedBox(
-                      width: 10,
+                  Positioned(
+                    bottom: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          FloatingActionButton(
+                              child: uplodingProduct
+                                  ? const CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                  : const Icon(Icons.upload),
+                              onPressed: () async {
+                                setState(() {
+                                  uplodingProduct = true;
+                                });
+                                await uplodProduct().whenComplete(() {
+                                  setState(() {
+                                    images.clear();
+                                    _formKey.currentState!.reset();
+                                    urlOfImages.clear();
+                                    uplodingProduct = false;
+                                  });
+                                });
+                              }),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          images.isNotEmpty
+                              ? FloatingActionButton(
+                                  child: const Icon(Icons.delete_forever),
+                                  onPressed: () {
+                                    setState(() {
+                                      images.clear();
+                                    });
+                                  })
+                              : FloatingActionButton(
+                                  child: const Icon(Icons.image_rounded),
+                                  onPressed: () {
+                                    pickImages();
+                                  })
+                        ],
+                      ),
                     ),
-                    images.isNotEmpty
-                        ? FloatingActionButton(
-                            child: const Icon(Icons.delete_forever),
-                            onPressed: () {
-                              setState(() {
-                                images.clear();
-                              });
-                            })
-                        : FloatingActionButton(
-                            child: const Icon(Icons.image_rounded),
-                            onPressed: () {
-                              pickImages();
-                            })
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
+            if (!connection.isInternetStable)
+              NoInternetScreen(context: context).showModel()
           ],
-        ),
-      ),
+        );
+      }),
     ));
   }
 }
