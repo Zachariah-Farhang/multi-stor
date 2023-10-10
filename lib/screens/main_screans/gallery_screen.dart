@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:multi_store_app/models/product_view_model.dart';
-import 'package:multi_store_app/screens/minor_screens/product_detiels.dart';
+import 'package:multi_store_app/screens/minor_screens/product_detiels_screen.dart';
 
 class GalleryScreen extends StatefulWidget {
   const GalleryScreen({

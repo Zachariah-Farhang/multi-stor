@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:multi_store_app/galleries/gallery.dart';
+import 'package:multi_store_app/screens/main_screans/gallery_screen.dart';
 
 import '../../widgets/app_bar_back_button_widget.dart';
 

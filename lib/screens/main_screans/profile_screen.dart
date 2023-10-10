@@ -7,7 +7,7 @@ import 'package:multi_store_app/components/customer_components/customer_orders.d
 import 'package:multi_store_app/components/customer_components/wishlist.dart';
 import 'package:multi_store_app/providers/cart_provider.dart';
 import 'package:multi_store_app/providers/wish_provider.dart';
-import 'package:multi_store_app/components/customer_components/cart_screen.dart';
+import 'package:multi_store_app/components/customer_components/cart.dart';
 import 'package:multi_store_app/utilities/global_values.dart';
 import 'package:multi_store_app/widgets/app_bar_back_button_widget.dart';
 import 'package:provider/provider.dart';

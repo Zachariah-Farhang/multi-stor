@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/widgets/reuseable_matrial_continer.dart';
 
-import '../screens/minor_screens/sub_gategories.dart';
+import '../screens/minor_screens/sub_gategories_screen.dart';
 
 class SliderBar extends StatelessWidget {
   const SliderBar({

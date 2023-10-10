@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:multi_store_app/auth/auth_components.dart';
+import 'package:multi_store_app/utilities/auth_utils.dart';
 import 'package:multi_store_app/widgets/reuseable_bottun.dart';
 import 'package:multi_store_app/widgets/snackbarr_widget.dart';
 import 'package:provider/provider.dart';

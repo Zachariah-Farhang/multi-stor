@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:multi_store_app/widgets/app_bar_back_button_widget.dart';
 
 import '../../models/product_view_model.dart';
-import '../minor_screens/product_detiels.dart';
+import '../minor_screens/product_detiels_screen.dart';
 
 class VisitStore extends StatefulWidget {
   const VisitStore({

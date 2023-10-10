@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:multi_store_app/components/customer_components/cart_screen.dart';
-import 'package:multi_store_app/screens/main_screans/category.dart';
-import 'package:multi_store_app/screens/main_screans/home.dart';
-import 'package:multi_store_app/screens/main_screans/profile.dart';
-import 'package:multi_store_app/screens/main_screans/stores.dart';
+import 'package:multi_store_app/components/customer_components/cart.dart';
+import 'package:multi_store_app/screens/main_screans/category_screen.dart';
+import 'package:multi_store_app/screens/main_screans/home_screen.dart';
+import 'package:multi_store_app/screens/main_screans/profile_screen.dart';
+import 'package:multi_store_app/screens/main_screans/stores_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/internet_provider.dart';

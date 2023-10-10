@@ -240,17 +240,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                 ],
                               )),
                             );
-
-                            // CartModel(
-                            //     product: Product(
-                            //         name: cart.getItem[index].name,
-                            //         price: cart.getItem[index].price,
-                            //         qty: 1,
-                            //         qntty: cart.getItem[index].qntty,
-                            //         imageUrl: cart.getItem[index].imageUrl,
-                            //         productId: cart.getItem[index].productId,
-                            //         suppId: cart.getItem[index].suppId),
-                            //     cart: cart);
                           }),
                         )
                       : const Center(

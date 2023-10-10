@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
-import '../screens/minor_screens/search.dart';
+import '../screens/main_screans/search_screen.dart';
 
 class SearchBottom extends StatelessWidget {
   const SearchBottom({

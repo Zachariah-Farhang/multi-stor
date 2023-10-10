@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/internet_provider.dart';
-import 'category.dart';
-import 'dashboard.dart';
-import 'home.dart';
+import 'category_screen.dart';
+import 'dashboard_screen.dart';
+import 'home_screen.dart';
 
 import '../../widgets/no_internet_widget.dart';
-import 'stores.dart';
+import 'stores_screen.dart';
 
-import 'uplode_product.dart';
+import 'uplode_product_screen.dart';
 
 //I have created a fulstatwidget for customer page that have a navigationbar.
 class SupplierHomeScreen extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_store_app/widgets/reuseable_matrial_continer.dart';
 
-import 'visit_store.dart';
+import 'visit_store_screen.dart';
 
 class StoresScreen extends StatefulWidget {
   const StoresScreen({

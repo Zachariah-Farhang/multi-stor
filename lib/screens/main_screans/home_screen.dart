@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/galleries/gallery.dart';
+import 'package:multi_store_app/screens/main_screans/gallery_screen.dart';
 import 'package:multi_store_app/widgets/tabs_widget.dart';
 
 import '../../widgets/search_bottom_widget.dart';

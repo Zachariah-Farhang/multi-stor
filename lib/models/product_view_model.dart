@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
 import '../providers/wish_provider.dart';
-import '../screens/main_screans/visit_store.dart';
+import '../screens/main_screans/visit_store_screen.dart';
 import '../utilities/global_values.dart';
 import '../widgets/snackbarr_widget.dart';
 
