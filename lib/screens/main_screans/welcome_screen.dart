@@ -138,77 +138,61 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         const SuplierSignInOrSignUp(),
                         const BuyerSignInOrSignUp(),
                         Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 80,
                             margin: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
                                 color: Colors.grey.withOpacity(0.6),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Row(
-                              children: [
-                                LoginBottom(
-                                  onTop: () {},
-                                  text: "گوگل",
-                                  imagePath: "assets/images/welcome/google.png",
-                                ),
-                                LoginBottom(
-                                  onTop: () {},
-                                  text: "فیسبوک",
-                                  imagePath:
-                                      "assets/images/welcome/facebook.png",
-                                ),
-                                isSingingUp
-                                    ? const Expanded(
-                                        child: Center(
-                                            child: CupertinoActivityIndicator(
-                                          radius: 18,
-                                          color: Colors.amber,
-                                        )),
-                                      )
-                                    : LoginBottom(
-                                        onTop: () async {
-                                          setState(() {
-                                            isSingingUp = true;
-                                          });
-                                          await FirebaseAuth.instance
-                                              .signInAnonymously()
-                                              .whenComplete(() {
-                                            String defultName = 'User';
-                                            int id = Random(100000000)
-                                                .nextInt(100000000);
+                                borderRadius: BorderRadius.circular(16)),
+                            child: isSingingUp
+                                ? const Expanded(
+                                    child: Center(
+                                        child: CupertinoActivityIndicator(
+                                      radius: 18,
+                                      color: Colors.amber,
+                                    )),
+                                  )
+                                : LoginBottom(
+                                    onTop: () async {
+                                      setState(() {
+                                        isSingingUp = true;
+                                      });
+                                      await FirebaseAuth.instance
+                                          .signInAnonymously()
+                                          .whenComplete(() {
+                                        String defultName = 'User';
+                                        int id = Random(100000000)
+                                            .nextInt(100000000);
 
-                                            String defultUserName =
-                                                defultName + id.toString();
-                                            late String uid;
-                                            String phoneNumber = '';
-                                            String email = '';
-                                            String address = '';
-                                            String userName = '';
-                                            userName = defultUserName;
-                                            email = '$defultUserName@gmail.com';
-                                            address = defultUserName;
-                                            phoneNumber = id.toString();
+                                        String defultUserName =
+                                            defultName + id.toString();
+                                        late String uid;
+                                        String phoneNumber = '';
+                                        String email = '';
+                                        String address = '';
+                                        String userName = '';
+                                        userName = defultUserName;
+                                        email = '$defultUserName@gmail.com';
+                                        address = defultUserName;
+                                        phoneNumber = id.toString();
 
-                                            uid = FirebaseAuth
-                                                .instance.currentUser!.uid;
-                                            anonymous.doc(uid).set({
-                                              'name': userName,
-                                              'email': email,
-                                              'phone': phoneNumber,
-                                              'address': address,
-                                              'cid': uid,
-                                            });
-                                            Navigator.pushReplacementNamed(
-                                                context, '/customer_screen',
-                                                arguments: 'anonymous');
-                                          });
-                                        },
-                                        text: "مهمان",
-                                        imagePath:
-                                            "assets/images/welcome/man.png",
-                                      )
-                              ],
-                            )),
+                                        uid = FirebaseAuth
+                                            .instance.currentUser!.uid;
+                                        anonymous.doc(uid).set({
+                                          'name': userName,
+                                          'email': email,
+                                          'phone': phoneNumber,
+                                          'address': address,
+                                          'cid': uid,
+                                        });
+                                        Navigator.pushReplacementNamed(
+                                            context, '/customer_screen',
+                                            arguments: 'anonymous');
+                                      });
+                                    },
+                                    text: "وارد شدن به عنوان مهمان",
+                                    imagePath: "assets/images/welcome/man.png",
+                                  )),
                       ],
                     ),
                   ),

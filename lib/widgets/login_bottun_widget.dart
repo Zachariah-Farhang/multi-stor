@@ -30,6 +30,9 @@ class LoginBottom extends StatelessWidget {
                   image: AssetImage(imagePath),
                 ),
               ),
+              const SizedBox(
+                height: 4,
+              ),
               Text(
                 text,
                 style:
