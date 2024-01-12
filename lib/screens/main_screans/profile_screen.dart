@@ -50,6 +50,10 @@ class ProfileScreenState extends State<ProfileScreen> {
   void getData() {
     try {
       userId = FirebaseAuth.instance.currentUser!.uid;
+      FirebaseAuth.instance.currentUser!.isAnonymous
+          ? collection = FirebaseFirestore.instance.collection('anonymous')
+          : collection = FirebaseFirestore.instance.collection('customers');
+
       collection!.doc(userId).get().then((DocumentSnapshot documentSnapshot) {
         if (mounted) {
           if (documentSnapshot.exists) {
@@ -71,7 +75,6 @@ class ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    collection = FirebaseFirestore.instance.collection('anonymous');
     getData();
     super.initState();
   }
@@ -105,8 +108,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                                 duration: const Duration(milliseconds: 200),
                                 child: const Text(
                                   'پروفایل',
-                                  style: TextStyle(
-                                      color: Colors.black87, fontSize: 29),
+                                  style: TextStyle(color: Colors.black87),
                                   textAlign: TextAlign.center,
                                 ),
                               ),

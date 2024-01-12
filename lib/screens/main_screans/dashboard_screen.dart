@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_store_app/components/supplier_components/edit_profile.dart';
-import 'package:multi_store_app/components/supplier_components/manage_products.dart';
-import 'package:multi_store_app/components/supplier_components/supplier_orders.dart';
-import 'package:multi_store_app/screens/main_screans/visit_store_screen.dart';
 
+import '../../components/supplier_components/edit_profile.dart';
+import '../../components/supplier_components/manage_products.dart';
+import '../../components/supplier_components/supplier_orders.dart';
 import '../../widgets/alirt_dialog_widget.dart';
+import 'visit_store_screen.dart';
 
 const String abslutPath = "assets/images/supplierImages/";
 

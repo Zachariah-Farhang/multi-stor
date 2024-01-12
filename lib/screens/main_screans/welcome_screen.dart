@@ -59,9 +59,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   void delayedTask() async {
     Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        isLoding = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoding = false;
+        });
+      }
     });
   }
 

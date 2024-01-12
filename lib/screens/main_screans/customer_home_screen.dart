@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:multi_store_app/components/customer_components/cart.dart';
-import 'package:multi_store_app/screens/main_screans/category_screen.dart';
-import 'package:multi_store_app/screens/main_screans/home_screen.dart';
-import 'package:multi_store_app/screens/main_screans/profile_screen.dart';
-import 'package:multi_store_app/screens/main_screans/stores_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/customer_components/cart.dart';
 import '../../providers/internet_provider.dart';
 import '../../utilities/global_values.dart';
 import '../../widgets/no_internet_widget.dart';
+import 'category_screen.dart';
+import 'home_screen.dart';
+import 'profile_screen.dart';
+import 'stores_screen.dart';
 
 //I have created a fulstatwidget for customer page that have a navigationbar.
 class CustomerHomeScrean extends StatefulWidget {

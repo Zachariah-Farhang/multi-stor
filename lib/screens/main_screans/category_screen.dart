@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:multi_store_app/utilities/categ_list.dart';
-import 'package:multi_store_app/models/category_view_model.dart';
-import 'package:multi_store_app/widgets/search_bottom_widget.dart';
-import 'package:multi_store_app/widgets/tabs_widget.dart';
+import '../../models/category_view_model.dart';
+import '../../utilities/categ_list.dart';
+import '../../widgets/search_bottom_widget.dart';
+import '../../widgets/tabs_widget.dart';
 
 double appBarHeight = AppBar().preferredSize.height;
 
@@ -161,8 +161,12 @@ class _CategoryScreenState extends State<CategoryScreen>
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
+        centerTitle: true,
         backgroundColor: Colors.white,
-        title: const SearchBottom(),
+        title: const Text(
+          'دسته بندی',
+          style: TextStyle(color: Colors.black87),
+        ),
       ),
       body: Stack(
         children: [

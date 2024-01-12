@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ReuseableButton extends StatelessWidget {
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final Widget child;
   final Color? color;
   final ShapeBorder? shape;
+
   const ReuseableButton({
     super.key,
     required this.onPressed,

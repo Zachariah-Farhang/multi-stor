@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:multi_store_app/components/customer_components/customer_orders.dart';
 import 'package:multi_store_app/providers/cart_provider.dart';
 import 'package:multi_store_app/widgets/alirt_dialog_widget.dart';
 import 'package:provider/provider.dart';
@@ -322,13 +323,24 @@ class _CartScreenState extends State<CartScreen> {
                               ],
                             ),
                             ReuseableButton(
-                                onPressed: () {},
-                                color: Colors.yellow,
-                                child: const Text("پرداخت",
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold)))
+                              onPressed: context.watch<Cart>().totalPrice != 0
+                                  ? () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const CustomerOrders()));
+                                    }
+                                  : null,
+                              color: Colors.yellow,
+                              child: const Text(
+                                "پرداخت",
+                                style: TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
                           ]),
                     ),
                   ),
